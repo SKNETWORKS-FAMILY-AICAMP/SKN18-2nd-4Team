@@ -1,1 +1,3 @@
-print (Hello);
+import streamlit as st
+
+st.title ("메인")
