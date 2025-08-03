@@ -1,0 +1,14 @@
+[[pages]]
+path = "app.py"
+name = "메인 대시보드"
+icon = "🚗"
+
+[[pages]]
+path = "money.py"
+name = "보조금 정보"
+icon = "💰"
+
+[[pages]]
+path = "pages/FAQ.py"
+name = "기업 FAQ"
+icon = "❓" 
