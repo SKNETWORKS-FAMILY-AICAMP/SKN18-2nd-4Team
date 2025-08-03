@@ -1,9 +1,8 @@
 streamlit
 numpy
 pandas
-folium
-streamlit-folium
-matplotlib
+plotly
 pymysql
 sqlalchemy
 mysqlclient
+cryptography
