@@ -125,7 +125,7 @@ def get_environmental_impact_data():
             화물 as cargo,
             특수 as special
         FROM greenhouse_gases 
-        WHERE 년도 BETWEEN 2012 AND 2022
+        WHERE 년도 BETWEEN 2019 AND 2022
         ORDER BY 년도, 지역
         """
         
@@ -161,7 +161,7 @@ def get_environmental_impact_data():
                 구분 as category,
                 합계 as total
             FROM environmental_vehicles 
-            WHERE 연도 BETWEEN 2020 AND 2024 AND 구분 IN ('전체 차량 등록', '친환경 전체')
+            WHERE 연도 BETWEEN 2019 AND 2024 AND 구분 IN ('전체 차량 등록', '친환경 전체')
             ORDER BY 연도, 구분
             """
             cursor.execute(eco_ratio_query)
