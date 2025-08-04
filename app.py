@@ -100,8 +100,19 @@ with tab1:
                 height=600
             )
             
-            fig.update_yaxes(title_text="전체 자동차 등록대수", secondary_y=False, range=[20000000, 27000000])
-            fig.update_yaxes(title_text="친환경 자동차 등록대수", secondary_y=True, range=[0, 4000000])
+            # Y축 눈금 개수를 동일하게 설정 (5개 간격)
+            fig.update_yaxes(
+                title_text="전체 자동차 등록대수", 
+                secondary_y=False, 
+                range=[20000000, 27000000],
+                dtick=1750000  # (27000000-20000000)/4 = 1750000
+            )
+            fig.update_yaxes(
+                title_text="친환경 자동차 등록대수", 
+                secondary_y=True, 
+                range=[0, 4000000],
+                dtick=1000000  # (4000000-0)/4 = 1000000
+            )
             
             st.plotly_chart(fig, use_container_width=True)
         
@@ -208,8 +219,18 @@ with tab2:
             tickmode='linear'
         )
         
-        fig.update_yaxes(title_text="친환경 자동차 비율 (%)", secondary_y=False, range=[0, 20])
-        fig.update_yaxes(title_text="온실가스 배출량", secondary_y=True)
+        fig.update_yaxes(
+            title_text="친환경 자동차 비율 (%)", 
+            secondary_y=False, 
+            range=[0, 20],
+            dtick=5  # (20-0)/4 = 5
+        )
+        fig.update_yaxes(
+            title_text="온실가스 배출량", 
+            secondary_y=True,
+            range=[70000, 90000],
+            dtick=5000  # (90000-70000)/4 = 5000
+        )
         
         st.plotly_chart(fig, use_container_width=True)
         
