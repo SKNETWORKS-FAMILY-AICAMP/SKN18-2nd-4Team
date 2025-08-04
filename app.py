@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🚗 친환경 자동차 메인 대시보드")
+st.title("🚗 친환경 자동차 대시보드")
 
 # 탭 생성
 tab1, tab2 = st.tabs(["자동차 등록 현황 분석", "환경 영향 분석"])
@@ -275,15 +275,60 @@ with tab2:
                 col1, col2 = st.columns(2)
                 with col1:
                     st.subheader("📊 지역별 배출량 순위")
+                    
+                    # 단위 표시를 위한 컨테이너
+                    unit_container = st.container()
+                    with unit_container:
+                        # CSS를 사용해서 단위를 오른쪽 상단에 배치
+                        st.markdown(
+                            """
+                            <style>
+                            .unit-text {
+                                text-align: right;
+                                font-size: 14px;
+                                color: #666;
+                                margin-bottom: 5px;
+                            }
+                            </style>
+                            <div class="unit-text">단위: 톤CO₂</div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    
                     region_ranking = region_gas_data.sort_values('total_gas', ascending=False)
-                    region_ranking = region_ranking[['region', 'total_gas']].rename(columns={
+                    # 순위 추가 (1부터 시작)
+                    region_ranking['rank'] = range(1, len(region_ranking) + 1)
+                    region_ranking = region_ranking[['rank', 'region', 'total_gas']].rename(columns={
+                        'rank': '순위',
                         'region': '지역',
                         'total_gas': '총 배출량'
                     })
-                    st.dataframe(region_ranking, use_container_width=True)
-                
+                    # 총 배출량에 1,000 단위 구분 쉼표 추가
+                    region_ranking['총 배출량'] = region_ranking['총 배출량'].apply(lambda x: f"{x:,}")
+                    st.dataframe(region_ranking, use_container_width=True, hide_index=True)
+
                 with col2:
                     st.subheader("📈 차종별 배출량 분석")
+                    
+                    # 단위 표시를 위한 컨테이너
+                    unit_container2 = st.container()
+                    with unit_container2:
+                        # CSS를 사용해서 단위를 오른쪽 상단에 배치
+                        st.markdown(
+                            """
+                            <style>
+                            .unit-text2 {
+                                text-align: right;
+                                font-size: 14px;
+                                color: #666;
+                                margin-bottom: 5px;
+                            }
+                            </style>
+                            <div class="unit-text2">단위: 톤CO₂</div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                        
                     vehicle_types = ['passenger', 'bus', 'cargo', 'special']
                     vehicle_names = ['승용', '승합', '화물', '특수']
                     
