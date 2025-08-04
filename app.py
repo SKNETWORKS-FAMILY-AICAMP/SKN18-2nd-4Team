@@ -32,102 +32,79 @@ with tab1:
             ["전체", "전기차", "수소차", "하이브리드"]
         )
         
-        # 이중 축 그래프 생성
-        fig = make_subplots(
-            specs=[[{"secondary_y": True}]]
-        )
-        
-        # 첫 번째 그래프: 전체 자동차 등록대수 (선그래프)
-        fig.add_trace(
-            go.Scatter(
-                x=vehicle_data['year'],
-                y=vehicle_data['total_vehicles'],
-                name="전체 자동차 등록대수",
-                line=dict(color='blue', width=3),
-                mode='lines+markers'
-            ),
-            secondary_y=False
-        )
-        
-        # 두 번째 그래프: 친환경 자동차 등록대수 (스택형 막대그래프)
-        # 하이라이트 옵션에 따라 색상과 투명도 조정
-        electric_color = 'red' if highlight_option == "전기차" else 'green'
-        hydrogen_color = 'red' if highlight_option == "수소차" else 'orange'
-        hybrid_color = 'red' if highlight_option == "하이브리드" else 'purple'
-        
-        # 투명도 설정 (하이라이트된 항목은 불투명, 나머지는 반투명)
-        electric_opacity = 1.0 if highlight_option == "전기차" else 0.6
-        hydrogen_opacity = 1.0 if highlight_option == "수소차" else 0.6
-        hybrid_opacity = 1.0 if highlight_option == "하이브리드" else 0.6
-        
-        # 전체 선택 시 모든 항목을 불투명하게
+        # 전체 선택 시에만 이중 축 그래프 표시
         if highlight_option == "전체":
-            electric_opacity = hydrogen_opacity = hybrid_opacity = 1.0
-            electric_color = 'green'
-            hydrogen_color = 'orange'
-            hybrid_color = 'purple'
+            # 이중 축 그래프 생성
+            fig = make_subplots(
+                specs=[[{"secondary_y": True}]]
+            )
+            
+            # 첫 번째 그래프: 전체 자동차 등록대수 (선그래프)
+            fig.add_trace(
+                go.Scatter(
+                    x=vehicle_data['year'],
+                    y=vehicle_data['total_vehicles'],
+                    name="전체 자동차 등록대수",
+                    line=dict(color='blue', width=3),
+                    mode='lines+markers'
+                ),
+                secondary_y=False
+            )
+            
+            # 두 번째 그래프: 친환경 자동차 등록대수 (스택형 막대그래프)
+            # 전체 선택 시 모든 항목을 원래 색상으로 표시
+            fig.add_trace(
+                go.Bar(
+                    x=vehicle_data['year'],
+                    y=vehicle_data['electric_vehicles'],
+                    name="전기차",
+                    marker_color='green',
+                    marker_opacity=1.0,
+                    hovertemplate='전기차: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
+                    customdata=vehicle_data['electric_ratio']
+                ),
+                secondary_y=True
+            )
+            
+            fig.add_trace(
+                go.Bar(
+                    x=vehicle_data['year'],
+                    y=vehicle_data['hydrogen_vehicles'],
+                    name="수소차",
+                    marker_color='orange',
+                    marker_opacity=1.0,
+                    hovertemplate='수소차: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
+                    customdata=vehicle_data['hydrogen_ratio']
+                ),
+                secondary_y=True
+            )
+            
+            fig.add_trace(
+                go.Bar(
+                    x=vehicle_data['year'],
+                    y=vehicle_data['hybrid_vehicles'],
+                    name="하이브리드",
+                    marker_color='purple',
+                    marker_opacity=1.0,
+                    hovertemplate='하이브리드: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
+                    customdata=vehicle_data['hybrid_ratio']
+                ),
+                secondary_y=True
+            )
+            
+            # 그래프 업데이트
+            fig.update_layout(
+                title="연도별 자동차 등록 현황 - 전체",
+                xaxis_title="연도",
+                barmode='stack',
+                height=600
+            )
+            
+            fig.update_yaxes(title_text="전체 자동차 등록대수", secondary_y=False, range=[20000000, 27000000])
+            fig.update_yaxes(title_text="친환경 자동차 등록대수", secondary_y=True, range=[0, 4000000])
+            
+            st.plotly_chart(fig, use_container_width=True)
         
-        fig.add_trace(
-            go.Bar(
-                x=vehicle_data['year'],
-                y=vehicle_data['electric_vehicles'],
-                name="전기차",
-                marker_color=electric_color,
-                marker_opacity=electric_opacity,
-                hovertemplate='전기차: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
-                customdata=vehicle_data['electric_ratio']
-            ),
-            secondary_y=True
-        )
-        
-        fig.add_trace(
-            go.Bar(
-                x=vehicle_data['year'],
-                y=vehicle_data['hydrogen_vehicles'],
-                name="수소차",
-                marker_color=hydrogen_color,
-                marker_opacity=hydrogen_opacity,
-                hovertemplate='수소차: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
-                customdata=vehicle_data['hydrogen_ratio']
-            ),
-            secondary_y=True
-        )
-        
-        fig.add_trace(
-            go.Bar(
-                x=vehicle_data['year'],
-                y=vehicle_data['hybrid_vehicles'],
-                name="하이브리드",
-                marker_color=hybrid_color,
-                marker_opacity=hybrid_opacity,
-                hovertemplate='하이브리드: %{y:,.0f}대<br>비율: %{customdata:.1f}%<extra></extra>',
-                customdata=vehicle_data['hybrid_ratio']
-            ),
-            secondary_y=True
-        )
-        
-        # 그래프 업데이트
-        fig.update_layout(
-            title=f"연도별 자동차 등록 현황 - {highlight_option} 하이라이트",
-            xaxis_title="연도",
-            barmode='stack',
-            height=600
-        )
-        
-        fig.update_yaxes(title_text="전체 자동차 등록대수", secondary_y=False)
-        fig.update_yaxes(title_text="친환경 자동차 등록대수", secondary_y=True)
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # 통계 정보
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("2024년 전체 등록대수", f"{vehicle_data.iloc[-1]['total_vehicles']:,}대")
-        with col2:
-            st.metric("2024년 친환경차 등록대수", f"{vehicle_data.iloc[-1]['total_eco_vehicles']:,.0f}대")
-        with col3:
-            eco_ratio = (vehicle_data.iloc[-1]['total_eco_vehicles'] / vehicle_data.iloc[-1]['total_vehicles']) * 100
-            st.metric("친환경차 비율", f"{eco_ratio:.1f}%")
         
         # 선택된 차종의 상세 정보 표시
         if highlight_option != "전체":
@@ -147,18 +124,26 @@ with tab1:
             fig_detail = go.Figure()
             fig_detail.add_trace(go.Bar(
                 x=vehicle_data['year'],
-                y=selected_data,
+                y=selected_ratio,  # 등록대수 대신 비율 사용
                 name=highlight_option,
                 marker_color='red',
-                hovertemplate=f'{highlight_option}: %{{y:,.0f}}대<br>비율: %{{customdata:.1f}}%<extra></extra>',
-                customdata=selected_ratio
+                hovertemplate=f'{highlight_option} 비율: %{{y:.1f}}%<extra></extra>'
             ))
             
+            # 차종별 Y축 범위 설정
+            if highlight_option == "전기차":
+                y_max = 40
+            elif highlight_option == "수소차":
+                y_max = 5
+            elif highlight_option == "하이브리드":
+                y_max = 80
+            
             fig_detail.update_layout(
-                title=f"{highlight_option} 연도별 등록 현황",
+                title=f"{highlight_option} 연도별 비율 변화",
                 xaxis_title="연도",
-                yaxis_title="등록대수",
-                height=400
+                yaxis_title=f"{highlight_option} 비율 (%)",
+                height=400,
+                yaxis=dict(range=[0, y_max])  # 차종별로 다른 Y축 범위 설정
             )
             
             st.plotly_chart(fig_detail, use_container_width=True)
@@ -215,6 +200,12 @@ with tab2:
             title="연도별 환경 영향 분석",
             xaxis_title="연도",
             height=500
+        )
+        
+        # x축을 1년 단위로 설정
+        fig.update_xaxes(
+            dtick=1,  # 1년 단위로 눈금 표시
+            tickmode='linear'
         )
         
         fig.update_yaxes(title_text="친환경 자동차 비율 (%)", secondary_y=False, range=[0, 20])
