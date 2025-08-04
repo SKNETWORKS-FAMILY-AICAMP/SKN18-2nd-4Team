@@ -1,2 +1,4 @@
 # DB Information config
 .streamlit/secret.toml
+database/__pycache__/
+utilities/__pycache__/
