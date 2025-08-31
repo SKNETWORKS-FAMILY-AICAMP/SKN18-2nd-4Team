@@ -1,0 +1,12 @@
+pandas
+matplotlib
+seaborn
+openpyxl
+xlrd
+jupyter
+ipykernel
+plotly
+scikit-learn
+xgboost
+lightgbm
+joblib
