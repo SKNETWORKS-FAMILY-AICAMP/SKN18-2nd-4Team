@@ -60,3 +60,53 @@ class Config:
                 return default
         
         return value
+    
+    # 데이터 관련 속성들
+    @property
+    def data_raw_dir(self): return Path(self.get('data.raw_dir'))
+    @property
+    def data_curated_dir(self): return Path(self.get('data.curated_dir'))
+    @property
+    def data_processed_dir(self): return Path(self.get('data.processed_dir'))
+    @property
+    def target_csv_name(self): return self.get('data.target_csv_name')
+    @property
+    def train_csv_name(self): return self.get('data.train_csv_name')
+    @property
+    def test_csv_name(self): return self.get('data.test_csv_name')
+    @property
+    def target_column(self): return self.get('data.target_column')
+    
+    # 모델 관련 속성들
+    @property
+    def model_random_state(self): return self.get('model.random_state')
+    @property
+    def model_test_season(self): return self.get('model.test_season')
+    @property
+    def model_prediction_season(self): return self.get('model.prediction_season')
+    @property
+    def model_composite_weights(self): return self.get('model.composite_weights')
+    @property
+    def output_model_path(self): return Path(self.get('model.output_model_path'))
+    @property
+    def output_preprocessor_path(self): return Path(self.get('model.output_preprocessor_path'))
+    
+    # 피처 관련 속성들
+    @property
+    def features_ordinal(self): return self.get('features.ordinal')
+    @property
+    def features_nominal(self): return self.get('features.nominal')
+    @property
+    def features_numeric_exclude(self): return self.get('features.numeric_exclude')
+    
+    # 출력 관련 속성들
+    @property
+    def output_predictions_csv(self): return Path(self.get('output.predictions_csv'))
+    @property
+    def output_model_comparison_plot(self): return Path(self.get('output.model_comparison_plot'))
+    @property
+    def output_shap_summary_plot(self): return Path(self.get('output.shap_summary_plot'))
+    @property
+    def output_feature_importance_plot(self): return Path(self.get('output.feature_importance_plot'))
+    @property
+    def output_prediction_distribution_plot(self): return Path(self.get('output.prediction_distribution_plot'))

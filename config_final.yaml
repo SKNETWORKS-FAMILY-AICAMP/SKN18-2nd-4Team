@@ -1,0 +1,50 @@
+data:
+  raw_dir: data/raw
+  curated_dir: data/curated
+  processed_dir: data/processed
+  train_csv_name: train_df.csv
+  test_csv_name: test_df.csv
+  target_column: transfer
+
+model:
+  random_state: 42
+  test_season: 23/24
+  prediction_season: 23/24
+  composite_weights:
+    auc: 0.4
+    f1: 0.3
+    precision: 0.2
+    recall: 0.1
+  output_model_path: outputs/final_model.pkl
+  output_preprocessor_path: outputs/preprocessor.pkl
+
+features:
+  ordinal: []
+  nominal:
+    - club_name
+    - country_of_birth
+    - foot
+    - position
+    - sub_position
+  numeric_exclude:
+    - player_name
+    - player_id
+    - transfer # target column
+    - season # excluded from modeling
+    - club_name # nominal
+    - country_of_birth # nominal
+    - foot # nominal
+    - position # nominal
+    - sub_position # nominal
+    - date_of_birth # date field
+    - agent_name # text field
+    - net_transfer_record # text field
+
+output:
+  predictions_csv: outputs/23_24_transfer_predictions.csv
+  model_comparison_plot: outputs/model_comparison.png
+  shap_summary_plot: outputs/shap_summary.png
+  feature_importance_plot: outputs/feature_importance.png
+  prediction_distribution_plot: outputs/prediction_distribution.png
+  learning_curves_plot: outputs/learning_curves.png
+  validation_curves_plot: outputs/validation_curves.png

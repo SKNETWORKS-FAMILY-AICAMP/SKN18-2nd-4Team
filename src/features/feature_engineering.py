@@ -5,6 +5,7 @@ Football Transfer Prediction - Feature Engineering Module
 
 import pandas as pd
 import numpy as np
+import logging
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
@@ -13,6 +14,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from typing import List, Dict, Tuple, Optional
 import warnings
 warnings.filterwarnings('ignore')
+
+logger = logging.getLogger(__name__)
 
 
 class CustomLabelEncoder(BaseEstimator, TransformerMixin):
@@ -34,24 +37,26 @@ class CustomLabelEncoder(BaseEstimator, TransformerMixin):
                 le = LabelEncoder()
                 le.fit(X[:, i].astype(str))
                 self.label_encoders[i] = le
+        
         self.is_fitted = True
         return self
     
     def transform(self, X):
         if not self.is_fitted:
             raise ValueError("Must fit before transform")
-        
+            
         if hasattr(X, 'iloc'):
             X_encoded = X.copy()
             for i in range(X.shape[1]):
                 try:
                     X_encoded.iloc[:, i] = self.label_encoders[i].transform(X.iloc[:, i].astype(str))
                 except ValueError:
+                    # 새로운 라벨을 -1로 처리
                     unique_labels = set(X.iloc[:, i].astype(str))
                     known_labels = set(self.label_encoders[i].classes_)
                     new_labels = unique_labels - known_labels
                     if new_labels:
-                        print(f"⚠️ 새로운 라벨 발견: {new_labels}, -1로 처리합니다.")
+                        logger.warning(f"새로운 라벨 발견: {new_labels}, -1로 처리합니다.")
                     X_encoded.iloc[:, i] = X.iloc[:, i].astype(str).apply(
                         lambda x: self.label_encoders[i].transform([x])[0] if x in self.label_encoders[i].classes_ else -1
                     )
@@ -66,12 +71,15 @@ class CustomLabelEncoder(BaseEstimator, TransformerMixin):
                     known_labels = set(self.label_encoders[i].classes_)
                     new_labels = unique_labels - known_labels
                     if new_labels:
-                        print(f"⚠️ 새로운 라벨 발견: {new_labels}, -1로 처리합니다.")
+                        logger.warning(f"새로운 라벨 발견: {new_labels}, -1로 처리합니다.")
                     X_encoded[:, i] = np.array([
                         self.label_encoders[i].transform([x])[0] if x in self.label_encoders[i].classes_ else -1
                         for x in X[:, i].astype(str)
                     ])
             return X_encoded.astype(float)
+
+    def fit_transform(self, X, y=None):
+        return self.fit(X, y).transform(X)
 
 
 class FootballFeatureEngineer:
@@ -79,23 +87,18 @@ class FootballFeatureEngineer:
     
     def __init__(self):
         self.feature_config = {
-            'ordinal_features': ['season', 'position', 'sub_position'],
-            'nominal_features': ['club_name', 'country_of_birth', 'foot'],
+            'ordinal_features': [],  # season 제거 (모델링에서 제외)
+            'nominal_features': ['club_name', 'country_of_birth', 'foot', 'position', 'sub_position'],
             'target_col': 'transfer'
         }
-        self.numeric_features = []
+        self.position_avg_height = {}
+        self.club_avg_minutes = {}
         self.is_fitted = False
     
     def detect_season_column(self, df: pd.DataFrame) -> Optional[str]:
         """시즌 컬럼 자동 탐지"""
         candidate_cols = [c for c in df.columns if 'season' in c.lower()]
         for c in candidate_cols:
-            try:
-                if df[c].astype(str).str.contains(r"^\d{2}/\d{2}$", na=False).any():
-                    return c
-            except Exception:
-                continue
-        for c in df.columns:
             try:
                 if df[c].astype(str).str.contains(r"^\d{2}/\d{2}$", na=False).any():
                     return c
@@ -114,110 +117,102 @@ class FootballFeatureEngineer:
             return np.nan
         return np.nan
     
-    def create_basic_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """기본 피쳐 생성"""
-        df = df.copy()
+    def create_engineered_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """11개 피처 엔지니어링 적용"""
+        logger.info("🔧 피처 엔지니어링 적용 중...")
+        df_fe = df.copy()
         
-        # 시즌 시작 연도
-        season_col = self.detect_season_column(df)
-        if season_col is not None:
-            df['season_start_year'] = df[season_col].apply(self.season_start_year)
-        
-        # 나이 계산
-        if 'date_of_birth' in df.columns and 'season_start_year' in df.columns:
-            by = df['date_of_birth'].astype(str).str.extract(r"^(\d{4})")[0]
-            birth_year = pd.to_numeric(by, errors='coerce')
-            df['age_at_season'] = (df['season_start_year'] - birth_year).astype('float')
-        
-        # 시장가치 관련 피쳐
-        if 'player_market_value_in_eur' in df.columns:
-            df['log_market_value'] = np.log1p(pd.to_numeric(df['player_market_value_in_eur'], errors='coerce'))
-        
-        if 'player_highest_market_value_in_eur' in df.columns and 'player_market_value_in_eur' in df.columns:
-            mv = pd.to_numeric(df['player_market_value_in_eur'], errors='coerce')
-            mv_hi = pd.to_numeric(df['player_highest_market_value_in_eur'], errors='coerce')
-            df['value_growth'] = (mv_hi - mv)
-            df['negotiation_proxy'] = 0.6 * mv + 0.4 * mv_hi
-        
-        return df
-    
-    def create_advanced_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """고급 피쳐 엔지니어링"""
-        df = df.copy()
-        
-        # 1. 시즌 평균 출전시간 / 클럽 시즌 평균 러닝타임
-        if 'season_avg_minutes' in df.columns and 'club_average_age' in df.columns:
-            # 클럽별 시즌 평균 러닝타임 계산
-            club_running_time = df.groupby(['club_name', 'season'])['season_avg_minutes'].mean().reset_index()
-            club_running_time.columns = ['club_name', 'season', 'club_season_avg_minutes']
-            df = df.merge(club_running_time, on=['club_name', 'season'], how='left')
-            df['minutes_vs_club_avg'] = df['season_avg_minutes'] / (df['club_season_avg_minutes'] + 1e-6)
-        
-        # 2. 나이 차이 (선수 나이 - 클럽 평균 나이)
-        if 'age_at_season' in df.columns and 'club_average_age' in df.columns:
-            df['age_difference'] = df['age_at_season'] - df['club_average_age']
-            df['age_relative_position'] = df['age_difference'] / (df['club_average_age'] + 1e-6)
-        
-        # 3. 공격 기여도 vs 팀 성과
-        if 'goals' in df.columns and 'assists' in df.columns and 'season_win_count' in df.columns:
-            df['attack_contribution'] = df['goals'] + df['assists']
-            df['attack_vs_team_success'] = df['attack_contribution'] * df['season_win_count']
-            df['attack_efficiency'] = df['attack_contribution'] / (df['season_win_count'] + 1e-6)
-        
-        # 4. 외국인 선수 여부 및 비율
-        if 'country_of_birth' in df.columns and 'club_foreigners_percentage' in df.columns:
-            df['is_foreigner'] = (df['country_of_birth'] != 'England').astype(int)
-            df['foreigner_vs_club_ratio'] = df['is_foreigner'] * df['club_foreigners_percentage']
-            df['is_foreigner_advantage'] = (df['is_foreigner'] == 1) & (df['club_foreigners_percentage'] > 50)
-        
-        # 5. 포지션별 키 적합성
-        if 'position' in df.columns and 'height_in_cm' in df.columns:
-            # 포지션별 평균 키 계산
-            position_height = df.groupby('position')['height_in_cm'].mean().reset_index()
-            position_height.columns = ['position', 'position_avg_height']
-            df = df.merge(position_height, on='position', how='left')
-            df['height_vs_position'] = df['height_in_cm'] - df['position_avg_height']
-            df['height_advantage'] = df['height_vs_position'] / (df['position_avg_height'] + 1e-6)
-        
-        # 6. 경고장과 출전시간의 관계
-        if 'yellow_cards' in df.columns and 'season_avg_minutes' in df.columns:
-            df['cards_per_minute'] = df['yellow_cards'] / (df['season_avg_minutes'] + 1e-6)
-            df['discipline_score'] = 1 / (df['cards_per_minute'] + 1e-6)
-        
-        # 7. 클럽 재적 기간 (시즌별)
-        if 'season' in df.columns and 'club_name' in df.columns:
-            # 선수별 클럽별 첫 시즌 찾기
-            player_club_first_season = df.groupby(['player_name', 'club_name'])['season'].min().reset_index()
-            player_club_first_season.columns = ['player_name', 'club_name', 'first_season']
-            df = df.merge(player_club_first_season, on=['player_name', 'club_name'], how='left')
+        # 통계 계산 (fit 단계)
+        if not self.is_fitted:
+            if 'position' in df_fe.columns and 'height_in_cm' in df_fe.columns:
+                self.position_avg_height = df_fe.groupby('position')['height_in_cm'].mean().to_dict()
             
-            # 시즌을 숫자로 변환하여 재적 기간 계산
-            season_order = ['12/13', '13/14', '14/15', '15/16', '16/17', '17/18', '18/19', '19/20', '20/21', '21/22', '22/23']
-            season_to_num = {s: i for i, s in enumerate(season_order)}
-            df['season_num'] = df['season'].map(season_to_num)
-            df['first_season_num'] = df['first_season'].map(season_to_num)
-            df['club_tenure_seasons'] = df['season_num'] - df['first_season_num'] + 1
-            df['club_tenure_seasons'] = df['club_tenure_seasons'].fillna(1)  # 첫 시즌은 1
+            if 'club_name' in df_fe.columns and 'season_avg_minutes' in df_fe.columns:
+                self.club_avg_minutes = df_fe.groupby('club_name')['season_avg_minutes'].mean().to_dict()
+            
+            self.is_fitted = True
         
-        # 8. 포지션별 테이블 순위 (간단한 버전)
-        if 'position' in df.columns and 'club_name' in df.columns:
-            # 클럽별 포지션별 선수 수 계산
-            position_club_count = df.groupby(['position', 'club_name']).size().reset_index(name='position_club_count')
-            df = df.merge(position_club_count, on=['position', 'club_name'], how='left')
-            df['position_competition'] = df['position_club_count'] - 1  # 경쟁자 수
+        # 1. 시즌 시작 연도
+        if 'season' in df_fe.columns:
+            df_fe['season_start_year'] = df_fe['season'].apply(
+                lambda x: 2000 + int(x.split('/')[0]) if pd.notna(x) and '/' in str(x) else np.nan
+            )
         
-        return df
+        # 2. 나이 계산
+        if 'date_of_birth' in df_fe.columns and 'season_start_year' in df_fe.columns:
+            birth_years = df_fe['date_of_birth'].astype(str).str.extract(r"^(\d{4})")[0]
+            birth_years = pd.to_numeric(birth_years, errors='coerce')
+            df_fe['age_at_season'] = (df_fe['season_start_year'] - birth_years).astype('float')
+        
+        # 3. 로그 시장가치
+        if 'market_value_in_eur' in df_fe.columns:
+            df_fe['log_market_value'] = np.log1p(pd.to_numeric(df_fe['market_value_in_eur'], errors='coerce'))
+        
+        # 4. 외국인 여부
+        if 'country_of_birth' in df_fe.columns:
+            df_fe['is_foreigner'] = (df_fe['country_of_birth'] != 'England').astype(int)
+        
+        # 5. 클럽 평균 대비 출전시간
+        if 'season_avg_minutes' in df_fe.columns and 'club_name' in df_fe.columns:
+            df_fe['minutes_vs_club_avg'] = df_fe.apply(
+                lambda row: row['season_avg_minutes'] / (self.club_avg_minutes.get(row['club_name'], 1) + 1e-6)
+                if pd.notna(row['season_avg_minutes']) and pd.notna(row['club_name']) else np.nan,
+                axis=1
+            )
+        
+        # 6. 클럽 평균 연령 대비 차이
+        if 'age_at_season' in df_fe.columns and 'club_average_age' in df_fe.columns:
+            df_fe['age_difference'] = df_fe['age_at_season'] - df_fe['club_average_age']
+        
+        # 7. 공격 기여도
+        if 'goals' in df_fe.columns and 'assists' in df_fe.columns:
+            df_fe['attack_contribution'] = df_fe['goals'] + df_fe['assists']
+        
+        # 8. 포지션별 평균 키 대비 비율
+        if 'height_in_cm' in df_fe.columns and 'position' in df_fe.columns:
+            df_fe['height_vs_position'] = df_fe.apply(
+                lambda row: row['height_in_cm'] / (self.position_avg_height.get(row['position'], 180) + 1e-6)
+                if pd.notna(row['height_in_cm']) and pd.notna(row['position']) else np.nan,
+                axis=1
+            )
+        
+        # 9. 분당 카드 수
+        if 'yellow_cards' in df_fe.columns and 'season_avg_minutes' in df_fe.columns:
+            df_fe['cards_per_minute'] = df_fe['yellow_cards'] / (df_fe['season_avg_minutes'] + 1e-6)
+        
+        # 10. 클럽 재적 기간
+        if 'season' in df_fe.columns and 'player_id' in df_fe.columns:
+            season_counts = df_fe.groupby('player_id')['season'].nunique()
+            df_fe['club_tenure_seasons'] = df_fe['player_id'].map(season_counts).fillna(1)
+        
+        # 11. 포지션 내 경쟁 강도
+        if 'position' in df_fe.columns and 'club_name' in df_fe.columns:
+            position_counts = df_fe.groupby(['club_name', 'position']).size()
+            df_fe['position_competition'] = df_fe.apply(
+                lambda row: position_counts.get((row['club_name'], row['position']), 1)
+                if pd.notna(row['club_name']) and pd.notna(row['position']) else 1,
+                axis=1
+            )
+        
+        logger.info(f"✅ 피처 엔지니어링 완료: {df_fe.shape[1] - df.shape[1]}개 피처 추가")
+        return df_fe
     
     def get_feature_types(self, df: pd.DataFrame) -> Dict[str, List[str]]:
         """피쳐 타입 분류"""
+        # ID 변수 및 제외할 변수들
+        exclude_cols = {
+            'player_id', 'club_id', 'season', 'player_name', 'club_name',
+            'date_of_birth', 'agent_name', 'net_transfer_record',
+            self.feature_config['target_col']
+        }
+        
         # 수치형 변수 자동 탐지
         numeric_features = [
             c for c in df.columns 
             if c not in self.feature_config['ordinal_features'] + 
                self.feature_config['nominal_features'] + 
-               [self.feature_config['target_col']]
+               list(exclude_cols)
             and pd.api.types.is_numeric_dtype(df[c])
-            and df[c].dtype in ['int64', 'float64', 'int32', 'float32']
         ]
         
         # 존재하는 피쳐만 선택
@@ -251,38 +246,28 @@ class FootballFeatureEngineer:
         ])
         
         # 하이브리드 전처리기
-        preprocessor = ColumnTransformer(
-            transformers=[
-                ('num', numeric_transformer, feature_types['numeric']),
-                ('ord', ordinal_transformer, feature_types['ordinal']),
-                ('nom', nominal_transformer, feature_types['nominal'])
-            ]
-        )
+        transformers = [('num', numeric_transformer, feature_types['numeric'])]
+        
+        if feature_types['ordinal']:
+            transformers.append(('ord', ordinal_transformer, feature_types['ordinal']))
+        
+        if feature_types['nominal']:
+            transformers.append(('nom', nominal_transformer, feature_types['nominal']))
+        
+        preprocessor = ColumnTransformer(transformers=transformers)
         
         return preprocessor
     
     def fit_transform(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, ColumnTransformer, Dict[str, List[str]]]:
-        """전체 피쳐 엔지니어링 및 전처리"""
-        # 기본 피쳐 생성
-        df_processed = self.create_basic_features(df)
-        
-        # 고급 피쳐 생성
-        df_processed = self.create_advanced_features(df_processed)
+        """전체 피쳐 엔지니어링 및 전처리 파이프라인"""
+        # 피쳐 엔지니어링 적용
+        df_processed = self.create_engineered_features(df)
         
         # 피쳐 타입 분류
         feature_types = self.get_feature_types(df_processed)
         
         # 전처리기 생성
         preprocessor = self.create_preprocessor(feature_types)
-        
-        # 타겟 제외한 피쳐만 선택
-        modeling_features = (feature_types['numeric'] + 
-                           feature_types['ordinal'] + 
-                           feature_types['nominal'])
-        
-        X = df_processed[modeling_features]
-        
-        self.is_fitted = True
         
         return df_processed, preprocessor, feature_types
 
@@ -295,12 +280,10 @@ class DataLeakageChecker:
         """시간적 데이터 누수 검사"""
         results = {}
         
-        # 1. 미래 데이터 포함 여부
         if time_col in df.columns:
             unique_times = sorted(df[time_col].unique())
             results['has_future_data'] = len(unique_times) > 1
             
-            # 2. 시간 순서와 타겟 분포의 관계
             time_target = df.groupby(time_col)[target_col].mean()
             results['temporal_consistency'] = len(time_target.unique()) > 1
         
@@ -311,14 +294,14 @@ class DataLeakageChecker:
         """피쳐 누수 검사"""
         suspicious_features = []
         
-        # 1. 타겟과 완벽한 상관관계
+        # 타겟과 완벽한 상관관계
         for col in df.select_dtypes(include=[np.number]).columns:
             if col != target_col:
                 corr = abs(df[col].corr(df[target_col]))
                 if corr > 0.95:
                     suspicious_features.append(f"{col} (correlation: {corr:.3f})")
         
-        # 2. 타겟과 동일한 분포
+        # 타겟과 동일한 분포
         for col in df.columns:
             if col != target_col and df[col].nunique() == df[target_col].nunique():
                 if set(df[col].unique()) == set(df[target_col].unique()):
@@ -331,14 +314,14 @@ class DataLeakageChecker:
         """데이터 품질 검사"""
         results = {}
         
-        # 1. 결측치 비율
+        # 결측치 비율
         missing_ratio = df.isnull().sum() / len(df)
         results['high_missing_features'] = missing_ratio[missing_ratio > 0.5].to_dict()
         
-        # 2. 중복 행
+        # 중복 행
         results['duplicate_rows'] = df.duplicated().sum()
         
-        # 3. 상수 피쳐
+        # 상수 피쳐
         constant_features = []
         for col in df.columns:
             if df[col].nunique() <= 1:

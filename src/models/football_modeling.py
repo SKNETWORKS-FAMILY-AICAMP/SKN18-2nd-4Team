@@ -16,6 +16,9 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
+
+# 피처 엔지니어링 추가
+from src.features.feature_engineering import FootballFeatureEngineer
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
@@ -104,9 +107,9 @@ class FootballModelTrainer:
     def __init__(self, df_model: pd.DataFrame, config):
         self.df_model = df_model
         self.config = config
-        self.target_col = config.features_config['target_column']
-        self.ordinal_features = config.features_config['ordinal_features']
-        self.nominal_features = config.features_config['nominal_features']
+        self.target_col = config.target_column
+        self.ordinal_features = config.features_ordinal
+        self.nominal_features = config.features_nominal
         
         # 결과 저장용
         self.model_results = {}
@@ -117,34 +120,34 @@ class FootballModelTrainer:
         """전체 파이프라인 실행"""
         logger.info("🚀 모델링 파이프라인 시작")
         
-        # 1. 피처 분류
-        numeric_features = self._get_numeric_features()
+        # 1. 피처 엔지니어링 및 전처리 파이프라인 설정
+        feature_engineer = FootballFeatureEngineer()
+        self.df_model, self.preprocessor, self.feature_types = feature_engineer.fit_transform(self.df_model)
+        logger.info(f"✅ 피처 엔지니어링 완료: {self.df_model.shape}")
         
         # 2. 데이터 분할
         X_train, X_test, y_train, y_test, X_2324 = self._split_data()
         
-        # 3. 전처리기 생성
-        self.preprocessor = self._create_preprocessor(numeric_features)
-        
-        # 4. 모델 정의
+        # 3. 모델 정의
         models = self._define_models()
         
-        # 5. 모델 훈련 및 평가
+        # 4. 모델 훈련 및 평가
         model_scores = self._train_and_evaluate_models(models, X_train, y_train, X_test, y_test)
         
-        # 6. 최적 모델 선택
+        # 5. 최적 모델 선택
         best_model_name = max(model_scores, key=model_scores.get)
         self.best_model = models[best_model_name]
         
-        # 7. 최종 평가
+        # 6. 최종 평가
         final_results = self._final_evaluation(X_test, y_test)
         
-        # 8. SHAP 분석
+        # 7. SHAP 분석
         shap_results = self._shap_analysis(X_test, y_test)
         
-        # 9. 결과 저장
+        # 8. 결과 저장
         self.model_results = {
             'model_scores': model_scores,
+            'model_comparison': model_scores,  # Plotter에서 사용
             'best_model_name': best_model_name,
             'best_model': self.best_model,
             'preprocessor': self.preprocessor,
@@ -155,34 +158,54 @@ class FootballModelTrainer:
             'X_2324': X_2324
         }
         
+        # 9. 시각화 (SHAP, 피처 중요도)
+        try:
+            from src.visualization.plotter import ModelVisualizer
+            visualizer = ModelVisualizer(self.model_results, self.output_dir)
+            
+            # SHAP 분석 플롯
+            visualizer.plot_shap_analysis()
+            
+            # 피처 중요도 플롯  
+            visualizer.plot_feature_importance()
+            
+            logger.info("✅ 시각화 완료")
+        except Exception as e:
+            logger.error(f"시각화 오류: {e}")
+        
         logger.info("✅ 모델링 파이프라인 완료")
         return self.model_results
     
     def _get_numeric_features(self) -> List[str]:
-        """수치형 피처 추출"""
+        """수치형 피처 추출 (ID 변수 제외)"""
         all_features = set(self.df_model.columns) - {self.target_col}
         categorical_features = set(self.ordinal_features + self.nominal_features)
+        # 제외할 ID 변수들
+        exclude_cols = {'player_id', 'club_id', 'season'}
+        
         return [col for col in all_features if col not in categorical_features and 
+                col not in exclude_cols and
                 pd.api.types.is_numeric_dtype(self.df_model[col])]
     
     def _split_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]:
         """데이터 분할"""
-        # 피처와 타겟 분리
-        feature_cols = [col for col in self.df_model.columns if col != self.target_col]
+        # 피처와 타겟 분리 (ID 변수 제외)
+        exclude_cols = {'player_id', 'club_id', 'season', self.target_col}
+        feature_cols = [col for col in self.df_model.columns if col not in exclude_cols]
         X = self.df_model[feature_cols]
         y = self.df_model[self.target_col]
         
-        # 23/24 데이터 분리
+        # 23/24 데이터 분리 (season 컬럼이 있는 경우)
         X_2324 = None
-        if 'season' in X.columns:
-            mask_2324 = X['season'] == '23/24'
-            X_2324 = X[mask_2324].copy()
+        if 'season' in self.df_model.columns:
+            mask_2324 = self.df_model['season'] == '23/24'
+            X_2324 = self.df_model[mask_2324][feature_cols].copy()
             X = X[~mask_2324].copy()
             y = y[~mask_2324].copy()
         
         # 22/23을 테스트로 사용
-        if 'season' in X.columns and '22/23' in X['season'].values:
-            test_mask = X['season'] == '22/23'
+        if 'season' in self.df_model.columns and '22/23' in self.df_model['season'].values:
+            test_mask = self.df_model['season'] == '22/23'
             X_train, X_test = X[~test_mask], X[test_mask]
             y_train, y_test = y[~test_mask], y[test_mask]
         else:
@@ -313,11 +336,19 @@ class FootballModelTrainer:
         # 피처 중요도 (Random Forest인 경우)
         feature_importance = None
         if hasattr(self.best_model, 'feature_importances_'):
-            feature_names = self._get_feature_names()
-            feature_importance = pd.Series(
-                self.best_model.feature_importances_,
-                index=feature_names
-            ).sort_values(ascending=True)
+            feature_names = self._get_processed_feature_names()
+            # 피처 수가 맞는지 확인
+            if len(self.best_model.feature_importances_) == len(feature_names):
+                feature_importance = pd.Series(
+                    self.best_model.feature_importances_,
+                    index=feature_names
+                ).sort_values(ascending=True)
+            else:
+                # 피처 수가 맞지 않으면 기본 이름 사용
+                feature_importance = pd.Series(
+                    self.best_model.feature_importances_,
+                    index=[f"feature_{i}" for i in range(len(self.best_model.feature_importances_))]
+                ).sort_values(ascending=True)
         
         return {
             'accuracy': accuracy,
@@ -331,7 +362,7 @@ class FootballModelTrainer:
         }
     
     def _shap_analysis(self, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, Any]:
-        """SHAP 분석"""
+        """SHAP 분석 (일관성 보장)"""
         if not _has_shap:
             logger.warning("SHAP가 설치되지 않았습니다.")
             return {}
@@ -347,11 +378,30 @@ class FootballModelTrainer:
             pipeline.fit(X_test, y_test)
             
             # 전처리된 데이터
+    
+            # 이미 훈련된 모델과 전처리기 사용 (재훈련 방지)
             X_test_processed = self.preprocessor.transform(X_test)
+
+            # SHAP Explainer (모델 타입에 따라 선택)
+            model_name = type(self.best_model).__name__
             
-            # SHAP Explainer
-            explainer = shap.TreeExplainer(self.best_model)
-            shap_values = explainer.shap_values(X_test_processed)
+            if hasattr(self.best_model, 'feature_importances_'):
+                # Tree-based 모델 (RandomForest, GradientBoosting, XGBoost, LightGBM 등)
+                explainer = shap.TreeExplainer(self.best_model)
+                shap_values = explainer.shap_values(X_test_processed)
+                if isinstance(shap_values, list):
+                    shap_values = shap_values[1]  # 이진 분류의 positive class
+            elif 'Linear' in model_name or 'Logistic' in model_name:
+                # Linear 모델 (LogisticRegression, LinearRegression 등)
+                explainer = shap.LinearExplainer(self.best_model, X_test_processed)
+                shap_values = explainer.shap_values(X_test_processed)
+            else:
+                # 기타 모델 (SVM, KNN 등) - KernelExplainer 사용 (느림)
+                background = shap.kmeans(X_test_processed, 50)  # 배경 데이터 샘플링
+                explainer = shap.KernelExplainer(self.best_model.predict_proba, background)
+                shap_values = explainer.shap_values(X_test_processed[:100])  # 샘플만 계산
+                if isinstance(shap_values, list):
+                    shap_values = shap_values[1]
             
             # 피처 이름 생성 (전처리 후 피처명)
             feature_names = self._get_processed_feature_names()
@@ -410,6 +460,30 @@ class FootballModelTrainer:
                     for value in unique_values:
                         feature_names.append(f"{feature}_{value}")
             
+            # 실제 전처리된 데이터 차원에 맞게 조정
+            try:
+                # 테스트 데이터로 실제 차원 확인 (ID 컬럼 제외)
+                exclude_cols = {'player_id', 'club_id', 'season', self.target_col, 'player_name', 
+                               'date_of_birth', 'agent_name', 'net_transfer_record'}
+                test_cols = [col for col in self.df_model.columns if col not in exclude_cols]
+                test_data = self.df_model[test_cols].head(1)
+                processed = self.preprocessor.transform(test_data)
+                actual_dim = processed.shape[1]
+                
+                if len(feature_names) != actual_dim:
+                    # 차원이 맞지 않으면 실제 차원에 맞게 조정
+                    if len(feature_names) > actual_dim:
+                        feature_names = feature_names[:actual_dim]
+                    else:
+                        # 부족한 피처명은 기본 이름으로 채움
+                        for i in range(len(feature_names), actual_dim):
+                            feature_names.append(f"feature_{i}")
+                
+                logger.info(f"✅ 실제 피처명 생성: {len(feature_names)}개 (차원: {actual_dim})")
+                
+            except Exception as e:
+                logger.warning(f"실제 차원 확인 실패: {e}")
+            
             return feature_names
             
         except Exception as e:
@@ -454,6 +528,36 @@ class FootballModelTrainer:
         joblib.dump(self.model_results, output_dir / 'model_results.pkl')
         
         logger.info(f"💾 모델 저장 완료: {output_dir}")
+    
+    def predict(self, df: pd.DataFrame) -> pd.DataFrame:
+        """23/24 시즌 예측"""
+        # 피처 엔지니어링 적용
+        from src.features.feature_engineering import FootballFeatureEngineer
+        feature_engineer = FootballFeatureEngineer()
+        df_processed = feature_engineer.create_engineered_features(df)
+        
+        # 모델링 피처 선택 (ID 변수 제외)
+        exclude_cols = {'player_id', 'club_id', 'season', 'transfer', 'player_name', 
+                       'date_of_birth', 'agent_name', 'net_transfer_record'}
+        feature_cols = [col for col in df_processed.columns if col not in exclude_cols]
+        X_pred = df_processed[feature_cols]
+        
+        # 전처리 및 예측
+        X_pred_processed = self.preprocessor.transform(X_pred)
+        predictions = self.best_model.predict(X_pred_processed)
+        probabilities = self.best_model.predict_proba(X_pred_processed)[:, 1]
+        
+        # 결과 데이터프레임 생성
+        result_df = pd.DataFrame({
+            'player_name': df['player_name'],
+            'club_name': df['club_name'],
+            'position': df['position'],
+            'predicted_transfer': predictions,
+            'transfer_probability': probabilities,
+            'transfer_probability_percent': (probabilities * 100).round(1)
+        })
+        
+        return result_df
     
     @classmethod
     def load_model(cls, output_dir: Path):

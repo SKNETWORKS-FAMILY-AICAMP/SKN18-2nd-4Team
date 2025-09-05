@@ -64,21 +64,6 @@ data/
   - 피쳐 엔지니어링 및 전처리 완료
   - 모델링에 바로 사용 가능
 
-## 🔧 데이터 파일 경로 설정
-
-프로젝트에서 데이터 파일을 사용할 때는 다음과 같이 경로를 설정하세요:
-
-```python
-# Python 스크립트에서 (프로젝트 루트에서 실행)
-data_path = "data/curated/player_final.csv"
-
-# 주피터 노트북에서 (notes 폴더에서 실행 시)
-data_path = "../data/curated/player_final.csv"
-
-# 원본 데이터 사용 시
-raw_data_path = "data/raw/players.csv"
-```
-
 ## 📊 데이터 파일 정보
 
 ### player_final.csv (최종 통합 데이터셋)

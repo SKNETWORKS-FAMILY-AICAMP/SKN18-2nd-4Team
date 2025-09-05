@@ -1,236 +1,238 @@
+"""
+Visualization module for Football Transfer Prediction
+"""
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
-from typing import List, Optional, Tuple
-import warnings
-warnings.filterwarnings('ignore')
+from pathlib import Path
+from typing import Dict, Any, List, Optional
+import logging
 
-# 한글 폰트 설정 (macOS)
-plt.rcParams['font.family'] = 'AppleGothic'
-plt.rcParams['axes.unicode_minus'] = False
+# SHAP import (optional)
+try:
+    import shap
+    _has_shap = True
+except ImportError:
+    _has_shap = False
 
-class DataPlotter:
-    """데이터 시각화를 담당하는 클래스"""
+logger = logging.getLogger(__name__)
+
+class ModelVisualizer:
+    """모델 시각화 클래스"""
     
-    def __init__(self, data: pd.DataFrame):
-        """
-        Args:
-            data (pd.DataFrame): 시각화할 데이터
-        """
-        self.data = data
-        self.numeric_cols = data.select_dtypes(include=[np.number]).columns.tolist()
-        self.categorical_cols = data.select_dtypes(include=['object', 'category']).columns.tolist()
+    def __init__(self, model_results: Dict[str, Any], output_dir: Path):
+        self.model_results = model_results
+        self.output_dir = output_dir
+        self.output_dir.mkdir(parents=True, exist_ok=True)
         
-    def plot_feature_summary(self, figsize: Tuple[int, int] = (15, 10)) -> None:
-        """
-        피쳐 요약 정보를 시각화합니다.
+        # 한글 폰트 설정
+        plt.rcParams['font.family'] = 'AppleGothic'
+        plt.rcParams['axes.unicode_minus'] = False
         
-        Args:
-            figsize (Tuple[int, int]): 그래프 크기
-        """
-        fig, axes = plt.subplots(2, 2, figsize=figsize)
-        fig.suptitle('데이터 피쳐 요약', fontsize=16, fontweight='bold')
+    def create_all_plots(self):
+        """모든 시각화 생성"""
+        logger.info("📊 시각화 생성 시작")
         
-        # 1. 데이터 타입 분포
-        data_types = []
-        for col in self.data.columns:
-            if col in self.numeric_cols:
-                if self.data[col].nunique() <= 20:
-                    data_types.append('Numeric (Categorical)')
-                else:
-                    data_types.append('Numeric')
-            else:
-                data_types.append('Categorical')
+        # 1. 모델 성능 비교
+        self.plot_model_comparison()
         
-        type_counts = pd.Series(data_types).value_counts()
-        axes[0, 0].pie(type_counts.values, labels=type_counts.index, autopct='%1.1f%%')
-        axes[0, 0].set_title('데이터 타입 분포')
+        # 2. 혼동 행렬
+        self.plot_confusion_matrix()
         
-        # 2. 결측값 분포
-        missing_counts = self.data.isnull().sum()
-        missing_counts = missing_counts[missing_counts > 0]
-        if len(missing_counts) > 0:
-            axes[0, 1].bar(range(len(missing_counts)), missing_counts.values)
-            axes[0, 1].set_title('결측값 개수')
-            axes[0, 1].set_xlabel('피쳐')
-            axes[0, 1].set_ylabel('결측값 개수')
-            axes[0, 1].set_xticks(range(len(missing_counts)))
-            axes[0, 1].set_xticklabels(missing_counts.index, rotation=45, ha='right')
-        else:
-            axes[0, 1].text(0.5, 0.5, '결측값 없음', ha='center', va='center', 
-                           transform=axes[0, 1].transAxes, fontsize=14)
-            axes[0, 1].set_title('결측값 현황')
+        # 3. ROC 곡선
+        self.plot_roc_curve()
         
-        # 3. 수치형 피쳐 분포 (히스토그램)
-        if len(self.numeric_cols) > 0:
-            for i, col in enumerate(self.numeric_cols[:4]):  # 최대 4개만
-                row, col_idx = i // 2, i % 2
-                if row == 1:  # 두 번째 행
-                    axes[row, col_idx].hist(self.data[col].dropna(), bins=20, alpha=0.7, edgecolor='black')
-                    axes[row, col_idx].set_title(f'{col} 분포')
-                    axes[row, col_idx].set_xlabel(col)
-                    axes[row, col_idx].set_ylabel('빈도')
+        # 4. 피처 중요도
+        self.plot_feature_importance()
         
-        # 4. 범주형 피쳐 분포 (막대그래프)
-        if len(self.categorical_cols) > 0:
-            col = self.categorical_cols[0]
-            value_counts = self.data[col].value_counts().head(10)
-            axes[1, 1].bar(range(len(value_counts)), value_counts.values)
-            axes[1, 1].set_title(f'{col} 상위 10개 값')
-            axes[1, 1].set_xlabel('값')
-            axes[1, 1].set_ylabel('개수')
-            axes[1, 1].set_xticks(range(len(value_counts)))
-            axes[1, 1].set_xticklabels(value_counts.index, rotation=45, ha='right')
+        # 5. SHAP 분석
+        if _has_shap and 'shap_results' in self.model_results:
+            self.plot_shap_analysis()
+        
+        logger.info("✅ 시각화 완료")
+    
+    def plot_model_comparison(self):
+        """모델 성능 비교 그래프"""
+        if 'model_scores' not in self.model_results:
+            logger.warning("모델 성능 점수가 없습니다.")
+            return
+            
+        fig, ax = plt.subplots(figsize=(12, 8))
+        
+        models = list(self.model_results['model_scores'].keys())
+        scores = list(self.model_results['model_scores'].values())
+        
+        bars = ax.bar(models, scores, color='skyblue', alpha=0.7)
+        ax.set_title('Model Performance Comparison', fontsize=16, fontweight='bold')
+        ax.set_ylabel('Composite Score', fontsize=12)
+        ax.set_xlabel('Models', fontsize=12)
+        
+        # 값 표시
+        for bar, score in zip(bars, scores):
+            ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
+                   f'{score:.3f}', ha='center', va='bottom')
+        
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(self.output_dir / 'model_comparison.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info("✅ 모델 성능 비교 그래프 저장 완료")
+    
+    def plot_confusion_matrix(self):
+        """혼동 행렬"""
+        if 'final_results' not in self.model_results or 'confusion_matrix' not in self.model_results['final_results']:
+            logger.warning("혼동 행렬 데이터가 없습니다.")
+            return
+            
+        cm = self.model_results['final_results']['confusion_matrix']
+        
+        fig, ax = plt.subplots(figsize=(8, 6))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
+        ax.set_title('Confusion Matrix', fontsize=16, fontweight='bold')
+        ax.set_xlabel('Predicted', fontsize=12)
+        ax.set_ylabel('Actual', fontsize=12)
         
         plt.tight_layout()
-        plt.show()
+        plt.savefig(self.output_dir / 'confusion_matrix.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info("✅ 혼동 행렬 그래프 저장 완료")
     
-    def plot_correlation_heatmap(self, target_col: str = 'Churn', figsize: Tuple[int, int] = (12, 10)) -> None:
-        """
-        상관관계 히트맵을 그립니다.
-        
-        Args:
-            target_col (str): 타겟 변수명
-            figsize (Tuple[int, int]): 그래프 크기
-        """
-        if target_col not in self.data.columns:
-            print(f"❌ 타겟 변수 '{target_col}'를 찾을 수 없습니다.")
+    def plot_roc_curve(self):
+        """ROC 곡선"""
+        if 'final_results' not in self.model_results or 'roc_curve' not in self.model_results['final_results']:
+            logger.warning("ROC 곡선 데이터가 없습니다.")
             return
+            
+        fpr, tpr = self.model_results['final_results']['roc_curve']
+        auc = self.model_results['final_results']['auc']
         
-        # 수치형 컬럼만 선택
-        numeric_data = self.data[self.numeric_cols + [target_col]]
-        numeric_data = numeric_data.dropna()
-        
-        if len(numeric_data) == 0:
-            print("❌ 결측값이 너무 많아 상관관계 분석을 수행할 수 없습니다.")
-            return
-        
-        # 상관관계 계산
-        corr_matrix = numeric_data.corr()
-        
-        # 히트맵 그리기
-        plt.figure(figsize=figsize)
-        mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
-        sns.heatmap(corr_matrix, mask=mask, annot=True, cmap='coolwarm', center=0,
-                    square=True, linewidths=0.5, cbar_kws={"shrink": .8})
-        plt.title('수치형 피쳐 상관관계 히트맵', fontsize=16, fontweight='bold')
-        plt.tight_layout()
-        plt.show()
-    
-    def plot_churn_analysis(self, target_col: str = 'Churn', figsize: Tuple[int, int] = (15, 12)) -> None:
-        """
-        이탈 분석을 시각화합니다.
-        
-        Args:
-            target_col (str): 타겟 변수명
-            figsize (Tuple[int, int]): 그래프 크기
-        """
-        if target_col not in self.data.columns:
-            print(f"❌ 타겟 변수 '{target_col}'를 찾을 수 없습니다.")
-            return
-        
-        fig, axes = plt.subplots(2, 3, figsize=figsize)
-        fig.suptitle('이탈(Churn) 분석', fontsize=16, fontweight='bold')
-        
-        # 1. 전체 이탈률
-        churn_counts = self.data[target_col].value_counts()
-        axes[0, 0].pie(churn_counts.values, labels=['유지', '이탈'], autopct='%1.1f%%')
-        axes[0, 0].set_title('전체 이탈률')
-        
-        # 2. 성별별 이탈률
-        if 'Gender' in self.data.columns:
-            gender_churn = pd.crosstab(self.data['Gender'], self.data[target_col])
-            gender_churn.plot(kind='bar', ax=axes[0, 1], color=['lightblue', 'lightcoral'])
-            axes[0, 1].set_title('성별별 이탈률')
-            axes[0, 1].set_xlabel('성별')
-            axes[0, 1].set_ylabel('고객 수')
-            axes[0, 1].legend(['유지', '이탈'])
-        
-        # 3. 결혼상태별 이탈률
-        if 'MaritalStatus' in self.data.columns:
-            marital_churn = pd.crosstab(self.data['MaritalStatus'], self.data[target_col])
-            marital_churn.plot(kind='bar', ax=axes[0, 2], color=['lightgreen', 'lightcoral'])
-            axes[0, 2].set_title('결혼상태별 이탈률')
-            axes[0, 2].set_xlabel('결혼상태')
-            axes[0, 2].set_ylabel('고객 수')
-            axes[0, 2].legend(['유지', '이탈'])
-        
-        # 4. 도시 등급별 이탈률
-        if 'CityTier' in self.data.columns:
-            city_churn = pd.crosstab(self.data['CityTier'], self.data[target_col])
-            city_churn.plot(kind='bar', ax=axes[1, 0], color=['lightyellow', 'lightcoral'])
-            axes[1, 0].set_title('도시 등급별 이탈률')
-            axes[1, 0].set_xlabel('도시 등급')
-            axes[1, 0].set_ylabel('고객 수')
-            axes[1, 0].legend(['유지', '이탈'])
-        
-        # 5. 만족도별 이탈률
-        if 'SatisfactionScore' in self.data.columns:
-            satisfaction_churn = pd.crosstab(self.data['SatisfactionScore'], self.data[target_col])
-            satisfaction_churn.plot(kind='bar', ax=axes[1, 1], color=['lightpink', 'lightcoral'])
-            axes[1, 1].set_title('만족도별 이탈률')
-            axes[1, 1].set_xlabel('만족도 점수')
-            axes[1, 1].set_ylabel('고객 수')
-            axes[1, 1].legend(['유지', '이탈'])
-        
-        # 6. 주문 횟수별 이탈률
-        if 'OrderCount' in self.data.columns:
-            order_churn = pd.crosstab(self.data['OrderCount'], self.data[target_col])
-            order_churn.plot(kind='bar', ax=axes[1, 2], color=['lightcyan', 'lightcoral'])
-            axes[1, 2].set_title('주문 횟수별 이탈률')
-            axes[1, 2].set_xlabel('주문 횟수')
-            axes[1, 2].set_ylabel('고객 수')
-            axes[1, 2].legend(['유지', '이탈'])
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {auc:.3f})')
+        ax.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        ax.set_xlim([0.0, 1.0])
+        ax.set_ylim([0.0, 1.05])
+        ax.set_xlabel('False Positive Rate', fontsize=12)
+        ax.set_ylabel('True Positive Rate', fontsize=12)
+        ax.set_title('ROC Curve', fontsize=16, fontweight='bold')
+        ax.legend(loc="lower right")
         
         plt.tight_layout()
-        plt.show()
+        plt.savefig(self.output_dir / 'roc_curve.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info("✅ ROC 곡선 그래프 저장 완료")
     
-    def plot_feature_distributions(self, figsize: Tuple[int, int] = (18, 15)) -> None:
-        """
-        주요 피쳐들의 분포를 시각화합니다.
+    def plot_feature_importance(self):
+        """피처 중요도 (상위 30개)"""
+        if 'final_results' not in self.model_results or 'feature_importance' not in self.model_results['final_results']:
+            logger.warning("피처 중요도 데이터가 없습니다.")
+            return
+            
+        importance = self.model_results['final_results']['feature_importance']
+        if importance is None:
+            logger.warning("피처 중요도를 계산할 수 없습니다.")
+            return
         
-        Args:
-            figsize (Tuple[int, int]): 그래프 크기
-        """
-        fig, axes = plt.subplots(3, 3, figsize=figsize)
-        fig.suptitle('주요 피쳐 분포 분석', fontsize=16, fontweight='bold')
+        # 상위 30개만 선택
+        top_importance = importance.tail(30)
         
-        # 수치형 피쳐들
-        numeric_features = ['Tenure', 'SatisfactionScore', 'HourSpendOnApp', 
-                          'OrderCount', 'CashbackAmount', 'NumberOfAddress']
+        fig, ax = plt.subplots(figsize=(12, 10))
+        top_importance.plot(kind='barh', ax=ax, color='lightcoral')
+        ax.set_title('Feature Importance (Top 30)', fontsize=16, fontweight='bold')
+        ax.set_xlabel('Importance', fontsize=12)
+        ax.set_ylabel('Features', fontsize=12)
         
-        for i, feature in enumerate(numeric_features):
-            if feature in self.data.columns:
-                row, col = i // 3, i % 3
+        plt.tight_layout()
+        plt.savefig(self.output_dir / 'feature_importance.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info("✅ 피처 중요도 그래프 저장 완료 (상위 30개)")
+    
+    def plot_shap_analysis(self):
+        """SHAP 분석"""
+        if not _has_shap or 'shap_results' not in self.model_results:
+            logger.warning("SHAP 분석을 위한 데이터가 없습니다.")
+            return
+            
+        try:
+            shap_results = self.model_results['shap_results']
+            if not shap_results:
+                logger.warning("SHAP 결과가 비어있습니다.")
+                return
                 
-                if feature in ['Tenure', 'CashbackAmount']:
-                    # 히스토그램
-                    axes[row, col].hist(self.data[feature].dropna(), bins=20, alpha=0.7, edgecolor='black')
-                    axes[row, col].set_title(f'{feature} 분포')
-                    axes[row, col].set_xlabel(feature)
-                    axes[row, col].set_ylabel('빈도')
-                else:
-                    # 막대그래프
-                    value_counts = self.data[feature].value_counts().sort_index()
-                    axes[row, col].bar(value_counts.index, value_counts.values)
-                    axes[row, col].set_title(f'{feature} 분포')
-                    axes[row, col].set_xlabel(feature)
-                    axes[row, col].set_ylabel('고객 수')
+            shap_values = shap_results['shap_values']
+            X_test_processed = shap_results['X_test_processed']
+            feature_names = shap_results.get('feature_names', [])
+            
+            # 피처명이 없으면 기본 이름 생성
+            if not feature_names:
+                feature_names = [f'feature_{i}' for i in range(X_test_processed.shape[1])]
+            
+            # DataFrame으로 변환하여 피처명 설정
+            X_test_df = pd.DataFrame(X_test_processed, columns=feature_names)
+            
+            # SHAP summary plot (가로로 길게, 피처명 명확히)
+            plt.figure(figsize=(20, 12))  # 더 가로로 길게
+            shap.summary_plot(
+                shap_values,
+                X_test_df,
+                max_display=20,
+                show=False,
+                plot_size=(20, 12)  # SHAP 내부 크기 설정
+            )
+            plt.title('SHAP Feature Importance Distribution (Top 20)', fontsize=18, fontweight='bold', pad=20)
+            plt.xlabel('SHAP value (impact on model output)', fontsize=14)
+            plt.ylabel('Features', fontsize=14)
+            plt.xticks(fontsize=12)
+            plt.yticks(fontsize=11)  # 피처명 폰트 크기
+            plt.tight_layout()
+            plt.savefig(self.output_dir / 'shap_summary.png', dpi=300, bbox_inches='tight', 
+                       facecolor='white', edgecolor='none')
+            plt.close()
+            
+            # SHAP bar plot (가로로 길게)
+            plt.figure(figsize=(16, 10))  # 가로로 길게
+            shap.summary_plot(
+                shap_values,
+                X_test_df,
+                plot_type="bar",
+                max_display=20,
+                show=False,
+                plot_size=(16, 10)
+            )
+            plt.title('SHAP Feature Importance Ranking (Top 20)', fontsize=18, fontweight='bold', pad=20)
+            plt.xlabel('Mean |SHAP value|', fontsize=14)
+            plt.ylabel('Features', fontsize=14)
+            plt.xticks(fontsize=12)
+            plt.yticks(fontsize=11)  # 피처명 폰트 크기
+            plt.tight_layout()
+            plt.savefig(self.output_dir / 'shap_bar.png', dpi=300, bbox_inches='tight',
+                       facecolor='white', edgecolor='none')
+            plt.close()
+            
+            logger.info("✅ SHAP 분석 완료")
+            
+        except Exception as e:
+            logger.error(f"SHAP 분석 오류: {e}")
+    
+    def plot_prediction_distribution(self, predictions: pd.DataFrame):
+        """예측 결과 분포"""
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
         
-        # 범주형 피쳐들
-        categorical_features = ['PreferredPaymentMode', 'PreferedOrderCat', 'Gender']
+        # 이적 확률 분포
+        ax1.hist(predictions['transfer_probability_percent'], bins=30, alpha=0.7, color='skyblue')
+        ax1.set_title('Transfer Probability Distribution', fontsize=14, fontweight='bold')
+        ax1.set_xlabel('Transfer Probability (%)', fontsize=12)
+        ax1.set_ylabel('Count', fontsize=12)
+        ax1.axvline(x=60, color='red', linestyle='--', label='High Risk Threshold (60%)')
+        ax1.legend()
         
-        for i, feature in enumerate(categorical_features):
-            if feature in self.data.columns:
-                row, col = (i + 6) // 3, (i + 6) % 3
-                value_counts = self.data[feature].value_counts()
-                axes[row, col].bar(range(len(value_counts)), value_counts.values)
-                axes[row, col].set_title(f'{feature} 분포')
-                axes[row, col].set_xlabel('값')
-                axes[row, col].set_ylabel('고객 수')
-                axes[row, col].set_xticks(range(len(value_counts)))
-                axes[row, col].set_xticklabels(value_counts.index, rotation=45, ha='right')
+        # 포지션별 이적 확률
+        position_risk = predictions.groupby('position')['transfer_probability_percent'].mean().sort_values(ascending=True)
+        position_risk.plot(kind='barh', ax=ax2, color='lightcoral')
+        ax2.set_title('Average Transfer Probability by Position', fontsize=14, fontweight='bold')
+        ax2.set_xlabel('Average Transfer Probability (%)', fontsize=12)
         
         plt.tight_layout()
-        plt.show()
+        plt.savefig(self.output_dir / 'prediction_distribution.png', dpi=300, bbox_inches='tight')
+        plt.close()
