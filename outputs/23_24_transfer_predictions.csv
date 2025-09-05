@@ -1,0 +1,253 @@
+player_name,club_name,position,predicted_transfer,transfer_probability,transfer_probability_percent
+Player_60,Arsenal,Midfield,1,0.9706877279242653,97.1
+Player_228,Liverpool,Defense,1,0.9261230176298259,92.6
+Player_785,Chelsea,Goalkeeper,1,0.9130310570227258,91.3
+Player_861,Arsenal,Defense,1,0.9025058864518635,90.3
+Player_357,Tottenham,Defense,1,0.8910652243543857,89.1
+Player_312,Arsenal,Defense,1,0.7395284659403638,74.0
+Player_868,Arsenal,Goalkeeper,1,0.696829421909814,69.7
+Player_604,Liverpool,Defense,1,0.6539045869326078,65.4
+Player_19,Man City,Midfield,1,0.60349363197268,60.3
+Player_223,Man City,Defense,1,0.5709370115773732,57.1
+Player_504,Liverpool,Midfield,1,0.5499818111898489,55.0
+Player_603,Man City,Midfield,1,0.5492834803337848,54.9
+Player_871,Man City,Midfield,1,0.5022496905870739,50.2
+Player_326,Liverpool,Defense,0,0.4955362012449331,49.6
+Player_970,Man City,Goalkeeper,0,0.4590213408775714,45.9
+Player_991,Liverpool,Midfield,0,0.45375945491535125,45.4
+Player_770,Tottenham,Defense,0,0.45331736274047946,45.3
+Player_97,Arsenal,Goalkeeper,0,0.45241636249808703,45.2
+Player_705,Man City,Defense,0,0.4461579438161376,44.6
+Player_654,Tottenham,Attack,0,0.4232025558232437,42.3
+Player_872,Chelsea,Attack,0,0.405956813196526,40.6
+Player_804,Arsenal,Goalkeeper,0,0.35953498708418274,36.0
+Player_422,Arsenal,Midfield,0,0.348110504121898,34.8
+Player_724,Chelsea,Midfield,0,0.3315989282331192,33.2
+Player_963,Tottenham,Midfield,0,0.25229718015774494,25.2
+Player_47,Tottenham,Midfield,0,0.2516355693224913,25.2
+Player_672,Tottenham,Midfield,0,0.24460280950993893,24.5
+Player_476,Man City,Midfield,0,0.242481578019484,24.2
+Player_329,Arsenal,Attack,0,0.23018547096837338,23.0
+Player_495,Chelsea,Attack,0,0.23018836774500112,23.0
+Player_662,Chelsea,Goalkeeper,0,0.22535591679005015,22.5
+Player_607,Chelsea,Attack,0,0.2174070057044997,21.7
+Player_281,Tottenham,Midfield,0,0.2112119108736833,21.1
+Player_537,Liverpool,Goalkeeper,0,0.21060392325302169,21.1
+Player_116,Arsenal,Goalkeeper,0,0.2100473946029138,21.0
+Player_416,Arsenal,Attack,0,0.19751765804164734,19.8
+Player_389,Arsenal,Goalkeeper,0,0.18864150796557247,18.9
+Player_217,Man City,Midfield,0,0.18201735268458416,18.2
+Player_973,Tottenham,Goalkeeper,0,0.17851510312561122,17.9
+Player_344,Arsenal,Defense,0,0.17764801999925678,17.8
+Player_527,Chelsea,Goalkeeper,0,0.17550746751705684,17.6
+Player_14,Man City,Midfield,0,0.1738088444750801,17.4
+Player_623,Man City,Midfield,0,0.1720759447777786,17.2
+Player_629,Man City,Defense,0,0.16460161915326857,16.5
+Player_669,Chelsea,Goalkeeper,0,0.1626420009250979,16.3
+Player_995,Arsenal,Midfield,0,0.15876689870354704,15.9
+Player_238,Tottenham,Midfield,0,0.15669195146738155,15.7
+Player_595,Tottenham,Midfield,0,0.14960783620126225,15.0
+Player_931,Chelsea,Goalkeeper,0,0.14972983063427042,15.0
+Player_173,Man City,Goalkeeper,0,0.13401733906833865,13.4
+Player_756,Tottenham,Goalkeeper,0,0.12552520486147645,12.6
+Player_955,Chelsea,Defense,0,0.12310003127760999,12.3
+Player_616,Man City,Midfield,0,0.12318627490314489,12.3
+Player_867,Tottenham,Midfield,0,0.11264365291099655,11.3
+Player_318,Arsenal,Goalkeeper,0,0.10301046834639077,10.3
+Player_652,Liverpool,Goalkeeper,0,0.09922042267520705,9.9
+Player_798,Liverpool,Midfield,0,0.0965658922371349,9.7
+Player_668,Arsenal,Attack,0,0.09636557919062315,9.6
+Player_384,Tottenham,Defense,0,0.09596687899879837,9.6
+Player_858,Chelsea,Defense,0,0.09331144095951024,9.3
+Player_553,Tottenham,Goalkeeper,0,0.09093578814070297,9.1
+Player_881,Tottenham,Goalkeeper,0,0.09012917401452743,9.0
+Player_737,Man City,Midfield,0,0.09024089246671135,9.0
+Player_936,Chelsea,Goalkeeper,0,0.08902675573654721,8.9
+Player_117,Liverpool,Midfield,0,0.08623906899722482,8.6
+Player_392,Tottenham,Midfield,0,0.08414233760365133,8.4
+Player_258,Arsenal,Defense,0,0.08274635928506845,8.3
+Player_180,Chelsea,Attack,0,0.07967044190059273,8.0
+Player_801,Liverpool,Defense,0,0.0786004801662901,7.9
+Player_321,Arsenal,Midfield,0,0.07708033911344006,7.7
+Player_431,Chelsea,Attack,0,0.07685764870337652,7.7
+Player_621,Arsenal,Defense,0,0.07583750952451276,7.6
+Player_641,Tottenham,Defense,0,0.07398690656950539,7.4
+Player_526,Tottenham,Attack,0,0.07280847097680489,7.3
+Player_806,Liverpool,Defense,0,0.07284287177863115,7.3
+Player_274,Liverpool,Midfield,0,0.07216635064685673,7.2
+Player_709,Chelsea,Attack,0,0.07034195376580586,7.0
+Player_671,Chelsea,Midfield,0,0.0692411067409269,6.9
+Player_316,Liverpool,Midfield,0,0.06549642106038839,6.5
+Player_870,Liverpool,Defense,0,0.06376204836970005,6.4
+Player_728,Liverpool,Defense,0,0.06219175434681244,6.2
+Player_627,Arsenal,Defense,0,0.06051058857069098,6.1
+Player_408,Tottenham,Defense,0,0.058036827368074896,5.8
+Player_130,Liverpool,Defense,0,0.05691338594311628,5.7
+Player_146,Man City,Defense,0,0.05733095195335112,5.7
+Player_942,Liverpool,Midfield,0,0.05526592801459995,5.5
+Player_181,Liverpool,Goalkeeper,0,0.05390592081189531,5.4
+Player_294,Man City,Midfield,0,0.052999890326678775,5.3
+Player_105,Tottenham,Defense,0,0.05174622846692419,5.2
+Player_110,Chelsea,Defense,0,0.05239693117339311,5.2
+Player_370,Arsenal,Midfield,0,0.05111570597795615,5.1
+Player_780,Arsenal,Goalkeeper,0,0.050256944258142,5.0
+Player_739,Tottenham,Midfield,0,0.048118085106284514,4.8
+Player_458,Arsenal,Midfield,0,0.048194681056339825,4.8
+Player_533,Tottenham,Midfield,0,0.045037364847575014,4.5
+Player_397,Liverpool,Attack,0,0.04350986949067351,4.4
+Player_699,Arsenal,Goalkeeper,0,0.04365891003433292,4.4
+Player_688,Chelsea,Midfield,0,0.04136127855962675,4.1
+Player_498,Chelsea,Midfield,0,0.03858750261337345,3.9
+Player_807,Liverpool,Goalkeeper,0,0.03777721897691622,3.8
+Player_426,Chelsea,Attack,0,0.03825267748010613,3.8
+Player_58,Man City,Defense,0,0.0374247629337834,3.7
+Player_750,Man City,Attack,0,0.036111919235524405,3.6
+Player_23,Chelsea,Defense,0,0.036146143052609284,3.6
+Player_535,Tottenham,Defense,0,0.03482736721396763,3.5
+Player_314,Arsenal,Attack,0,0.034733898251790865,3.5
+Player_445,Man City,Defense,0,0.03409555214502695,3.4
+Player_599,Tottenham,Attack,0,0.03163114856255308,3.2
+Player_278,Liverpool,Defense,0,0.03217727719579945,3.2
+Player_183,Arsenal,Goalkeeper,0,0.0318435205742455,3.2
+Player_457,Liverpool,Attack,0,0.031015291463616028,3.1
+Player_842,Chelsea,Midfield,0,0.031497961216195906,3.1
+Player_969,Tottenham,Goalkeeper,0,0.029917970327191304,3.0
+Player_67,Arsenal,Goalkeeper,0,0.029775592283950474,3.0
+Player_815,Man City,Defense,0,0.02885361692351778,2.9
+Player_98,Arsenal,Midfield,0,0.028722305366962308,2.9
+Player_3,Tottenham,Goalkeeper,0,0.027966448222098116,2.8
+Player_809,Tottenham,Goalkeeper,0,0.027225507468208805,2.7
+Player_285,Tottenham,Midfield,0,0.026877346479408315,2.7
+Player_851,Tottenham,Goalkeeper,0,0.025957383413966643,2.6
+Player_90,Liverpool,Attack,0,0.024666258326167152,2.5
+Player_74,Tottenham,Goalkeeper,0,0.023451984811931212,2.3
+Player_811,Arsenal,Attack,0,0.022025616007175463,2.2
+Player_483,Tottenham,Defense,0,0.021408993803256823,2.1
+Player_162,Tottenham,Attack,0,0.019594004697577258,2.0
+Player_182,Chelsea,Defense,0,0.020144574981691303,2.0
+Player_863,Arsenal,Attack,0,0.020056144447101815,2.0
+Player_79,Man City,Attack,0,0.01762464385947494,1.8
+Player_674,Chelsea,Goalkeeper,0,0.016606898233370138,1.7
+Player_921,Tottenham,Goalkeeper,0,0.01590402039970994,1.6
+Player_560,Chelsea,Attack,0,0.01576895562321449,1.6
+Player_30,Liverpool,Midfield,0,0.015248561803755042,1.5
+Player_886,Arsenal,Midfield,0,0.014982418888007384,1.5
+Player_100,Man City,Goalkeeper,0,0.014602053670154371,1.5
+Player_860,Chelsea,Midfield,0,0.014512206465231658,1.5
+Player_211,Man City,Goalkeeper,0,0.014564490628478989,1.5
+Player_697,Arsenal,Attack,0,0.014157972382409768,1.4
+Player_685,Chelsea,Midfield,0,0.013807278931776962,1.4
+Player_538,Arsenal,Attack,0,0.013986592981406854,1.4
+Player_140,Chelsea,Defense,0,0.012551125127574808,1.3
+Player_411,Arsenal,Goalkeeper,0,0.01324952253072451,1.3
+Player_460,Chelsea,Midfield,0,0.012642662547958303,1.3
+Player_378,Arsenal,Attack,0,0.012552445871124022,1.3
+Player_282,Chelsea,Midfield,0,0.01347507927144791,1.3
+Player_231,Chelsea,Goalkeeper,0,0.012432880122376526,1.2
+Player_205,Liverpool,Midfield,0,0.012438494192825462,1.2
+Player_687,Chelsea,Defense,0,0.011459813472634429,1.1
+Player_946,Arsenal,Goalkeeper,0,0.011394269381578545,1.1
+Player_269,Man City,Midfield,0,0.010851430777316201,1.1
+Player_470,Arsenal,Defense,0,0.01134534122867584,1.1
+Player_986,Tottenham,Goalkeeper,0,0.01078902323857562,1.1
+Player_193,Arsenal,Goalkeeper,0,0.010694910814917254,1.1
+Player_673,Man City,Attack,0,0.010028281197342724,1.0
+Player_134,Liverpool,Goalkeeper,0,0.009522808044131987,1.0
+Player_18,Chelsea,Attack,0,0.009879992514725657,1.0
+Player_693,Chelsea,Goalkeeper,0,0.008828474300867034,0.9
+Player_703,Man City,Goalkeeper,0,0.008879194072028453,0.9
+Player_41,Chelsea,Defense,0,0.008554652016662294,0.9
+Player_515,Liverpool,Defense,0,0.008771597088563728,0.9
+Player_610,Chelsea,Defense,0,0.009370221804861847,0.9
+Player_142,Man City,Attack,0,0.009070275812105164,0.9
+Player_210,Liverpool,Defense,0,0.008312121641687376,0.8
+Player_32,Man City,Midfield,0,0.007949300526874873,0.8
+Player_619,Man City,Defense,0,0.008034547394321724,0.8
+Player_337,Man City,Defense,0,0.00819963880587198,0.8
+Player_465,Arsenal,Defense,0,0.008000730137297222,0.8
+Player_407,Man City,Attack,0,0.007888720052515787,0.8
+Player_808,Chelsea,Attack,0,0.0074484706152953915,0.7
+Player_826,Arsenal,Attack,0,0.006863118663777667,0.7
+Player_938,Chelsea,Midfield,0,0.006597015076648695,0.7
+Player_467,Liverpool,Defense,0,0.006679271284161867,0.7
+Player_930,Arsenal,Goalkeeper,0,0.006668092414937832,0.7
+Player_352,Chelsea,Attack,0,0.006953995659506607,0.7
+Player_789,Chelsea,Attack,0,0.006944406686061621,0.7
+Player_907,Liverpool,Goalkeeper,0,0.007398567884758407,0.7
+Player_971,Tottenham,Attack,0,0.005637095970741999,0.6
+Player_741,Tottenham,Attack,0,0.00623300530982845,0.6
+Player_224,Chelsea,Midfield,0,0.005662933850600164,0.6
+Player_112,Tottenham,Defense,0,0.006151501619138851,0.6
+Player_276,Tottenham,Attack,0,0.005613480167526069,0.6
+Player_528,Tottenham,Goalkeeper,0,0.006093610983912002,0.6
+Player_423,Arsenal,Goalkeeper,0,0.006137140693865691,0.6
+Player_292,Chelsea,Attack,0,0.00525697351770604,0.5
+Player_31,Man City,Goalkeeper,0,0.005147200591870685,0.5
+Player_649,Arsenal,Defense,0,0.0047799737870452864,0.5
+Player_702,Arsenal,Goalkeeper,0,0.005048176681627378,0.5
+Player_676,Tottenham,Attack,0,0.004602222608382539,0.5
+Player_442,Liverpool,Attack,0,0.0050257426969224275,0.5
+Player_856,Liverpool,Goalkeeper,0,0.004866337332053043,0.5
+Player_490,Chelsea,Attack,0,0.005072385057344584,0.5
+Player_926,Arsenal,Midfield,0,0.004534252134139556,0.5
+Player_521,Chelsea,Attack,0,0.005017328353808326,0.5
+Player_962,Arsenal,Attack,0,0.0040969558101492335,0.4
+Player_922,Tottenham,Attack,0,0.003569425990577628,0.4
+Player_1,Tottenham,Goalkeeper,0,0.003721179120704448,0.4
+Player_419,Man City,Attack,0,0.004230430865348374,0.4
+Player_208,Man City,Defense,0,0.0036901146615480203,0.4
+Player_758,Tottenham,Goalkeeper,0,0.00401383503076581,0.4
+Player_468,Chelsea,Attack,0,0.0037099054854107306,0.4
+Player_650,Arsenal,Attack,0,0.003963081247403126,0.4
+Player_17,Tottenham,Defense,0,0.0036511143511928127,0.4
+Player_141,Tottenham,Goalkeeper,0,0.003815476561506671,0.4
+Player_592,Tottenham,Attack,0,0.0038036461264693315,0.4
+Player_334,Man City,Attack,0,0.0037493215894769134,0.4
+Player_878,Tottenham,Goalkeeper,0,0.0027051342936385485,0.3
+Player_496,Liverpool,Goalkeeper,0,0.0032264996294931922,0.3
+Player_253,Liverpool,Defense,0,0.0028042875194539455,0.3
+Player_222,Liverpool,Goalkeeper,0,0.003174710503540217,0.3
+Player_564,Man City,Goalkeeper,0,0.0027519018548890226,0.3
+Player_497,Chelsea,Attack,0,0.003212464765445991,0.3
+Player_577,Man City,Goalkeeper,0,0.0034851141885199723,0.3
+Player_821,Man City,Defense,0,0.0026341405163927702,0.3
+Player_625,Arsenal,Attack,0,0.0026396588943495922,0.3
+Player_104,Chelsea,Attack,0,0.002516526215210615,0.3
+Player_106,Liverpool,Attack,0,0.0031358194663261554,0.3
+Player_165,Arsenal,Attack,0,0.003350887641891375,0.3
+Player_939,Chelsea,Midfield,0,0.0034563957378431396,0.3
+Player_49,Man City,Attack,0,0.00265884330529827,0.3
+Player_75,Arsenal,Attack,0,0.0016683243033220737,0.2
+Player_101,Chelsea,Defense,0,0.0018769168174808855,0.2
+Player_997,Chelsea,Defense,0,0.0019531838913989497,0.2
+Player_449,Arsenal,Defense,0,0.0023650101772197587,0.2
+Player_503,Liverpool,Defense,0,0.002068167655955903,0.2
+Player_984,Liverpool,Attack,0,0.001911948744251436,0.2
+Player_857,Man City,Attack,0,0.00167580854674,0.2
+Player_566,Liverpool,Midfield,0,0.002170156499531334,0.2
+Player_633,Liverpool,Attack,0,0.0017981700173465346,0.2
+Player_680,Tottenham,Attack,0,0.0018862809090469375,0.2
+Player_682,Arsenal,Goalkeeper,0,0.002181740861389524,0.2
+Player_686,Tottenham,Attack,0,0.002012195471794791,0.2
+Player_121,Man City,Attack,0,0.0016121028290994055,0.2
+Player_980,Liverpool,Attack,0,0.0006986120482140744,0.1
+Player_65,Man City,Defense,0,0.0009299319844245758,0.1
+Player_990,Arsenal,Midfield,0,0.0010777602859266355,0.1
+Player_772,Man City,Goalkeeper,0,0.0013755861080145294,0.1
+Player_158,Chelsea,Goalkeeper,0,0.0008338713586160797,0.1
+Player_203,Chelsea,Midfield,0,0.0012967883821063183,0.1
+Player_810,Man City,Defense,0,0.0009632050687403644,0.1
+Player_439,Chelsea,Attack,0,0.0012294183993737456,0.1
+Player_221,Chelsea,Attack,0,0.0006457382978941876,0.1
+Player_287,Tottenham,Attack,0,0.000788568155166706,0.1
+Player_202,Chelsea,Goalkeeper,0,0.0013404011591177437,0.1
+Player_197,Chelsea,Midfield,0,0.0005866349736175922,0.1
+Player_255,Liverpool,Goalkeeper,0,0.000866193512260342,0.1
+Player_102,Man City,Attack,0,0.0004938711686979997,0.0
+Player_940,Arsenal,Goalkeeper,0,0.0002521586797313935,0.0
+Player_977,Arsenal,Attack,0,0.0003710970864614693,0.0
+Player_544,Chelsea,Midfield,0,0.0003601296392194295,0.0
+Player_591,Chelsea,Midfield,0,0.00035786309596752867,0.0
+Player_818,Tottenham,Defense,0,0.0003649736663656195,0.0
+Player_21,Tottenham,Attack,0,0.00044939572763017237,0.0
+Player_957,Tottenham,Defense,0,0.00036828770534945096,0.0

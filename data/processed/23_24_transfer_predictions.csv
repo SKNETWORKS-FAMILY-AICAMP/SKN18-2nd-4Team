@@ -1,0 +1,618 @@
+player_name,club_name,position,predicted_transfer,transfer_probability_percent
+Lesley Ugochukwu,Chelsea Football Club,Midfield,1,97.0
+Roméo Lavia,Chelsea Football Club,Midfield,1,96.8
+Jamie Donley,Tottenham Hotspur Football Club,Attack,1,96.7
+Deivid Washington,Chelsea Football Club,Attack,1,96.1
+Rodrigo Ribeiro,Nottingham Forest Football Club,Attack,1,95.9
+Rodrigo Ribeiro,Nottingham Forest Football Club,Attack,1,95.9
+Josh Acheampong,Chelsea Football Club,Defender,1,95.8
+Stefan Bajcetic,Liverpool Football Club,Midfield,1,95.7
+Djordje Petrovic,Chelsea Football Club,Goalkeeper,1,95.4
+Ian Maatsen,Chelsea Football Club,Defender,1,95.2
+Daniel Jebbison,Sheffield United,Attack,1,95.0
+Cesare Casadei,Chelsea Football Club,Midfield,1,94.8
+Mikey Moore,Tottenham Hotspur Football Club,Attack,1,94.8
+Jurrien Timber,Arsenal Football Club,Defender,1,94.8
+Ben Doak,Liverpool Football Club,Attack,1,94.5
+Donny van de Beek,Manchester United Football Club,Midfield,1,94.4
+Willy Kambwala,Manchester United Football Club,Defender,1,94.2
+Wilson Odobert,Burnley FC,Attack,1,94.0
+Hannibal,Manchester United Football Club,Midfield,1,93.7
+Alejo Veliz,Tottenham Hotspur Football Club,Attack,1,93.7
+Facundo Pellistri,Manchester United Football Club,Attack,1,93.5
+Han-Noah Massengo,Burnley FC,Midfield,1,93.1
+Maxime Estève,Burnley FC,Defender,1,93.0
+Jimi Tauriainen,Chelsea Football Club,Midfield,1,92.9
+David Ozoh,Crystal Palace Football Club,Midfield,1,92.8
+Ethan Wheatley,Manchester United Football Club,Attack,1,92.8
+Bryan Gil,Tottenham Hotspur Football Club,Attack,1,92.7
+Chermiti,Everton Football Club,Attack,1,92.7
+Mason Burstow,Chelsea Football Club,Attack,1,92.2
+Owen Beck,Liverpool Football Club,Defender,1,92.2
+Brandon Aguilera,Nottingham Forest Football Club,Midfield,1,92.1
+Romain Faivre,Association Football Club Bournemouth,Midfield,1,92.1
+Jayden Danns,Liverpool Football Club,Attack,1,92.0
+Ben Parkinson,Newcastle United Football Club,Attack,1,92.0
+Benoît Badiashile,Chelsea Football Club,Defender,1,92.0
+Lorenz Assignon,Burnley FC,Defender,1,91.8
+Nicolas Jackson,Chelsea Football Club,Attack,1,91.3
+Enso González,Wolverhampton Wanderers Football Club,Attack,1,91.3
+Ryan Oné,Sheffield United,Attack,1,91.0
+Andrey Santos,Nottingham Forest Football Club,Midfield,1,90.9
+Omari Kellyman,Aston Villa Football Club,Midfield,1,90.9
+Leon Chiwome,Wolverhampton Wanderers Football Club,Attack,1,90.9
+Nathan Fraser,Wolverhampton Wanderers Football Club,Attack,1,90.8
+Fábio Silva,Wolverhampton Wanderers Football Club,Attack,1,90.6
+Bart Verbruggen,Brighton and Hove Albion Football Club,Goalkeeper,1,90.6
+Alex Matos,Chelsea Football Club,Midfield,1,90.6
+Timo Werner,Tottenham Hotspur Football Club,Attack,1,90.5
+Divock Origi,Nottingham Forest Football Club,Attack,1,90.5
+Dane Scarlett,Tottenham Hotspur Football Club,Attack,1,90.5
+Anass Zaroury,Burnley FC,Midfield,1,90.5
+Santiago Bueno,Wolverhampton Wanderers Football Club,Defender,1,90.4
+Alex Murphy,Newcastle United Football Club,Defender,1,90.3
+Ivan Perisic,Tottenham Hotspur Football Club,Attack,1,90.3
+Rodrigo Bentancur,Tottenham Hotspur Football Club,Midfield,1,90.1
+Mike Trésor,Burnley FC,Attack,1,90.0
+Leander Dendoncker,Aston Villa Football Club,Midfield,1,90.0
+Finley Munroe,Aston Villa Football Club,Defender,1,89.9
+Robert Sánchez,Chelsea Football Club,Goalkeeper,1,89.7
+Kaelan Casey,West Ham United Football Club,Defender,1,89.6
+Ethan Nwaneri,Arsenal Football Club,Attack,1,89.5
+Malo Gusto,Chelsea Football Club,Defender,1,89.4
+Issa Kaboré,Luton Town,Defender,1,89.4
+Thilo Kehrer,West Ham United Football Club,Defender,1,89.3
+Naouirou Ahamada,Crystal Palace Football Club,Midfield,1,89.2
+Aymeric Laporte,Manchester City Football Club,Defender,1,89.2
+Aaron Hickey,Brentford Football Club,Defender,1,88.9
+Tyler Onyango,Everton Football Club,Midfield,1,88.9
+Carlos Baleba,Brighton and Hove Albion Football Club,Midfield,1,88.8
+Hugo Bueno,Wolverhampton Wanderers Football Club,Defender,1,88.8
+James McConnell,Liverpool Football Club,Midfield,1,88.7
+Amadou Diallo,Newcastle United Football Club,Attack,1,88.7
+Joe Johnson,Luton Town,Defender,1,88.4
+Daniel Gore,Manchester United Football Club,Midfield,1,88.3
+Kaide Gordon,Liverpool Football Club,Attack,1,88.2
+Albert Sambi Lokonga,Luton Town,Midfield,1,88.2
+Zack Nelson,Luton Town,Midfield,1,88.1
+Nathan Patterson,Everton Football Club,Defender,1,88.1
+William Osula,Sheffield United,Attack,1,88.1
+Davinson Sánchez,Tottenham Hotspur Football Club,Defender,1,88.0
+Yasser Larouci,Sheffield United,Defender,1,87.9
+Ameen Al-Dakhil,Burnley FC,Defender,1,87.9
+Anis Slimane,Sheffield United,Midfield,1,87.9
+Armando Broja,Chelsea Football Club,Attack,1,87.8
+Arnaut Danjuma,Everton Football Club,Attack,1,87.7
+Jonny Otto,Wolverhampton Wanderers Football Club,Defender,1,87.7
+Omari Forson,Manchester United Football Club,Attack,1,87.6
+Neco Williams,Nottingham Forest Football Club,Defender,1,87.6
+Arijanet Muric,Burnley FC,Goalkeeper,1,87.6
+Benson Manuel,Burnley FC,Attack,1,87.3
+George Earthy,West Ham United Football Club,Midfield,1,87.3
+Giovanni Reyna,Nottingham Forest Football Club,Midfield,1,87.2
+Michael Ndiweni,Newcastle United Football Club,Attack,1,87.2
+Sven Botman,Newcastle United Football Club,Defender,1,87.1
+Zeki Amdouni,Burnley FC,Attack,1,87.0
+Jordan Beyer,Burnley FC,Defender,1,87.0
+Conor Bradley,Liverpool Football Club,Defender,1,87.0
+Carney Chukwuemeka,Chelsea Football Club,Midfield,1,86.8
+Mark O'Mahony,Brighton and Hove Albion Football Club,Attack,1,86.8
+Orel Mangala,Nottingham Forest Football Club,Midfield,1,86.6
+Emerson Royal,Tottenham Hotspur Football Club,Defender,1,86.5
+Bobby Clark,Liverpool Football Club,Midfield,1,86.5
+Sam Curtis,Sheffield United,Defender,1,86.5
+Micky van de Ven,Tottenham Hotspur Football Club,Defender,1,86.4
+Oscar Bobb,Manchester City Football Club,Attack,1,86.4
+Divin Mubama,West Ham United Football Club,Attack,1,86.3
+Ansu Fati,Brighton and Hove Albion Football Club,Attack,1,86.2
+Tawanda Chirewa,Wolverhampton Wanderers Football Club,Midfield,1,86.1
+Nuno Tavares,Nottingham Forest Football Club,Defender,1,86.0
+Jadon Sancho,Manchester United Football Club,Attack,1,86.0
+Kaine Kesler-Hayden,Aston Villa Football Club,Defender,1,86.0
+Alfie Gilchrist,Chelsea Football Club,Defender,1,85.8
+Axel Disasi,Chelsea Football Club,Defender,1,85.8
+Matheus França,Crystal Palace Football Club,Midfield,1,85.7
+Aleksandar Mitrović,Fulham Football Club,Attack,1,85.7
+David Datro Fofana,Burnley FC,Attack,1,85.6
+Sander Berge,Burnley FC,Midfield,1,85.5
+Jaden Philogene,Aston Villa Football Club,Attack,1,85.5
+Konstantinos Mavropanos,West Ham United Football Club,Defender,1,85.4
+Odel Offiah,Brighton and Hove Albion Football Club,Defender,1,85.3
+Jacob Bruun Larsen,Burnley FC,Attack,1,84.9
+Dominic Sadi,Association Football Club Bournemouth,Attack,1,84.7
+Lewis Miley,Newcastle United Football Club,Midfield,1,84.6
+Sergio Gómez,Manchester City Football Club,Attack,1,84.6
+Michael Olakigbe,Brentford Football Club,Attack,1,84.5
+Anthony Martial,Manchester United Football Club,Attack,1,84.5
+Saša Lukić,Fulham Football Club,Midfield,1,84.5
+Christopher Nkunku,Chelsea Football Club,Attack,1,84.4
+Thomas Strakosha,Brentford Football Club,Goalkeeper,1,84.3
+Benicio Baker-Boaitey,Brighton and Hove Albion Football Club,Attack,1,84.3
+Jhon Durán,Aston Villa Football Club,Attack,1,84.2
+Ryan Gravenberch,Liverpool Football Club,Midfield,1,84.0
+Joe White,Newcastle United Football Club,Midfield,1,83.9
+Clément Lenglet,Aston Villa Football Club,Defender,1,83.8
+Bertrand Traoré,Aston Villa Football Club,Attack,1,83.8
+James Hill,Association Football Club Bournemouth,Defender,1,83.7
+Tom Cannon,Everton Football Club,Attack,1,83.5
+Lewis Warrington,Everton Football Club,Midfield,1,83.5
+Amadou Onana,Everton Football Club,Midfield,1,83.4
+Kevin Schade,Brentford Football Club,Attack,1,83.3
+Pape Matar Sarr,Tottenham Hotspur Football Club,Midfield,1,83.3
+Nicolò Zaniolo,Aston Villa Football Club,Midfield,1,83.1
+Tim Iroegbunam,Aston Villa Football Club,Midfield,1,83.1
+Justin Kluivert,Association Football Club Bournemouth,Midfield,1,83.1
+James Trafford,Burnley FC,Goalkeeper,1,82.8
+Andrew Omobamidele,Nottingham Forest Football Club,Defender,1,82.8
+Mads Andersen,Luton Town,Defender,1,82.3
+Hamed Junior Traoré,Association Football Club Bournemouth,Midfield,1,82.1
+Reece James,Chelsea Football Club,Defender,1,82.1
+Reece James,Chelsea Football Club,Defender,1,82.1
+Odysseas Vlachodimos,Nottingham Forest Football Club,Goalkeeper,1,82.1
+Lewis Dobbin,Everton Football Club,Attack,1,82.0
+Valentín Barco,Brighton and Hove Albion Football Club,Defender,1,82.0
+Sofyan Amrabat,Manchester United Football Club,Midfield,1,81.9
+Philippe Coutinho,Aston Villa Football Club,Midfield,1,81.8
+Jan Paul van Hecke,Brighton and Hove Albion Football Club,Defender,1,81.8
+Daiki Hashioka,Luton Town,Defender,1,81.8
+Destiny Udogie,Tottenham Hotspur Football Club,Defender,1,81.8
+Luke Harris,Fulham Football Club,Midfield,1,81.6
+Radu Drăgușin,Tottenham Hotspur Football Club,Defender,1,81.5
+Alex Scott,Association Football Club Bournemouth,Midfield,1,81.4
+Aaron Ramsey,Burnley FC,Midfield,1,81.1
+Aaron Ramsey,Burnley FC,Midfield,1,81.1
+Dango Ouattara,Association Football Club Bournemouth,Attack,1,81.0
+Mykhaylo Mudryk,Chelsea Football Club,Attack,1,80.9
+Taiwo Awoniyi,Nottingham Forest Football Club,Attack,1,80.7
+Ben Johnson,West Ham United Football Club,Defender,1,80.7
+Moussa Niakhaté,Nottingham Forest Football Club,Defender,1,80.7
+Rayan Aït-Nouri,Wolverhampton Wanderers Football Club,Defender,1,80.6
+Loris Karius,Newcastle United Football Club,Goalkeeper,1,80.5
+Beto,Everton Football Club,Attack,1,80.1
+Beto,Everton Football Club,Attack,1,80.1
+Alejandro Garnacho,Manchester United Football Club,Attack,1,80.0
+Manor Solomon,Tottenham Hotspur Football Club,Attack,1,79.6
+Sandro Tonali,Newcastle United Football Club,Midfield,1,79.6
+Ivo Grbic,Sheffield United,Goalkeeper,1,79.5
+Rasmus Højlund,Manchester United Football Club,Attack,1,79.4
+Fred Onyedinma,Luton Town,Midfield,1,79.2
+Jaidon Anthony,Association Football Club Bournemouth,Attack,1,79.1
+Matz Sels,Nottingham Forest Football Club,Goalkeeper,1,79.1
+Vitinho,Burnley FC,Defender,1,78.9
+Vitinho,Burnley FC,Defender,1,78.9
+Vitinho,Burnley FC,Defender,1,78.9
+Vitinho,Burnley FC,Defender,1,78.9
+Hannes Delcroix,Burnley FC,Defender,1,78.9
+Fodé Ballo-Touré,Fulham Football Club,Defender,1,78.9
+Vitinho,Burnley FC,Defender,1,78.9
+Raheem Sterling,Chelsea Football Club,Attack,1,78.7
+Myles Peart-Harris,Brentford Football Club,Midfield,1,78.7
+Jakub Moder,Brighton and Hove Albion Football Club,Midfield,1,78.6
+Saïd Benrahma,West Ham United Football Club,Attack,1,78.6
+Chiedozie Ogbene,Luton Town,Attack,1,78.5
+Konstantinos Tsimikas,Liverpool Football Club,Defender,1,78.5
+Sasa Kalajdzic,Wolverhampton Wanderers Football Club,Attack,1,78.4
+Willy Boly,Nottingham Forest Football Club,Defender,1,78.4
+Mark Travers,Association Football Club Bournemouth,Goalkeeper,1,78.3
+Jaïro Riedewald,Crystal Palace Football Club,Midfield,1,78.2
+Aaron Ramsdale,Arsenal Football Club,Goalkeeper,1,78.2
+Julio Enciso,Brighton and Hove Albion Football Club,Midfield,1,78.2
+Pablo Fornals,West Ham United Football Club,Midfield,1,77.8
+Cédric Soares,Arsenal Football Club,Defender,1,77.7
+Marc Cucurella,Chelsea Football Club,Defender,1,77.7
+Jakub Kiwior,Arsenal Football Club,Defender,1,77.5
+Luis Sinisterra,Association Football Club Bournemouth,Attack,1,77.5
+Jérémy Doku,Manchester City Football Club,Attack,1,77.3
+Ibrahim Sangaré,Nottingham Forest Football Club,Midfield,1,77.2
+Mohamed Elneny,Arsenal Football Club,Midfield,1,77.2
+Amad Diallo,Manchester United Football Club,Attack,1,77.0
+Antwoine Hackford,Sheffield United,Attack,1,76.9
+Ibrahima Konaté,Liverpool Football Club,Defender,1,76.9
+Kristoffer Ajer,Brentford Football Club,Defender,1,76.7
+Maxwel Cornet,West Ham United Football Club,Attack,1,76.6
+Kevin De Bruyne,Manchester City Football Club,Midfield,1,76.6
+Fábio Vieira,Arsenal Football Club,Midfield,1,76.4
+Fábio Vieira,Arsenal Football Club,Midfield,1,76.4
+Eric Dier,Tottenham Hotspur Football Club,Defender,1,76.4
+Max Aarons,Association Football Club Bournemouth,Defender,1,76.3
+Tahith Chong,Luton Town,Attack,1,76.3
+Thiago Alcántara,Liverpool Football Club,Midfield,1,76.3
+Scott McKenna,Nottingham Forest Football Club,Defender,1,75.9
+Milos Kerkez,Association Football Club Bournemouth,Defender,1,75.6
+Yegor Yarmolyuk,Brentford Football Club,Midfield,1,75.6
+Jesurun Rak-Sakyi,Crystal Palace Football Club,Attack,1,75.5
+Frank Onyeka,Brentford Football Club,Midfield,1,75.4
+Connor Roberts,Burnley FC,Defender,1,75.4
+Mark Flekken,Brentford Football Club,Goalkeeper,1,75.3
+Antony,Manchester United Football Club,Attack,1,75.3
+Antony,Manchester United Football Club,Attack,1,75.3
+André Gomes,Everton Football Club,Midfield,1,75.3
+André Gomes,Everton Football Club,Midfield,1,75.3
+Issa Diop,Fulham Football Club,Defender,1,75.1
+Richarlison,Tottenham Hotspur Football Club,Attack,1,74.9
+Darwin Núñez,Liverpool Football Club,Attack,1,74.8
+Gonzalo Montiel,Nottingham Forest Football Club,Defender,1,74.7
+Mads Roerslev,Brentford Football Club,Defender,1,74.6
+Michael Obafemi,Burnley FC,Attack,1,74.3
+Cody Gakpo,Liverpool Football Club,Attack,1,74.1
+Kenny Tete,Fulham Football Club,Defender,1,74.0
+Lewis Hall,Newcastle United Football Club,Defender,1,73.9
+Jack Hinshelwood,Brighton and Hove Albion Football Club,Midfield,1,73.9
+Alphonse Areola,West Ham United Football Club,Goalkeeper,1,73.8
+Cheikhou Kouyaté,Nottingham Forest Football Club,Midfield,1,73.8
+Ryan Giles,Luton Town,Defender,1,73.7
+Raphaël Varane,Manchester United Football Club,Defender,1,73.6
+Jarell Quansah,Liverpool Football Club,Defender,1,73.5
+Boubacar Traoré,Wolverhampton Wanderers Football Club,Midfield,1,73.5
+Chris Wood,Nottingham Forest Football Club,Attack,1,73.4
+Adama Traoré,Fulham Football Club,Attack,1,73.3
+Thomas Kaminski,Luton Town,Goalkeeper,1,73.3
+Noni Madueke,Chelsea Football Club,Attack,1,73.3
+Adama Traoré,Fulham Football Club,Attack,1,73.3
+Adama Traoré,Fulham Football Club,Attack,1,73.3
+Adama Traoré,Fulham Football Club,Attack,1,73.3
+Jean-Ricner Bellegarde,Wolverhampton Wanderers Football Club,Midfield,1,72.9
+Sydie Peck,Sheffield United,Midfield,1,72.8
+Evan Ferguson,Brighton and Hove Albion Football Club,Attack,1,72.7
+Takehiro Tomiyasu,Arsenal Football Club,Defender,1,72.6
+Boubacar Kamara,Aston Villa Football Club,Midfield,1,72.6
+Oliver Arblaster,Sheffield United,Midfield,1,72.5
+Joel Matip,Liverpool Football Club,Defender,1,72.4
+Rhys Norrington-Davies,Sheffield United,Defender,1,72.4
+André Onana,Manchester United Football Club,Goalkeeper,1,72.3
+Pedro Neto,Wolverhampton Wanderers Football Club,Attack,1,72.3
+Ben Chilwell,Chelsea Football Club,Defender,1,72.1
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Danilo,Nottingham Forest Football Club,Midfield,1,71.9
+Bénie Traoré,Sheffield United,Attack,1,71.8
+Ilya Zabarnyi,Association Football Club Bournemouth,Defender,1,71.8
+Oliver Skipp,Tottenham Hotspur Football Club,Midfield,1,71.6
+Mikkel Damsgaard,Brentford Football Club,Midfield,1,71.6
+Christian Eriksen,Manchester United Football Club,Midfield,1,71.4
+Joël Veltman,Brighton and Hove Albion Football Club,Defender,1,71.4
+Teden Mengi,Luton Town,Defender,1,71.1
+Emile Smith Rowe,Arsenal Football Club,Midfield,1,71.0
+Giovani Lo Celso,Tottenham Hotspur Football Club,Midfield,1,70.7
+Philip Billing,Association Football Club Bournemouth,Midfield,1,70.3
+Facundo Buonanotte,Brighton and Hove Albion Football Club,Midfield,1,70.2
+Mason Mount,Manchester United Football Club,Midfield,1,70.0
+Reiss Nelson,Arsenal Football Club,Attack,1,69.9
+Chris Mepham,Association Football Club Bournemouth,Defender,1,69.6
+Rico Lewis,Manchester City Football Club,Defender,1,69.6
+Youri Tielemans,Aston Villa Football Club,Midfield,1,69.5
+Nicolás Domínguez,Nottingham Forest Football Club,Midfield,1,69.5
+Levi Colwill,Chelsea Football Club,Defender,1,69.4
+Pedro Porro,Tottenham Hotspur Football Club,Defender,1,69.4
+Callum Hudson-Odoi,Nottingham Forest Football Club,Attack,1,69.3
+Kalvin Phillips,Manchester City Football Club,Midfield,1,69.2
+Morgan Rogers,Aston Villa Football Club,Midfield,1,68.9
+Tyrone Mings,Aston Villa Football Club,Defender,1,68.6
+Jean-Philippe Mateta,Crystal Palace Football Club,Attack,1,68.5
+Pierre-Emile Højbjerg,Tottenham Hotspur Football Club,Midfield,1,68.5
+Murillo,Nottingham Forest Football Club,Defender,1,68.4
+Jóhann Berg Gudmundsson,Burnley FC,Attack,1,68.4
+Sergio Reguilón,Manchester United Football Club,Defender,1,68.2
+Andrei Radu,Association Football Club Bournemouth,Goalkeeper,1,68.0
+Joe Willock,Newcastle United Football Club,Midfield,1,68.0
+Andrei Radu,Association Football Club Bournemouth,Goalkeeper,1,68.0
+Mario Lemina,Wolverhampton Wanderers Football Club,Midfield,1,67.9
+Vini Souza,Sheffield United,Midfield,1,67.9
+Diogo Dalot,Manchester United Football Club,Defender,1,67.3
+Andre Brooks,Sheffield United,Midfield,1,67.1
+Matt Targett,Newcastle United Football Club,Defender,1,66.9
+Ben Godfrey,Everton Football Club,Defender,1,66.8
+Tom Lockyer,Luton Town,Defender,1,66.8
+David Brooks,Association Football Club Bournemouth,Attack,1,66.8
+Calum Chambers,Aston Villa Football Club,Defender,1,66.7
+Timothy Castagne,Fulham Football Club,Defender,1,66.6
+Trevoh Chalobah,Chelsea Football Club,Defender,1,66.6
+Alex Iwobi,Everton Football Club,Attack,1,66.3
+Stefan Ortega,Manchester City Football Club,Goalkeeper,1,66.3
+Elijah Adebayo,Luton Town,Attack,1,66.2
+Dara O'Shea,Burnley FC,Defender,1,66.2
+Rodrigo Muniz,Fulham Football Club,Attack,1,66.2
+Matheus Nunes,Wolverhampton Wanderers Football Club,Midfield,1,65.9
+Kurt Zouma,West Ham United Football Club,Defender,1,65.8
+Joe Worrall,Nottingham Forest Football Club,Defender,1,65.8
+Jacob Ramsey,Aston Villa Football Club,Midfield,1,65.4
+Enzo Fernández,Chelsea Football Club,Midfield,1,65.4
+Felipe,Nottingham Forest Football Club,Defender,1,65.0
+Felipe,Nottingham Forest Football Club,Defender,1,65.0
+Ben Davies,Tottenham Hotspur Football Club,Defender,1,65.0
+Ben Davies,Tottenham Hotspur Football Club,Defender,1,65.0
+Tino Livramento,Newcastle United Football Club,Defender,1,64.8
+Simon Adingra,Brighton and Hove Albion Football Club,Attack,1,64.7
+Kieffer Moore,Association Football Club Bournemouth,Attack,1,64.6
+Guglielmo Vicario,Tottenham Hotspur Football Club,Goalkeeper,1,64.5
+James McAtee,Manchester City Football Club,Midfield,1,64.4
+Josko Gvardiol,Manchester City Football Club,Defender,1,64.2
+Kobbie Mainoo,Manchester United Football Club,Midfield,1,63.9
+Serge Aurier,Nottingham Forest Football Club,Defender,1,63.6
+Luke Thomas,Sheffield United,Defender,1,63.5
+Neal Maupay,Everton Football Club,Attack,1,63.4
+Tommy Doyle,Wolverhampton Wanderers Football Club,Midfield,1,63.3
+José Sá,Wolverhampton Wanderers Football Club,Goalkeeper,1,62.9
+Caoimhín Kelleher,Liverpool Football Club,Goalkeeper,1,62.8
+Álex Moreno,Aston Villa Football Club,Defender,1,62.6
+Daniel Bentley,Wolverhampton Wanderers Football Club,Goalkeeper,1,62.4
+Nayef Aguerd,West Ham United Football Club,Defender,1,62.4
+Matheus Cunha,Wolverhampton Wanderers Football Club,Attack,1,62.1
+Abdoulaye Doucouré,Everton Football Club,Midfield,1,62.1
+Alfie Doughty,Luton Town,Midfield,1,61.8
+Bryan Mbeumo,Brentford Football Club,Attack,1,61.7
+Virgil van Dijk,Liverpool Football Club,Defender,1,61.6
+Jayden Bogle,Sheffield United,Defender,1,61.6
+Luca Koleosho,Burnley FC,Attack,1,61.5
+William Saliba,Arsenal Football Club,Defender,1,61.4
+Lyle Foster,Burnley FC,Attack,1,61.3
+Joe Rothwell,Association Football Club Bournemouth,Midfield,1,61.2
+Nathan Redmond,Burnley FC,Attack,1,61.2
+Aaron Wan-Bissaka,Manchester United Football Club,Defender,1,61.1
+Igor,Brighton and Hove Albion Football Club,Defender,1,61.1
+Igor,Brighton and Hove Albion Football Club,Defender,1,61.1
+João Gomes,Wolverhampton Wanderers Football Club,Midfield,1,61.1
+João Gomes,Wolverhampton Wanderers Football Club,Midfield,1,61.1
+Enes Ünal,Association Football Club Bournemouth,Attack,1,61.0
+Vitaly Janelt,Brentford Football Club,Midfield,1,61.0
+Ola Aina,Nottingham Forest Football Club,Defender,1,60.9
+Marcos Senesi,Association Football Club Bournemouth,Defender,1,60.9
+Ryan Yates,Nottingham Forest Football Club,Midfield,1,60.9
+Remi Matthews,Crystal Palace Football Club,Goalkeeper,1,60.7
+Reece Burke,Luton Town,Defender,1,60.5
+Pablo Sarabia,Wolverhampton Wanderers Football Club,Attack,1,60.4
+Elliot Anderson,Newcastle United Football Club,Midfield,1,60.3
+Josh Dasilva,Brentford Football Club,Midfield,1,60.2
+Gabriel Osho,Luton Town,Defender,1,60.1
+Antoine Semenyo,Association Football Club Bournemouth,Midfield,1,60.1
+Ben Brereton Díaz,Sheffield United,Attack,1,59.9
+Andrew Robertson,Liverpool Football Club,Defender,1,59.9
+James Garner,Everton Football Club,Midfield,1,59.9
+Hjalmar Ekdal,Burnley FC,Defender,1,59.9
+Gabriel Martinelli,Arsenal Football Club,Attack,1,59.9
+Lloyd Kelly,Association Football Club Bournemouth,Defender,1,59.5
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+Jacob Brown,Luton Town,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+João Pedro,Brighton and Hove Albion Football Club,Attack,1,59.4
+Gabriel Jesus,Arsenal Football Club,Attack,1,59.2
+Vitaliy Mykolenko,Everton Football Club,Defender,1,59.2
+Lucas Digne,Aston Villa Football Club,Defender,1,58.8
+Casemiro,Manchester United Football Club,Midfield,1,58.8
+Rhian Brewster,Sheffield United,Attack,1,58.7
+Harry Toffolo,Nottingham Forest Football Club,Defender,1,58.6
+Moussa Diaby,Aston Villa Football Club,Attack,1,58.6
+Adam Wharton,Crystal Palace Football Club,Midfield,1,58.5
+Billy Gilmour,Brighton and Hove Albion Football Club,Midfield,1,58.3
+Kai Havertz,Arsenal Football Club,Attack,1,58.2
+Michael Keane,Everton Football Club,Defender,1,58.0
+Yoane Wissa,Brentford Football Club,Attack,1,58.0
+Shandon Baptiste,Brentford Football Club,Midfield,1,57.9
+Nélson Semedo,Wolverhampton Wanderers Football Club,Defender,1,57.8
+Carlos Vinícius,Fulham Football Club,Attack,1,57.7
+Anthony Elanga,Nottingham Forest Football Club,Attack,1,57.7
+Odsonne Edouard,Crystal Palace Football Club,Attack,1,57.5
+Pau Torres,Aston Villa Football Club,Defender,1,57.3
+Tom Davies,Sheffield United,Midfield,1,57.2
+Tom Davies,Sheffield United,Midfield,1,57.2
+Jarrad Branthwaite,Everton Football Club,Defender,1,57.1
+Nathan Collins,Brentford Football Club,Defender,1,56.9
+Diego Carlos,Aston Villa Football Club,Defender,1,56.7
+Oli McBurnie,Sheffield United,Attack,1,56.7
+Joelinton,Newcastle United Football Club,Midfield,1,56.6
+Toti,Wolverhampton Wanderers Football Club,Defender,1,56.6
+Daniel Muñoz,Crystal Palace Football Club,Defender,1,56.1
+Christian Nørgaard,Brentford Football Club,Midfield,1,55.9
+Alisson,Liverpool Football Club,Goalkeeper,1,55.9
+Alisson,Liverpool Football Club,Goalkeeper,1,55.9
+Cameron Archer,Aston Villa Football Club,Attack,1,55.9
+Mahmoud Dahoud,Brighton and Hove Albion Football Club,Midfield,1,55.6
+Leandro Trossard,Arsenal Football Club,Attack,1,55.6
+Yves Bissouma,Tottenham Hotspur Football Club,Midfield,1,55.5
+Mathias Jensen,Brentford Football Club,Midfield,1,55.5
+Nathan Aké,Manchester City Football Club,Defender,1,55.5
+Conor Gallagher,Chelsea Football Club,Midfield,1,55.5
+Diogo Jota,Liverpool Football Club,Attack,1,55.5
+Josh Cullen,Burnley FC,Midfield,1,55.5
+Dominic Calvert-Lewin,Everton Football Club,Attack,1,55.4
+Cauley Woodrow,Luton Town,Attack,1,55.3
+Andreas Pereira,Fulham Football Club,Midfield,1,55.2
+Tariq Lamptey,Brighton and Hove Albion Football Club,Defender,1,54.7
+Eddie Nketiah,Arsenal Football Club,Attack,1,54.1
+Douglas Luiz,Aston Villa Football Club,Midfield,1,54.0
+Marcus Tavernier,Association Football Club Bournemouth,Midfield,1,53.8
+Jorginho,Arsenal Football Club,Midfield,1,53.6
+Jorginho,Arsenal Football Club,Midfield,1,53.6
+Jorginho,Arsenal Football Club,Midfield,1,53.6
+Jorginho,Arsenal Football Club,Midfield,1,53.6
+Marvelous Nakamba,Luton Town,Midfield,1,53.4
+Lisandro Martínez,Manchester United Football Club,Defender,1,53.0
+Ryan Christie,Association Football Club Bournemouth,Midfield,1,52.8
+Jordan Ayew,Crystal Palace Football Club,Attack,1,52.8
+Harvey Barnes,Newcastle United Football Club,Attack,1,52.5
+Zanka,Brentford Football Club,Defender,1,52.4
+Angelo Ogbonna,West Ham United Football Club,Defender,1,52.4
+Harry Maguire,Manchester United Football Club,Defender,1,52.2
+Lucas Paquetá,West Ham United Football Club,Midfield,1,52.1
+Oleksandr Zinchenko,Arsenal Football Club,Defender,1,52.1
+Curtis Jones,Liverpool Football Club,Midfield,1,52.1
+Jack Cork,Burnley FC,Midfield,1,51.9
+Tomas Soucek,West Ham United Football Club,Midfield,1,51.8
+Brennan Johnson,Nottingham Forest Football Club,Attack,1,51.6
+James Shea,Luton Town,Goalkeeper,1,51.4
+Calvin Bassey,Fulham Football Club,Defender,1,51.1
+Keane Lewis-Potter,Brentford Football Club,Attack,1,50.8
+João Palhinha,Fulham Football Club,Midfield,1,50.6
+Idrissa Gueye,Everton Football Club,Midfield,1,50.5
+Jack Grealish,Manchester City Football Club,Attack,1,50.1
+Adam Webster,Brighton and Hove Albion Football Club,Defender,0,49.9
+Matt Doherty,Wolverhampton Wanderers Football Club,Defender,0,49.2
+Matty Cash,Aston Villa Football Club,Defender,0,48.6
+Ross Barkley,Luton Town,Midfield,0,48.5
+Joachim Andersen,Crystal Palace Football Club,Defender,0,48.3
+Luke Shaw,Manchester United Football Club,Defender,0,48.3
+Jamaal Lascelles,Newcastle United Football Club,Defender,0,48.2
+Cristian Romero,Tottenham Hotspur Football Club,Defender,0,48.1
+Leon Bailey,Aston Villa Football Club,Attack,0,48.0
+Marc Guéhi,Crystal Palace Football Club,Defender,0,48.0
+David Raya,Arsenal Football Club,Goalkeeper,0,48.0
+Charlie Taylor,Burnley FC,Defender,0,47.4
+Nick Pope,Newcastle United Football Club,Goalkeeper,0,47.3
+Neto,Association Football Club Bournemouth,Goalkeeper,0,47.0
+Morgan Gibbs-White,Nottingham Forest Football Club,Midfield,0,47.0
+Anthony Gordon,Newcastle United Football Club,Attack,0,47.0
+Neto,Association Football Club Bournemouth,Goalkeeper,0,47.0
+Lukasz Fabianski,West Ham United Football Club,Goalkeeper,0,47.0
+Neto,Association Football Club Bournemouth,Goalkeeper,0,47.0
+Carlton Morris,Luton Town,Attack,0,46.9
+Kaoru Mitoma,Brighton and Hove Albion Football Club,Attack,0,46.8
+Jefferson Lerma,Crystal Palace Football Club,Midfield,0,46.6
+Gustavo Hamer,Sheffield United,Midfield,0,46.6
+Emerson,West Ham United Football Club,Defender,0,46.6
+Mohamed Salah,Liverpool Football Club,Attack,0,46.5
+Cheick Doucouré,Crystal Palace Football Club,Midfield,0,46.5
+Harry Wilson,Fulham Football Club,Attack,0,46.3
+Danny Ings,West Ham United Football Club,Attack,0,46.1
+Jordan Clark,Luton Town,Midfield,0,45.7
+Maximilian Kilman,Wolverhampton Wanderers Football Club,Defender,0,45.6
+Jacob Murphy,Newcastle United Football Club,Attack,0,45.6
+Mason Holgate,Sheffield United,Defender,0,45.6
+Max Lowe,Sheffield United,Defender,0,45.5
+Solly March,Brighton and Hove Albion Football Club,Attack,0,44.8
+Dean Henderson,Crystal Palace Football Club,Goalkeeper,0,44.7
+Jonny Evans,Manchester United Football Club,Defender,0,44.6
+Manuel Akanji,Manchester City Football Club,Defender,0,44.3
+Paul Dummett,Newcastle United Football Club,Defender,0,44.3
+Harvey Elliott,Liverpool Football Club,Midfield,0,44.1
+John Stones,Manchester City Football Club,Defender,0,44.0
+Pelly Ruddock Mpanzu,Luton Town,Midfield,0,43.8
+Marcus Rashford,Manchester United Football Club,Attack,0,43.4
+Rico Henry,Brentford Football Club,Defender,0,43.3
+Josh Brownhill,Burnley FC,Midfield,0,43.1
+Tyler Adams,Association Football Club Bournemouth,Midfield,0,43.0
+Luke Berry,Luton Town,Midfield,0,43.0
+Dwight McNeil,Everton Football Club,Midfield,0,42.9
+Dominik Szoboszlai,Liverpool Football Club,Midfield,0,42.8
+Pascal Groß,Brighton and Hove Albion Football Club,Midfield,0,42.4
+Bernd Leno,Fulham Football Club,Goalkeeper,0,42.4
+Miguel Almirón,Newcastle United Football Club,Attack,0,42.3
+Sean Longstaff,Newcastle United Football Club,Midfield,0,42.2
+Tosin Adarabioyo,Fulham Football Club,Defender,0,42.2
+Joe Gomez,Liverpool Football Club,Defender,0,42.0
+Jeffrey Schlupp,Crystal Palace Football Club,Midfield,0,42.0
+Rúben Dias,Manchester City Football Club,Defender,0,41.9
+Amari'i Bell,Luton Town,Defender,0,41.7
+Edson Álvarez,West Ham United Football Club,Midfield,0,41.6
+Jay Rodríguez,Burnley FC,Attack,0,41.5
+Michael Olise,Crystal Palace Football Club,Attack,0,41.4
+Anel Ahmedhodzic,Sheffield United,Defender,0,41.3
+Jack Harrison,Everton Football Club,Attack,0,41.2
+Andros Townsend,Luton Town,Attack,0,41.1
+Robin Olsen,Aston Villa Football Club,Goalkeeper,0,41.1
+Dominic Solanke,Association Football Club Bournemouth,Attack,0,40.9
+Trent Alexander-Arnold,Liverpool Football Club,Defender,0,40.3
+Moisés Caicedo,Chelsea Football Club,Midfield,0,40.0
+Thomas Partey,Arsenal Football Club,Midfield,0,39.7
+Emil Krafth,Newcastle United Football Club,Defender,0,39.6
+Sam Johnstone,Crystal Palace Football Club,Goalkeeper,0,39.4
+George Baldock,Sheffield United,Defender,0,39.2
+Lewis Cook,Association Football Club Bournemouth,Midfield,0,39.2
+Bruno Fernandes,Manchester United Football Club,Midfield,0,38.6
+Fabian Schär,Newcastle United Football Club,Defender,0,38.4
+James Maddison,Tottenham Hotspur Football Club,Midfield,0,38.3
+Séamus Coleman,Everton Football Club,Defender,0,38.1
+Emiliano Martínez,Aston Villa Football Club,Goalkeeper,0,37.8
+Emiliano Martínez,Aston Villa Football Club,Goalkeeper,0,37.8
+James Ward-Prowse,West Ham United Football Club,Midfield,0,37.6
+Callum Wilson,Newcastle United Football Club,Attack,0,37.3
+Callum Wilson,Newcastle United Football Club,Attack,0,37.3
+Ederson,Manchester City Football Club,Goalkeeper,0,36.8
+Ederson,Manchester City Football Club,Goalkeeper,0,36.8
+Tyrick Mitchell,Crystal Palace Football Club,Defender,0,36.4
+John Fleck,Sheffield United,Midfield,0,36.2
+James Tomkins,Crystal Palace Football Club,Defender,0,35.9
+Bruno Guimarães,Newcastle United Football Club,Midfield,0,35.8
+Wataru Endo,Liverpool Football Club,Midfield,0,35.7
+Ben White,Arsenal Football Club,Defender,0,35.7
+Ivan Toney,Brentford Football Club,Attack,0,35.5
+Mohammed Kudus,West Ham United Football Club,Attack,0,35.3
+Pervis Estupiñán,Brighton and Hove Albion Football Club,Defender,0,35.0
+John Egan,Sheffield United,Defender,0,34.7
+Matt Turner,Nottingham Forest Football Club,Goalkeeper,0,34.2
+Michail Antonio,West Ham United Football Club,Attack,0,34.1
+Dan Burn,Newcastle United Football Club,Defender,0,34.1
+Jarrod Bowen,West Ham United Football Club,Attack,0,33.8
+Martin Ødegaard,Arsenal Football Club,Midfield,0,33.8
+Scott McTominay,Manchester United Football Club,Midfield,0,33.4
+Bernardo Silva,Manchester City Football Club,Midfield,0,33.4
+Aaron Cresswell,West Ham United Football Club,Defender,0,33.4
+Jordan Pickford,Everton Football Club,Goalkeeper,0,33.3
+Luis Díaz,Liverpool Football Club,Attack,0,33.0
+Kieran Trippier,Newcastle United Football Club,Defender,0,32.6
+John McGinn,Aston Villa Football Club,Midfield,0,32.5
+Craig Dawson,Wolverhampton Wanderers Football Club,Defender,0,32.0
+Ezri Konsa,Aston Villa Football Club,Defender,0,31.8
+Adam Smith,Association Football Club Bournemouth,Defender,0,31.7
+Adam Smith,Association Football Club Bournemouth,Defender,0,31.7
+Matt Ritchie,Newcastle United Football Club,Midfield,0,31.6
+Will Hughes,Crystal Palace Football Club,Midfield,0,31.6
+Dejan Kulusevski,Tottenham Hotspur Football Club,Midfield,0,31.0
+Jason Steele,Brighton and Hove Albion Football Club,Goalkeeper,0,30.9
+Ben Osborn,Sheffield United,Midfield,0,30.9
+James Tarkowski,Everton Football Club,Defender,0,30.6
+Victor Lindelöf,Manchester United Football Club,Defender,0,30.4
+Gabriel Magalhães,Arsenal Football Club,Defender,0,29.7
+Ethan Pinnock,Brentford Football Club,Defender,0,28.8
+Harrison Reed,Fulham Football Club,Midfield,0,28.2
+Thiago Silva,Chelsea Football Club,Defender,0,28.2
+Thiago Silva,Chelsea Football Club,Defender,0,28.2
+Heung-min Son,Tottenham Hotspur Football Club,Attack,0,27.6
+Chris Basham,Sheffield United,Defender,0,27.5
+Nathaniel Clyne,Crystal Palace Football Club,Defender,0,27.3
+Jack Robinson,Sheffield United,Defender,0,27.1
+Martin Dúbravka,Newcastle United Football Club,Goalkeeper,0,26.8
+Kyle Walker,Manchester City Football Club,Defender,0,26.8
+Danny Welbeck,Brighton and Hove Albion Football Club,Attack,0,26.8
+Vladimír Coufal,West Ham United Football Club,Defender,0,26.5
+Antonee Robinson,Fulham Football Club,Defender,0,26.2
+Auston Trusty,Sheffield United,Defender,0,25.9
+Joel Ward,Crystal Palace Football Club,Defender,0,25.9
+Chris Richards,Crystal Palace Football Club,Defender,0,25.9
+Oliver Norwood,Sheffield United,Midfield,0,25.6
+Lewis Dunk,Brighton and Hove Albion Football Club,Defender,0,25.4
+Ollie Watkins,Aston Villa Football Club,Attack,0,25.3
+Wes Foderingham,Sheffield United,Goalkeeper,0,24.8
+Adam Lallana,Brighton and Hove Albion Football Club,Midfield,0,24.8
+Eberechi Eze,Crystal Palace Football Club,Midfield,0,24.7
+Willian,Fulham Football Club,Attack,0,24.3
+Willian,Fulham Football Club,Attack,0,24.3
+Bobby De Cordova-Reid,Fulham Football Club,Attack,0,23.2
+Ashley Young,Everton Football Club,Defender,0,23.0
+Alexander Isak,Newcastle United Football Club,Attack,0,22.9
+Julián Alvarez,Manchester City Football Club,Attack,0,22.7
+Alexis Mac Allister,Liverpool Football Club,Midfield,0,22.6
+Declan Rice,Arsenal Football Club,Midfield,0,22.3
+Rodri,Manchester City Football Club,Midfield,0,21.6
+Rodri,Manchester City Football Club,Midfield,0,21.6
+Hee-chan Hwang,Wolverhampton Wanderers Football Club,Attack,0,21.4
+Saman Ghoddos,Brentford Football Club,Midfield,0,21.3
+Tom Cairney,Fulham Football Club,Midfield,0,20.3
+Cole Palmer,Manchester City Football Club,Midfield,0,19.9
+Mateo Kovacic,Manchester City Football Club,Midfield,0,19.7
+Raúl Jiménez,Fulham Football Club,Attack,0,19.6
+Bukayo Saka,Arsenal Football Club,Attack,0,19.1
+Ben Mee,Brentford Football Club,Defender,0,16.6
+James Milner,Brighton and Hove Albion Football Club,Midfield,0,16.5
+Phil Foden,Manchester City Football Club,Attack,0,15.5
+Erling Haaland,Manchester City Football Club,Attack,0,11.3
+Tim Ream,Fulham Football Club,Defender,0,4.7
