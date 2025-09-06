@@ -1,0 +1,18 @@
+# 필요 라이브러리 설치치
+streamlit==1.49.1
+pandas==2.3.2
+numpy==2.3.2
+matplotlib==3.10.6
+scikit-learn==1.7.1
+lightgbm==4.6.0
+xgboost==3.0.5
+catboost==1.2.8
+pymysql==1.1.2
+sqlalchemy==2.0.43
+requests==2.32.5
+torch==2.8.0
+python-dotenv==1.1.1
+seaborn == 0.13.2
+streamlit-aggrid == 1.1.8.post1
+imbalanced-learn==0.14.0
+openai==1.106.1
