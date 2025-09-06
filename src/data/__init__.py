@@ -1,4 +1,3 @@
-from .data_loader import DataLoader
-from .data_explorer import DataExplorer
+from .data_loader_new import DataLoaderNew
 
-__all__ = ['DataLoader', 'DataExplorer']
+__all__ = ['DataLoaderNew']

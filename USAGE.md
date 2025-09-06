@@ -34,11 +34,11 @@
 python main.py --mode all
 
 # 개별 실행
-python main.py --mode train       # 기본 모델링 (피처 엔지니어링 자동 적용)
-python main.py --mode predict     # 예측만 실행 (기본 모델링에 포함)
-python main.py --mode tune        # 하이퍼파라미터 튜닝
-python main.py --mode regularize  # 정규화 강화
-python main.py --mode ensemble    # 앙상블 모델
+python main.py --mode train                   # 기본 모델링 (기존 개선된 모델 재사용)
+python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모델 무시)
+python main.py --mode tune                    # 하이퍼파라미터 튜닝
+python main.py --mode regularize              # 정규화 강화
+python main.py --mode ensemble                # 앙상블 모델
 ```
 
 ### 2. 단계별 실행
@@ -160,7 +160,11 @@ python main.py --mode regularize  # 정규화 강화로 오버피팅 완화
 python main.py --mode ensemble    # 앙상블 모델로 성능 향상
 
 # 2단계: 개선된 결과 확인
-python main.py --mode train       # 향상된 모델의 SHAP 분석 및 23/24 예측
+python main.py --mode train       # 향상된 모델의 SHAP 분석 및 23/24 예측 (개선된 모델 재사용)
 ```
 
-> **참고**: 각 고급 기법은 독립적으로 실행되며, `train` 모드는 언제든 실행 가능합니다. 고급 기법 실행 후 `train`을 다시 실행하면 개선된 성능을 확인할 수 있습니다.
+> **스마트 모델 관리**:
+>
+> - `train` 모드는 **기존 개선된 모델을 자동으로 재사용**합니다
+> - 강제로 처음부터 학습하려면 `--force-retrain` 옵션 사용
+> - 각 고급 기법은 더 좋은 성능일 때만 최종 모델을 업데이트합니다

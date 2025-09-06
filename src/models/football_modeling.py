@@ -120,42 +120,110 @@ class FootballModelTrainer:
         """전체 파이프라인 실행"""
         logger.info("🚀 모델링 파이프라인 시작")
         
-        # 1. 피처 엔지니어링 및 전처리 파이프라인 설정
+        # 0. 데이터 품질 및 누수 검사
+        from src.features.feature_engineering import DataLeakageChecker
+        
+        # 데이터 품질 검사
+        quality_results = DataLeakageChecker.check_data_quality(self.df_model)
+        logger.info("🔍 데이터 품질 검사 완료")
+        if quality_results['high_missing_features']:
+            logger.warning(f"높은 결측치 피처: {list(quality_results['high_missing_features'].keys())}")
+        if quality_results['constant_features']:
+            logger.warning(f"상수 피처: {quality_results['constant_features']}")
+        if quality_results['duplicate_rows'] > 0:
+            logger.info(f"ℹ️ 중복 행: {quality_results['duplicate_rows']}개 (정상적인 데이터 특성)")
+        
+        # 시간적 누수 검사
+        if 'season' in self.df_model.columns:
+            temporal_results = DataLeakageChecker.check_temporal_leakage(
+                self.df_model, 'season', self.target_col
+            )
+            logger.info("🔍 시간적 데이터 누수 검사 완료")
+        
+        # 피처 누수 검사
+        feature_leakage = DataLeakageChecker.check_feature_leakage(self.df_model, self.target_col)
+        if feature_leakage['suspicious_features']:
+            logger.warning(f"의심스러운 피처: {feature_leakage['suspicious_features']}")
+        else:
+            logger.info("✅ 피처 누수 없음")
+        
+        # 1. 피처 엔지니어링 (전체 데이터에 적용)
         feature_engineer = FootballFeatureEngineer()
-        self.df_model, self.preprocessor, self.feature_types = feature_engineer.fit_transform(self.df_model)
+        self.df_model = feature_engineer.create_engineered_features(self.df_model)
         logger.info(f"✅ 피처 엔지니어링 완료: {self.df_model.shape}")
         
-        # 2. 데이터 분할
-        X_train, X_test, y_train, y_test, X_2324 = self._split_data()
+        # 2. 데이터 분할 (22/23을 validation으로 사용)
+        X_train, X_val, y_train, y_val, X_2324 = self._split_data()
         
-        # 3. 모델 정의
+        # 3. 전처리기 생성 및 학습 (train 데이터만 사용 - 데이터 누수 방지)
+        feature_types = feature_engineer.get_feature_types(self.df_model)
+        self.preprocessor = feature_engineer.create_preprocessor(feature_types)
+        self.feature_types = feature_types
+        
+        # train 데이터로만 전처리기 학습
+        self.preprocessor.fit(X_train)
+        logger.info("✅ 전처리기 학습 완료 (train 데이터만 사용)")
+        
+        # 전처리 적용
+        X_train = self.preprocessor.transform(X_train)
+        X_val = self.preprocessor.transform(X_val)
+        logger.info(f"✅ 전처리 적용 완료: train {X_train.shape}, validation {X_val.shape}")
+        
+        # 4. 모델 정의
         models = self._define_models()
         
-        # 4. 모델 훈련 및 평가
-        model_scores = self._train_and_evaluate_models(models, X_train, y_train, X_test, y_test)
+        # 5. 모델 훈련 및 평가 (validation 데이터로 평가)
+        model_scores, model_details = self._train_and_evaluate_models(models, X_train, y_train, X_val, y_val)
         
-        # 5. 최적 모델 선택
+        # 6. 최적 모델 선택
         best_model_name = max(model_scores, key=model_scores.get)
         self.best_model = models[best_model_name]
         
-        # 6. 최종 평가
-        final_results = self._final_evaluation(X_test, y_test)
+        # 6.5. 오버피팅 검사
+        from src.features.feature_engineering import OverfittingChecker
         
-        # 7. SHAP 분석
-        shap_results = self._shap_analysis(X_test, y_test)
+        # 학습 곡선 분석
+        learning_curve_results = OverfittingChecker.check_learning_curves(
+            self.best_model, X_train, y_train, X_val, y_val
+        )
+        if learning_curve_results['is_overfitting']:
+            logger.warning(f"⚠️ 오버피팅 감지! 최종 갭: {learning_curve_results['final_gap']:.3f}, 최대 갭: {learning_curve_results['max_gap']:.3f}")
+        else:
+            logger.info(f"✅ 오버피팅 없음 (최종 갭: {learning_curve_results['final_gap']:.3f})")
         
-        # 8. 결과 저장
+        # 교차검증 일관성 검사
+        cv_results = OverfittingChecker.check_cv_consistency(self.best_model, X_train, y_train)
+        if cv_results['is_stable']:
+            logger.info(f"✅ 교차검증 안정성: {cv_results['cv_mean']:.3f} ± {cv_results['cv_std']:.3f}")
+        else:
+            logger.warning(f"⚠️ 교차검증 불안정: {cv_results['cv_mean']:.3f} ± {cv_results['cv_std']:.3f}")
+        
+        # 7. 최종 평가 (validation 데이터로 평가)
+        final_results = self._final_evaluation(X_val, y_val)
+        
+        # 8. SHAP 분석 (validation 데이터로 분석)
+        shap_results = self._shap_analysis(X_val, y_val)
+        
+        # 9. 결과 저장
         self.model_results = {
             'model_scores': model_scores,
+            'model_details': model_details,  # 상세 성능 지표 추가
             'model_comparison': model_scores,  # Plotter에서 사용
             'best_model_name': best_model_name,
             'best_model': self.best_model,
             'preprocessor': self.preprocessor,
             'final_results': final_results,
             'shap_results': shap_results,
-            'X_test': X_test,
-            'y_test': y_test,
-            'X_2324': X_2324
+            'X_train': X_train,      # 훈련 데이터 추가
+            'y_train': y_train,      # 훈련 타겟 추가
+            'X_validation': X_val,   # validation 데이터
+            'y_validation': y_val,   # validation 타겟
+            'X_2324': X_2324,
+            # 검사 결과 추가
+            'data_quality_results': quality_results,
+            'feature_leakage_results': feature_leakage,
+            'learning_curve_results': learning_curve_results,
+            'cv_consistency_results': cv_results
         }
         
         # 9. 시각화 (SHAP, 피처 중요도)
@@ -188,14 +256,14 @@ class FootballModelTrainer:
                 pd.api.types.is_numeric_dtype(self.df_model[col])]
     
     def _split_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]:
-        """데이터 분할"""
+        """데이터 분할 (22/23을 validation으로 사용)"""
         # 피처와 타겟 분리 (ID 변수 제외)
         exclude_cols = {'player_id', 'club_id', 'season', self.target_col}
         feature_cols = [col for col in self.df_model.columns if col not in exclude_cols]
         X = self.df_model[feature_cols]
         y = self.df_model[self.target_col]
         
-        # 23/24 데이터 분리 (season 컬럼이 있는 경우)
+        # 23/24 데이터 분리 (예측용 데이터)
         X_2324 = None
         if 'season' in self.df_model.columns:
             mask_2324 = self.df_model['season'] == '23/24'
@@ -203,17 +271,27 @@ class FootballModelTrainer:
             X = X[~mask_2324].copy()
             y = y[~mask_2324].copy()
         
-        # 22/23을 테스트로 사용
+        # 22/23을 validation으로 사용
         if 'season' in self.df_model.columns and '22/23' in self.df_model['season'].values:
-            test_mask = self.df_model['season'] == '22/23'
-            X_train, X_test = X[~test_mask], X[test_mask]
-            y_train, y_test = y[~test_mask], y[test_mask]
+            validation_mask = self.df_model['season'] == '22/23'
+            # 22/23을 제외한 나머지를 train으로, 22/23을 validation으로
+            X_train, X_val = X[~validation_mask], X[validation_mask]
+            y_train, y_val = y[~validation_mask], y[validation_mask]
+            
+            logger.info(f"📊 데이터 분할 완료:")
+            logger.info(f"  - Train: {X_train.shape[0]:,} rows (11-21 시즌)")
+            logger.info(f"  - Validation: {X_val.shape[0]:,} rows (22/23 시즌)")
+            logger.info(f"  - Prediction: {X_2324.shape[0] if X_2324 is not None else 0:,} rows (23/24 시즌)")
         else:
-            X_train, X_test, y_train, y_test = train_test_split(
+            # season 컬럼이 없는 경우 일반적인 분할
+            X_train, X_val, y_train, y_val = train_test_split(
                 X, y, test_size=0.2, random_state=42, stratify=y
             )
+            logger.info(f"📊 데이터 분할 완료 (랜덤 분할):")
+            logger.info(f"  - Train: {X_train.shape[0]:,} rows")
+            logger.info(f"  - Validation: {X_val.shape[0]:,} rows")
         
-        return X_train, X_test, y_train, y_test, X_2324
+        return X_train, X_val, y_train, y_val, X_2324
     
     def _create_preprocessor(self, numeric_features: List[str]) -> ColumnTransformer:
         """전처리기 생성"""
@@ -266,72 +344,72 @@ class FootballModelTrainer:
         return models
     
     def _train_and_evaluate_models(self, models: Dict[str, Any], X_train: pd.DataFrame, 
-                                  y_train: pd.Series, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, float]:
+                                  y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series) -> Dict[str, Any]:
         """모델 훈련 및 평가"""
         model_scores = {}
+        model_details = {}  # 상세 성능 지표 저장
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
         
         for name, model in models.items():
             logger.info(f"🔧 {name} 모델 훈련 중...")
             
-            # Pipeline 생성
-            pipeline = Pipeline([
-                ('preprocessor', self.preprocessor),
-                ('classifier', model)
-            ])
-            
-            # 교차 검증
-            cv_scores = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring='f1', n_jobs=1)
+            # 이미 전처리된 데이터이므로 모델만 사용
+            # 교차 검증 (전처리된 데이터로 직접 수행)
+            cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='f1', n_jobs=1)
             
             # 모델 훈련
-            pipeline.fit(X_train, y_train)
+            model.fit(X_train, y_train)
             
             # 예측
-            y_pred = pipeline.predict(X_test)
-            y_pred_proba = pipeline.predict_proba(X_test)[:, 1] if hasattr(pipeline.named_steps['classifier'], 'predict_proba') else None
+            y_pred = model.predict(X_val)
+            y_pred_proba = model.predict_proba(X_val)[:, 1] if hasattr(model, 'predict_proba') else None
             
             # 성능 지표 계산
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-            auc = roc_auc_score(y_test, y_pred_proba) if y_pred_proba is not None else 0
+            accuracy = accuracy_score(y_val, y_pred)
+            precision = precision_score(y_val, y_pred)
+            recall = recall_score(y_val, y_pred)
+            f1 = f1_score(y_val, y_pred)
+            auc = roc_auc_score(y_val, y_pred_proba) if y_pred_proba is not None else 0
             
-            # 복합 점수 계산
-            composite_score = auc * 0.4 + f1 * 0.3 + precision * 0.2 + recall * 0.1
+            # 복합 점수 계산 (균등 가중)
+            composite_score = (accuracy + precision + recall + f1 + auc) / 5
             model_scores[name] = composite_score
+            
+            # 상세 성능 지표 저장
+            model_details[name] = {
+                'accuracy': accuracy,
+                'precision': precision,
+                'recall': recall,
+                'f1': f1,
+                'auc': auc,
+                'composite_score': composite_score,
+                'cv_f1_mean': cv_scores.mean(),
+                'cv_f1_std': cv_scores.std()
+            }
             
             logger.info(f"✅ {name}: AUC={auc:.3f}, F1={f1:.3f}, Composite={composite_score:.3f}")
         
-        return model_scores
+        return model_scores, model_details
     
-    def _final_evaluation(self, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, Any]:
+    def _final_evaluation(self, X_val: pd.DataFrame, y_val: pd.Series) -> Dict[str, Any]:
         """최종 모델 평가"""
-        # Pipeline 생성
-        pipeline = Pipeline([
-            ('preprocessor', self.preprocessor),
-            ('classifier', self.best_model)
-        ])
-        
-        # 훈련
-        pipeline.fit(X_test, y_test)  # 실제로는 X_train을 사용해야 하지만 간단히
-        
+        # 이미 훈련된 모델 사용 (전처리된 데이터)
         # 예측
-        y_pred = pipeline.predict(X_test)
-        y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
+        y_pred = self.best_model.predict(X_val)
+        y_pred_proba = self.best_model.predict_proba(X_val)[:, 1] if hasattr(self.best_model, 'predict_proba') else None
         
         # 성능 지표
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
-        auc = roc_auc_score(y_test, y_pred_proba)
+        accuracy = accuracy_score(y_val, y_pred)
+        precision = precision_score(y_val, y_pred)
+        recall = recall_score(y_val, y_pred)
+        f1 = f1_score(y_val, y_pred)
+        auc = roc_auc_score(y_val, y_pred_proba)
         
         # ROC 곡선
-        fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+        fpr, tpr, _ = roc_curve(y_val, y_pred_proba)
         
         # 혼동 행렬
-        cm = confusion_matrix(y_test, y_pred)
+        cm = confusion_matrix(y_val, y_pred)
         
         # 피처 중요도 (Random Forest인 경우)
         feature_importance = None
@@ -361,26 +439,16 @@ class FootballModelTrainer:
             'feature_importance': feature_importance
         }
     
-    def _shap_analysis(self, X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, Any]:
+    def _shap_analysis(self, X_val: pd.DataFrame, y_val: pd.Series) -> Dict[str, Any]:
         """SHAP 분석 (일관성 보장)"""
         if not _has_shap:
             logger.warning("SHAP가 설치되지 않았습니다.")
             return {}
         
         try:
-            # Pipeline 생성
-            pipeline = Pipeline([
-                ('preprocessor', self.preprocessor),
-                ('classifier', self.best_model)
-            ])
-            
-            # 훈련
-            pipeline.fit(X_test, y_test)
-            
-            # 전처리된 데이터
-    
             # 이미 훈련된 모델과 전처리기 사용 (재훈련 방지)
-            X_test_processed = self.preprocessor.transform(X_test)
+            # X_val는 이미 전처리된 상태
+            X_val_processed = X_val
 
             # SHAP Explainer (모델 타입에 따라 선택)
             model_name = type(self.best_model).__name__
@@ -388,18 +456,18 @@ class FootballModelTrainer:
             if hasattr(self.best_model, 'feature_importances_'):
                 # Tree-based 모델 (RandomForest, GradientBoosting, XGBoost, LightGBM 등)
                 explainer = shap.TreeExplainer(self.best_model)
-                shap_values = explainer.shap_values(X_test_processed)
+                shap_values = explainer.shap_values(X_val_processed)
                 if isinstance(shap_values, list):
                     shap_values = shap_values[1]  # 이진 분류의 positive class
             elif 'Linear' in model_name or 'Logistic' in model_name:
                 # Linear 모델 (LogisticRegression, LinearRegression 등)
-                explainer = shap.LinearExplainer(self.best_model, X_test_processed)
-                shap_values = explainer.shap_values(X_test_processed)
+                explainer = shap.LinearExplainer(self.best_model, X_val_processed)
+                shap_values = explainer.shap_values(X_val_processed)
             else:
                 # 기타 모델 (SVM, KNN 등) - KernelExplainer 사용 (느림)
-                background = shap.kmeans(X_test_processed, 50)  # 배경 데이터 샘플링
+                background = shap.kmeans(X_val_processed, 50)  # 배경 데이터 샘플링
                 explainer = shap.KernelExplainer(self.best_model.predict_proba, background)
-                shap_values = explainer.shap_values(X_test_processed[:100])  # 샘플만 계산
+                shap_values = explainer.shap_values(X_val_processed[:100])  # 샘플만 계산
                 if isinstance(shap_values, list):
                     shap_values = shap_values[1]
             
@@ -409,7 +477,7 @@ class FootballModelTrainer:
             return {
                 'shap_values': shap_values,
                 'feature_names': feature_names,
-                'X_test_processed': X_test_processed
+                'X_val_processed': X_val_processed
             }
             
         except Exception as e:
@@ -490,31 +558,6 @@ class FootballModelTrainer:
             logger.error(f"전처리 후 피처명 생성 오류: {e}")
             return [f"feature_{i}" for i in range(100)]
     
-    def predict(self, X: pd.DataFrame) -> pd.DataFrame:
-        """예측 수행"""
-        if self.best_model is None or self.preprocessor is None:
-            raise ValueError("모델이 훈련되지 않았습니다.")
-        
-        # Pipeline 생성
-        pipeline = Pipeline([
-            ('preprocessor', self.preprocessor),
-            ('classifier', self.best_model)
-        ])
-        
-        # 예측
-        y_pred = pipeline.predict(X)
-        y_pred_proba = pipeline.predict_proba(X)[:, 1]
-        
-        # 결과 DataFrame 생성
-        result = X[['player_name', 'club_name', 'position']].copy()
-        result['predicted_transfer'] = y_pred
-        result['transfer_probability'] = y_pred_proba
-        result['transfer_probability_percent'] = (y_pred_proba * 100).round(1)
-        
-        # 확률 순으로 정렬
-        result = result.sort_values('transfer_probability_percent', ascending=False)
-        
-        return result
     
     def save_model(self, output_dir: Path):
         """모델 저장"""

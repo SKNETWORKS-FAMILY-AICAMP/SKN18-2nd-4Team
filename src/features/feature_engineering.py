@@ -176,14 +176,29 @@ class FootballFeatureEngineer:
                 axis=1
             )
         
-        # 9. 분당 카드 수
-        if 'yellow_cards' in df_fe.columns and 'season_avg_minutes' in df_fe.columns:
+        # 9. 가중 카드 점수 및 분당 카드 수
+        if 'yellow_cards' in df_fe.columns and 'red_cards' in df_fe.columns:
+            # Red Card = 3배 가중치 (퇴장이 경고보다 심각)
+            df_fe['weighted_cards'] = df_fe['yellow_cards'] + (df_fe['red_cards'] * 3)
+            
+            if 'season_avg_minutes' in df_fe.columns:
+                df_fe['cards_per_minute'] = df_fe['weighted_cards'] / (df_fe['season_avg_minutes'] + 1e-6)
+        elif 'yellow_cards' in df_fe.columns and 'season_avg_minutes' in df_fe.columns:
+            # Red Card 정보가 없으면 기존 방식 유지
             df_fe['cards_per_minute'] = df_fe['yellow_cards'] / (df_fe['season_avg_minutes'] + 1e-6)
         
         # 10. 클럽 재적 기간
         if 'season' in df_fe.columns and 'player_id' in df_fe.columns:
             season_counts = df_fe.groupby('player_id')['season'].nunique()
             df_fe['club_tenure_seasons'] = df_fe['player_id'].map(season_counts).fillna(1)
+        
+        # 10.5. 징계 관련 추가 피처
+        if 'red_cards' in df_fe.columns:
+            # 카드 심각도 레벨 (0: 없음, 1: 경고만, 2: 퇴장 포함)
+            if 'yellow_cards' in df_fe.columns:
+                df_fe['discipline_level'] = 0
+                df_fe.loc[df_fe['yellow_cards'] > 0, 'discipline_level'] = 1
+                df_fe.loc[df_fe['red_cards'] > 0, 'discipline_level'] = 2
         
         # 11. 포지션 내 경쟁 강도
         if 'position' in df_fe.columns and 'club_name' in df_fe.columns:

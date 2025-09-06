@@ -161,21 +161,21 @@ class ModelVisualizer:
                 return
                 
             shap_values = shap_results['shap_values']
-            X_test_processed = shap_results['X_test_processed']
+            X_val_processed = shap_results['X_val_processed']
             feature_names = shap_results.get('feature_names', [])
             
             # 피처명이 없으면 기본 이름 생성
             if not feature_names:
-                feature_names = [f'feature_{i}' for i in range(X_test_processed.shape[1])]
+                feature_names = [f'feature_{i}' for i in range(X_val_processed.shape[1])]
             
             # DataFrame으로 변환하여 피처명 설정
-            X_test_df = pd.DataFrame(X_test_processed, columns=feature_names)
+            X_val_df = pd.DataFrame(X_val_processed, columns=feature_names)
             
             # SHAP summary plot (가로로 길게, 피처명 명확히)
             plt.figure(figsize=(20, 12))  # 더 가로로 길게
             shap.summary_plot(
                 shap_values,
-                X_test_df,
+                X_val_df,
                 max_display=20,
                 show=False,
                 plot_size=(20, 12)  # SHAP 내부 크기 설정
@@ -194,7 +194,7 @@ class ModelVisualizer:
             plt.figure(figsize=(16, 10))  # 가로로 길게
             shap.summary_plot(
                 shap_values,
-                X_test_df,
+                X_val_df,
                 plot_type="bar",
                 max_display=20,
                 show=False,

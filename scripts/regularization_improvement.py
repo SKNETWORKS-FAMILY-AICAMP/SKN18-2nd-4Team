@@ -11,6 +11,8 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import logging
+import joblib
+
 from sklearn.linear_model import LogisticRegression, Ridge, Lasso
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
@@ -50,40 +52,44 @@ def regularization_improvement():
         print(f"  - Train: {train_df.shape[0]:,} rows")
         print(f"  - Test: {test_df.shape[0]:,} rows")
         
-        # 2. 피처 준비
-        target_col = config.target_column
-        # 2. 피처 엔지니어링 적용
-        from src.features.feature_engineering import FootballFeatureEngineer
-        feature_engineer = FootballFeatureEngineer()
-        train_df_processed = feature_engineer.create_engineered_features(train_df)
-        test_df_processed = feature_engineer.create_engineered_features(test_df)
+        # 2. 기본 모델링과 동일한 방식으로 처리
+        from src.models.football_modeling import FootballModelTrainer
         
-        # 3. 데이터 분할
-        exclude_cols = {'player_id', 'club_id', 'season', target_col, 'player_name', 
-                       'date_of_birth', 'agent_name', 'net_transfer_record'}
-        feature_cols = [col for col in train_df_processed.columns if col not in exclude_cols]
+        # 전체 데이터 합치기 (모델링용)
+        all_data = pd.concat([train_df, test_df], ignore_index=True)
         
-        X_train = train_df_processed[feature_cols]
-        y_train = train_df_processed[target_col]
-        X_test = test_df_processed[feature_cols]
-        y_test = test_df_processed[target_col]
+        # 기본 모델링 결과 재사용 (중복 학습 방지)
+        outputs_dir = Path(config.output_dir)
+        model_results_path = outputs_dir / "model_results.pkl"
         
-        # 4. 전처리기 생성
-        all_data_processed = pd.concat([train_df_processed, test_df_processed], ignore_index=True)
-        _, preprocessor, _ = feature_engineer.fit_transform(all_data_processed)
+        if model_results_path.exists():
+            logger.info("💾 기존 모델링 결과 재사용 (중복 학습 방지)")
+            model_results = joblib.load(model_results_path)
+        else:
+            logger.info("🚀 기본 모델링 결과가 없어서 새로 학습합니다")
+            model_trainer = FootballModelTrainer(all_data, config)
+            model_results = model_trainer.run_pipeline()
         
-        # 5. 전처리된 데이터
-        X_train_processed = preprocessor.transform(X_train)
-        X_test_processed = preprocessor.transform(X_test)
+        # 전처리된 데이터 가져오기
+        X_val = model_results['X_validation']  # validation 데이터 사용
+        y_val = model_results['y_validation']
+        X_train = model_results['X_train']
+        y_train = model_results['y_train']
+        preprocessor = model_results['preprocessor']
+        
+        # 이미 전처리된 데이터를 명확한 변수명으로 할당
+        X_train_processed = X_train  # 전처리 완료된 train 데이터
+        X_val_processed = X_val      # 전처리 완료된 validation 데이터
         
         # 5. 교차 검증 설정
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        from sklearn.metrics import f1_score, roc_auc_score
         f1_scorer = make_scorer(f1_score)
         
-        # 6. 정규화된 모델 정의
+        # 6. 정규화된 모델 정의 (성능 상위 3개 모델만)
         regularized_models = {}
         
-        # Logistic Regression with L1/L2 regularization
+        # Logistic Regression with L1/L2 regularization (성능 1위)
         regularized_models['Logistic Regression (L1)'] = LogisticRegression(
             penalty='l1', C=0.1, solver='liblinear', 
             class_weight='balanced', random_state=42, max_iter=1000
@@ -93,34 +99,16 @@ def regularization_improvement():
             class_weight='balanced', random_state=42, max_iter=1000
         )
         
-        # SVM with regularization
+        # SVM with regularization (성능 2위)
         regularized_models['SVM (RBF)'] = SVC(
             C=0.1, kernel='rbf', gamma='scale',
             class_weight='balanced', random_state=42, probability=True
         )
-        regularized_models['SVM (Linear)'] = SVC(
-            C=0.1, kernel='linear',
-            class_weight='balanced', random_state=42, probability=True
-        )
         
-        # Random Forest with regularization
-        regularized_models['Random Forest (Regularized)'] = RandomForestClassifier(
-            n_estimators=100, max_depth=10, min_samples_split=10,
-            min_samples_leaf=4, max_features='sqrt',
-            class_weight='balanced', random_state=42
-        )
-        
-        # Gradient Boosting with regularization
-        regularized_models['Gradient Boosting (Regularized)'] = GradientBoostingClassifier(
-            n_estimators=200, learning_rate=0.05, max_depth=5,
-            subsample=0.8, min_samples_split=10, min_samples_leaf=4,
-            random_state=42
-        )
-        
-        # LightGBM with regularization
+        # LightGBM with regularization (성능 3위)
         if _has_lgbm:
             regularized_models['LightGBM (Regularized)'] = LGBMClassifier(
-                n_estimators=200, learning_rate=0.05, num_leaves=31,
+                n_estimators=100, learning_rate=0.1, num_leaves=31,  # 더 빠른 설정
                 max_depth=5, subsample=0.8, colsample_bytree=0.8,
                 class_weight='balanced', random_state=42
             )
@@ -131,37 +119,31 @@ def regularization_improvement():
         for model_name, model in regularized_models.items():
             logger.info(f"🔧 {model_name} 훈련 시작")
             
-            # Pipeline 생성
-            from sklearn.pipeline import Pipeline
-            pipeline = Pipeline([
-                ('preprocessor', preprocessor),
-                ('classifier', model)
-            ])
-            
+            # 이미 전처리된 데이터로 직접 모델 훈련
             # 교차 검증
-            cv_scores = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring=f1_scorer)
+            cv_scores = cross_val_score(model, X_train_processed, y_train, cv=cv, scoring=f1_scorer)
             
             # 전체 데이터로 훈련
-            pipeline.fit(X_train, y_train)
+            model.fit(X_train_processed, y_train)
             
             # 예측
-            y_pred = pipeline.predict(X_test)
-            y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
+            y_pred = model.predict(X_val_processed)
+            y_pred_proba = model.predict_proba(X_val_processed)[:, 1] if hasattr(model, 'predict_proba') else None
             
             # 성능 평가
             from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
             
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-            auc = roc_auc_score(y_test, y_pred_proba)
+            accuracy = accuracy_score(y_val, y_pred)
+            precision = precision_score(y_val, y_pred, zero_division=0)
+            recall = recall_score(y_val, y_pred, zero_division=0)
+            f1 = f1_score(y_val, y_pred, zero_division=0)
+            auc = roc_auc_score(y_val, y_pred_proba) if y_pred_proba is not None else 0
             
-            # 복합 점수 계산
-            composite_score = auc * 0.4 + f1 * 0.3 + precision * 0.2 + recall * 0.1
+            # 복합 점수 계산 (균등 가중)
+            composite_score = (accuracy + precision + recall + f1 + auc) / 5
             
             regularization_results[model_name] = {
-                'model': pipeline,
+                'model': model,
                 'cv_mean': cv_scores.mean(),
                 'cv_std': cv_scores.std(),
                 'accuracy': accuracy,
@@ -241,6 +223,30 @@ def regularization_improvement():
         print("  - outputs/best_regularized_model.pkl")
         print("  - outputs/regularized_model_performance.csv")
         print("="*80)
+        
+        # 8. 최고 성능 모델이 기존 모델보다 좋으면 최종 모델 업데이트
+        current_best_score = max(model_results['model_scores'].values()) if 'model_scores' in model_results else 0
+        if 'tuning_improvement' in model_results:
+            current_best_score += model_results['tuning_improvement']  # 튜닝 개선분 반영
+            
+        regularized_best_score = best_model_info['composite_score']
+        
+        if regularized_best_score > current_best_score:
+            logger.info(f"🎉 정규화된 모델이 더 우수합니다! {current_best_score:.4f} → {regularized_best_score:.4f}")
+            
+            # 최종 model_results 업데이트
+            model_results['best_model'] = best_model_info['model']
+            model_results['best_model_name'] = f"{best_model_name} (Regularized)"
+            model_results['regularization_improvement'] = regularized_best_score - current_best_score
+            
+            # 최종 모델 저장 (outputs/ 덮어쓰기)
+            outputs_dir = Path(config.output_dir)
+            joblib.dump(best_model_info['model'], outputs_dir / "model.pkl")
+            joblib.dump(model_results, outputs_dir / "model_results.pkl")
+            
+            logger.info("✅ 최종 모델이 정규화된 모델로 업데이트되었습니다")
+        else:
+            logger.info(f"기존 모델이 더 우수합니다. {current_best_score:.4f} > {regularized_best_score:.4f}")
         
         logger.info("✅ 정규화 강화 완료")
         

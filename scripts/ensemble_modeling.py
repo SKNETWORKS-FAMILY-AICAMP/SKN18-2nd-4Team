@@ -11,6 +11,8 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import logging
+import joblib
+
 from sklearn.ensemble import VotingClassifier, StackingClassifier, BaggingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -50,30 +52,38 @@ def ensemble_modeling():
         print(f"  - Train: {train_df.shape[0]:,} rows")
         print(f"  - Test: {test_df.shape[0]:,} rows")
         
-        # 2. 피처 준비
-        target_col = config.target_column
-        # 2. 피처 엔지니어링 적용
-        from src.features.feature_engineering import FootballFeatureEngineer
-        feature_engineer = FootballFeatureEngineer()
-        train_df_processed = feature_engineer.create_engineered_features(train_df)
-        test_df_processed = feature_engineer.create_engineered_features(test_df)
+        # 2. 기본 모델링과 동일한 방식으로 처리
+        from src.models.football_modeling import FootballModelTrainer
         
-        # 3. 데이터 분할
-        exclude_cols = {'player_id', 'club_id', 'season', target_col, 'player_name', 
-                       'date_of_birth', 'agent_name', 'net_transfer_record'}
-        feature_cols = [col for col in train_df_processed.columns if col not in exclude_cols]
+        # 전체 데이터 합치기 (모델링용)
+        all_data = pd.concat([train_df, test_df], ignore_index=True)
         
-        X_train = train_df_processed[feature_cols]
-        y_train = train_df_processed[target_col]
-        X_test = test_df_processed[feature_cols]
-        y_test = test_df_processed[target_col]
+        # 기본 모델링 결과 재사용 (중복 학습 방지)
+        outputs_dir = Path(config.output_dir)
+        model_results_path = outputs_dir / "model_results.pkl"
         
-        # 4. 전처리기 생성
-        all_data_processed = pd.concat([train_df_processed, test_df_processed], ignore_index=True)
-        _, preprocessor, _ = feature_engineer.fit_transform(all_data_processed)
+        if model_results_path.exists():
+            logger.info("💾 기존 모델링 결과 재사용 (중복 학습 방지)")
+            model_results = joblib.load(model_results_path)
+        else:
+            logger.info("🚀 기본 모델링 결과가 없어서 새로 학습합니다")
+            model_trainer = FootballModelTrainer(all_data, config)
+            model_results = model_trainer.run_pipeline()
+        
+        # 전처리된 데이터 가져오기
+        X_val = model_results['X_validation']  # validation 데이터 사용
+        y_val = model_results['y_validation']
+        X_train = model_results['X_train']
+        y_train = model_results['y_train']
+        preprocessor = model_results['preprocessor']
+        
+        # 이미 전처리된 데이터를 명확한 변수명으로 할당
+        X_train_processed = X_train  # 전처리 완료된 train 데이터
+        X_val_processed = X_val      # 전처리 완료된 validation 데이터
         
         # 4. 교차 검증 설정
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        from sklearn.metrics import f1_score, roc_auc_score
         f1_scorer = make_scorer(f1_score)
         
         # 5. 기본 모델들 정의
@@ -117,7 +127,7 @@ def ensemble_modeling():
         
         # Bagging with Random Forest
         ensemble_models['Bagging (RF)'] = BaggingClassifier(
-            base_estimator=RandomForestClassifier(n_estimators=50, max_depth=8,
+            estimator=RandomForestClassifier(n_estimators=50, max_depth=8,
                                                 class_weight='balanced', random_state=42),
             n_estimators=10,
             random_state=42
@@ -125,7 +135,7 @@ def ensemble_modeling():
         
         # Bagging with Gradient Boosting
         ensemble_models['Bagging (GB)'] = BaggingClassifier(
-            base_estimator=GradientBoostingClassifier(n_estimators=100, learning_rate=0.1,
+            estimator=GradientBoostingClassifier(n_estimators=100, learning_rate=0.1,
                                                     max_depth=4, random_state=42),
             n_estimators=10,
             random_state=42
@@ -137,37 +147,38 @@ def ensemble_modeling():
         for model_name, model in ensemble_models.items():
             logger.info(f"🤝 {model_name} 훈련 시작")
             
-            # Pipeline 생성
-            from sklearn.pipeline import Pipeline
-            pipeline = Pipeline([
-                ('preprocessor', preprocessor),
-                ('classifier', model)
-            ])
-            
+            # 이미 전처리된 데이터 사용 (Pipeline 불필요)
             # 교차 검증
-            cv_scores = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring=f1_scorer)
+            cv_scores = cross_val_score(model, X_train_processed, y_train, cv=cv, scoring=f1_scorer)
             
             # 전체 데이터로 훈련
-            pipeline.fit(X_train, y_train)
+            model.fit(X_train_processed, y_train)
             
             # 예측
-            y_pred = pipeline.predict(X_test)
-            y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
+            y_pred = model.predict(X_val_processed)
+            
+            # predict_proba 사용 가능 여부 확인 (Hard Voting은 불가능)
+            try:
+                y_pred_proba = model.predict_proba(X_val_processed)[:, 1]
+                has_proba = True
+            except AttributeError:
+                y_pred_proba = None
+                has_proba = False
             
             # 성능 평가
             from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
             
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-            auc = roc_auc_score(y_test, y_pred_proba)
+            accuracy = accuracy_score(y_val, y_pred)
+            precision = precision_score(y_val, y_pred)
+            recall = recall_score(y_val, y_pred)
+            f1 = f1_score(y_val, y_pred)
+            auc = roc_auc_score(y_val, y_pred_proba) if has_proba else 0
             
-            # 복합 점수 계산
-            composite_score = auc * 0.4 + f1 * 0.3 + precision * 0.2 + recall * 0.1
+            # 복합 점수 계산 (균등 가중)
+            composite_score = (accuracy + precision + recall + f1 + auc) / 5
             
             ensemble_results[model_name] = {
-                'model': pipeline,
+                'model': model,
                 'cv_mean': cv_scores.mean(),
                 'cv_std': cv_scores.std(),
                 'accuracy': accuracy,
@@ -256,6 +267,32 @@ def ensemble_modeling():
         print("  - outputs/best_ensemble_model.pkl")
         print("  - outputs/ensemble_model_performance.csv")
         print("="*80)
+        
+        # 8. 최고 성능 모델이 기존 모델보다 좋으면 최종 모델 업데이트
+        current_best_score = max(model_results['model_scores'].values()) if 'model_scores' in model_results else 0
+        if 'tuning_improvement' in model_results:
+            current_best_score += model_results['tuning_improvement']  # 튜닝 개선분 반영
+        if 'regularization_improvement' in model_results:
+            current_best_score += model_results['regularization_improvement']  # 정규화 개선분 반영
+            
+        ensemble_best_score = best_ensemble_info['composite_score']
+        
+        if ensemble_best_score > current_best_score:
+            logger.info(f"🎉 앙상블 모델이 더 우수합니다! {current_best_score:.4f} → {ensemble_best_score:.4f}")
+            
+            # 최종 model_results 업데이트
+            model_results['best_model'] = best_ensemble_info['model']
+            model_results['best_model_name'] = f"{best_ensemble_name} (Ensemble)"
+            model_results['ensemble_improvement'] = ensemble_best_score - current_best_score
+            
+            # 최종 모델 저장 (outputs/ 덮어쓰기)
+            outputs_dir = Path(config.output_dir)
+            joblib.dump(best_ensemble_info['model'], outputs_dir / "model.pkl")
+            joblib.dump(model_results, outputs_dir / "model_results.pkl")
+            
+            logger.info("✅ 최종 모델이 앙상블 모델로 업데이트되었습니다")
+        else:
+            logger.info(f"기존 모델이 더 우수합니다. {current_best_score:.4f} > {ensemble_best_score:.4f}")
         
         logger.info("✅ 앙상블 모델 구축 완료")
         

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 하이퍼파라미터 튜닝
-- Random Forest, Gradient Boosting, LightGBM 최적화
+- 성능 상위 3개 모델 최적화: Logistic Regression, SVM, LightGBM
 - GridSearchCV를 통한 체계적 탐색
 """
 
@@ -10,14 +10,12 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import logging
+import joblib
+
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import make_scorer, f1_score, roc_auc_score
-import joblib
 
-# 프로젝트 루트를 Python 경로에 추가
-project_root = Path(__file__).parent
-sys.path.append(str(project_root))
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -56,18 +54,28 @@ def hyperparameter_tuning():
         # 전체 데이터 합치기 (모델링용)
         all_data = pd.concat([train_df, test_df], ignore_index=True)
         
-        # 모델 훈련 (기본 파이프라인 실행)
-        model_trainer = FootballModelTrainer(all_data, config)
-        model_results = model_trainer.run_pipeline()
+        # 기본 모델링 결과 재사용 (중복 학습 방지)
+        outputs_dir = Path(config.output_dir)
+        model_results_path = outputs_dir / "model_results.pkl"
+        
+        if model_results_path.exists():
+            logger.info("💾 기존 모델링 결과 재사용 (중복 학습 방지)")
+            model_results = joblib.load(model_results_path)
+        else:
+            logger.info("🚀 기본 모델링 결과가 없어서 새로 학습합니다")
+            model_trainer = FootballModelTrainer(all_data, config)
+            model_results = model_trainer.run_pipeline()
         
         # 전처리된 데이터 가져오기
-        X_train = model_results['X_test']  # 이미 전처리됨
-        y_train = model_results['y_test']
+        X_val = model_results['X_validation']  # 전처리된 데이터
+        y_val = model_results['y_validation']
+        X_train = model_results['X_train']
+        y_train = model_results['y_train']
         preprocessor = model_results['preprocessor']
         
-        # 간단하게 처리 (이미 전처리된 데이터 사용)
-        X_train_processed = X_train  # 이미 전처리됨
-        X_test_processed = X_train   # 동일한 데이터
+        # 이미 전처리된 데이터를 명확한 변수명으로 할당
+        X_train_processed = X_train  # 전처리 완료된 train 데이터
+        X_val_processed = X_val      # 전처리 완료된 validation 데이터
         
         # 5. 교차 검증 설정
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -77,84 +85,137 @@ def hyperparameter_tuning():
         f1_scorer = make_scorer(f1_score)
         auc_scorer = make_scorer(roc_auc_score)
         
-        # 7. 하이퍼파라미터 그리드 정의
+        # 7. 하이퍼파라미터 그리드 정의 (성능 상위 3개 모델만)
         param_grids = {}
         
-        # Random Forest
-        param_grids['Random Forest'] = {
-            'n_estimators': [50, 100, 200],
-            'max_depth': [5, 10, 15, None],
-            'min_samples_split': [2, 5, 10],
-            'min_samples_leaf': [1, 2, 4],
-            'max_features': ['sqrt', 'log2', None]
+        # Logistic Regression (성능 1위) - 1단계 재검증: 넓은 범위에서 최적 구간 찾기
+        param_grids['Logistic Regression'] = {
+            'C': [0.1, 0.5, 1.0, 5.0, 10.0],  # 넓은 범위에서 비교
+            'penalty': ['l1', 'l2'],           # penalty 비교
+            'solver': ['liblinear']            # 안정적 solver
         }
         
-        # Gradient Boosting
-        param_grids['Gradient Boosting'] = {
-            'n_estimators': [100, 200, 300],
-            'learning_rate': [0.01, 0.1, 0.2],
-            'max_depth': [3, 5, 7],
-            'subsample': [0.8, 0.9, 1.0],
-            'min_samples_split': [2, 5, 10],
-            'min_samples_leaf': [1, 2, 4]
+        # SVM (성능 2위) - 1단계 재검증: 넓은 범위에서 최적 구간 찾기
+        param_grids['SVM'] = {
+            'C': [0.01, 0.1, 1.0, 10.0, 100.0],  # 넓은 범위에서 비교
+            'kernel': ['rbf', 'linear'],          # 커널 비교
+            'gamma': ['scale', 'auto']            # 감마 비교
         }
         
-        # LightGBM
+        # LightGBM (성능 3위) - 1단계 재검증: 주요 파라미터 넓은 범위 비교
         if _has_lgbm:
             param_grids['LightGBM'] = {
-                'n_estimators': [100, 200, 300],
-                'learning_rate': [0.01, 0.1, 0.2],
-                'num_leaves': [31, 50, 100],
-                'max_depth': [5, 10, 15],
-                'subsample': [0.8, 0.9, 1.0],
-                'colsample_bytree': [0.8, 0.9, 1.0]
+                'n_estimators': [50, 100, 200, 500],   # 넓은 범위에서 비교
+                'learning_rate': [0.01, 0.1, 0.3],    # 넓은 범위에서 비교
+                'max_depth': [3, 5, 7]                 # depth 비교
             }
         
-        # 8. 모델 정의
+        # 8. 모델 정의 (성능 상위 3개 모델만)
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.svm import SVC
+        
         models = {
-            'Random Forest': RandomForestClassifier(random_state=42, class_weight='balanced'),
-            'Gradient Boosting': GradientBoostingClassifier(random_state=42)
+            'Logistic Regression': LogisticRegression(random_state=42, class_weight='balanced'),
+            'SVM': SVC(random_state=42, class_weight='balanced', probability=True)
         }
         
         if _has_lgbm:
             models['LightGBM'] = LGBMClassifier(random_state=42, class_weight='balanced')
         
-        # 9. 하이퍼파라미터 튜닝 실행
+        # 파라미터 그리드에서 classifier__ 접두사 제거 (Pipeline 사용하지 않음)
+        for model_name in param_grids:
+            new_params = {}
+            for param, values in param_grids[model_name].items():
+                # classifier__ 접두사 제거
+                new_param = param.replace('classifier__', '')
+                new_params[new_param] = values
+            param_grids[model_name] = new_params
+        
+        # 9. 하이퍼파라미터 튜닝 실행 (전처리된 데이터에 직접 적용)
         tuning_results = {}
         
         for model_name, model in models.items():
+            if model_name not in param_grids:
+                continue
+                
             logger.info(f"🔧 {model_name} 하이퍼파라미터 튜닝 시작")
             
-            # Pipeline 생성
-            from sklearn.pipeline import Pipeline
-            pipeline = Pipeline([
-                ('preprocessor', preprocessor),
-                ('classifier', model)
-            ])
+            # 파라미터 호환성 처리
+            current_params = param_grids[model_name].copy()
             
-            # GridSearchCV
-            grid_search = GridSearchCV(
-                pipeline,
-                param_grids[model_name],
-                cv=cv,
-                scoring=f1_scorer,
-                n_jobs=-1,
-                verbose=1
-            )
-            
-            # 훈련
-            grid_search.fit(X_train, y_train)
-            
-            # 결과 저장
-            tuning_results[model_name] = {
-                'best_params': grid_search.best_params_,
-                'best_score': grid_search.best_score_,
-                'best_model': grid_search.best_estimator_
-            }
+            # Logistic Regression의 penalty-solver 호환성 처리
+            if model_name == 'Logistic Regression':
+                # penalty에 따라 적절한 solver 자동 선택
+                compatible_params = []
+                for penalty in current_params['penalty']:
+                    param_combo = current_params.copy()
+                    param_combo['penalty'] = [penalty]
+                    
+                    # penalty에 따른 solver 자동 선택
+                    if penalty == 'l1':
+                        param_combo['solver'] = ['liblinear']  # l1은 liblinear 사용
+                        param_combo.pop('l1_ratio', None)     # l1은 l1_ratio 불필요
+                    elif penalty == 'l2':
+                        param_combo['solver'] = ['lbfgs']      # l2는 lbfgs 사용 (빠름)
+                        param_combo.pop('l1_ratio', None)     # l2는 l1_ratio 불필요
+                    elif penalty == 'elasticnet':
+                        param_combo['solver'] = ['saga']       # elasticnet은 saga 사용
+                        # l1_ratio는 유지 (elasticnet 필수 파라미터)
+                    
+                    compatible_params.append(param_combo)
+                
+                # 각 호환 조합별로 개별 튜닝
+                best_score = -1
+                best_params = None
+                best_estimator = None
+                
+                for param_combo in compatible_params:
+                    grid_search = GridSearchCV(
+                        model,
+                        param_combo,
+                        cv=cv,
+                        scoring=f1_scorer,
+                        n_jobs=-1,
+                        verbose=0
+                    )
+                    grid_search.fit(X_train_processed, y_train)
+                    
+                    if grid_search.best_score_ > best_score:
+                        best_score = grid_search.best_score_
+                        best_params = grid_search.best_params_
+                        best_estimator = grid_search.best_estimator_
+                
+                # 결과 저장
+                tuning_results[model_name] = {
+                    'best_params': best_params,
+                    'best_score': best_score,
+                    'best_model': best_estimator
+                }
+                
+            else:
+                # SVM과 LightGBM은 기존 방식
+                grid_search = GridSearchCV(
+                    model,
+                    current_params,
+                    cv=cv,
+                    scoring=f1_scorer,
+                    n_jobs=-1,
+                    verbose=1
+                )
+                
+                # 하이퍼파라미터 튜닝 실행 (이미 전처리된 데이터 사용)
+                grid_search.fit(X_train_processed, y_train)
+                
+                # 결과 저장
+                tuning_results[model_name] = {
+                    'best_params': grid_search.best_params_,
+                    'best_score': grid_search.best_score_,
+                    'best_model': grid_search.best_estimator_
+                }
             
             logger.info(f"✅ {model_name} 튜닝 완료")
-            logger.info(f"   최고 점수: {grid_search.best_score_:.4f}")
-            logger.info(f"   최적 파라미터: {grid_search.best_params_}")
+            logger.info(f"   최고 점수: {tuning_results[model_name]['best_score']:.4f}")
+            logger.info(f"   최적 파라미터: {tuning_results[model_name]['best_params']}")
         
         # 10. 최적 모델 평가
         logger.info("📊 최적 모델 평가 시작")
@@ -164,20 +225,20 @@ def hyperparameter_tuning():
             best_model = results['best_model']
             
             # 예측
-            y_pred = best_model.predict(X_test)
-            y_pred_proba = best_model.predict_proba(X_test)[:, 1]
+            y_pred = best_model.predict(X_val_processed)
+            y_pred_proba = best_model.predict_proba(X_val_processed)[:, 1]
             
             # 성능 평가
             from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
             
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-            auc = roc_auc_score(y_test, y_pred_proba)
+            accuracy = accuracy_score(y_val, y_pred)
+            precision = precision_score(y_val, y_pred)
+            recall = recall_score(y_val, y_pred)
+            f1 = f1_score(y_val, y_pred)
+            auc = roc_auc_score(y_val, y_pred_proba)
             
-            # 복합 점수 계산
-            composite_score = auc * 0.4 + f1 * 0.3 + precision * 0.2 + recall * 0.1
+            # 복합 점수 계산 (균등 가중)
+            composite_score = (accuracy + precision + recall + f1 + auc) / 5
             
             best_models[model_name] = {
                 'model': best_model,
@@ -247,6 +308,27 @@ def hyperparameter_tuning():
         print("  - outputs/best_tuned_model.pkl")
         print("  - outputs/tuned_model_performance.csv")
         print("="*80)
+        
+        # 8. 최고 성능 모델이 기존 모델보다 좋으면 최종 모델 업데이트
+        original_best_score = max(model_results['model_scores'].values()) if 'model_scores' in model_results else 0
+        tuned_best_score = best_model_info['composite_score']
+        
+        if tuned_best_score > original_best_score:
+            logger.info(f"🎉 튜닝된 모델이 더 우수합니다! {original_best_score:.4f} → {tuned_best_score:.4f}")
+            
+            # 최종 model_results 업데이트
+            model_results['best_model'] = best_model_info['model']
+            model_results['best_model_name'] = f"{best_model_name} (Tuned)"
+            model_results['tuning_improvement'] = tuned_best_score - original_best_score
+            
+            # 최종 모델 저장 (outputs/ 덮어쓰기)
+            outputs_dir = Path(config.output_dir)
+            joblib.dump(best_model_info['model'], outputs_dir / "model.pkl")
+            joblib.dump(model_results, outputs_dir / "model_results.pkl")
+            
+            logger.info("✅ 최종 모델이 튜닝된 모델로 업데이트되었습니다")
+        else:
+            logger.info(f"기존 모델이 더 우수합니다. {original_best_score:.4f} > {tuned_best_score:.4f}")
         
         logger.info("✅ 하이퍼파라미터 튜닝 완료")
         

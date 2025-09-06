@@ -101,6 +101,8 @@ class Config:
     
     # 출력 관련 속성들
     @property
+    def output_dir(self): return Path(self.get('output.output_dir'))
+    @property
     def output_predictions_csv(self): return Path(self.get('output.predictions_csv'))
     @property
     def output_model_comparison_plot(self): return Path(self.get('output.model_comparison_plot'))

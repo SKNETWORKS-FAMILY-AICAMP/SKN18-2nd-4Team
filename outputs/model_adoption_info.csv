@@ -1,2 +1,2 @@
 ﻿Best_Model,Best_Score,Selection_Criteria,Weight_Formula
-Logistic Regression,0.5594,Composite Score (Weighted Average),Accuracy(0.2) + Precision(0.2) + Recall(0.2) + F1(0.2) + AUC(0.2)
+Logistic Regression,0.5604,Composite Score (Weighted Average),Accuracy(0.2) + Precision(0.2) + Recall(0.2) + F1(0.2) + AUC(0.2)

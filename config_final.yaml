@@ -41,6 +41,7 @@ features:
     - net_transfer_record # text field
 
 output:
+  output_dir: outputs
   predictions_csv: outputs/23_24_transfer_predictions.csv
   model_comparison_plot: outputs/model_comparison.png
   shap_summary_plot: outputs/shap_summary.png

@@ -12,53 +12,72 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def save_model_performance():
+def save_model_performance(model_results=None):
     """모델 성능 점수를 상세히 저장하고 출력"""
     try:
         # 경로 설정
         outputs_dir = Path("outputs")
-        model_results_path = outputs_dir / "model_results.pkl"
+        outputs_dir.mkdir(parents=True, exist_ok=True)
         
-        if not model_results_path.exists():
-            logger.error("model_results.pkl 파일이 없습니다.")
+        # 모델 결과 확인
+        if model_results is None:
+            model_results_path = outputs_dir / "model_results.pkl"
+            if not model_results_path.exists():
+                logger.error("model_results.pkl 파일이 없고 model_results도 제공되지 않았습니다.")
+                return
+            # 파일에서 로드
+            model_results = joblib.load(model_results_path)
+        
+        # model_details 우선 사용, 없으면 model_comparison 사용
+        if 'model_details' in model_results:
+            model_data = model_results['model_details']
+            use_details = True
+        elif 'model_comparison' in model_results:
+            model_data = model_results['model_comparison']
+            use_details = False
+        else:
+            logger.error("모델 성능 데이터가 없습니다.")
             return
-        
-        # 모델 결과 로드
-        model_results = joblib.load(model_results_path)
-        
-        if 'model_comparison' not in model_results:
-            logger.error("모델 비교 결과가 없습니다.")
-            return
-        
-        model_comparison = model_results['model_comparison']
         
         # 상세 성능 데이터프레임 생성
         detailed_performance = []
         
-        for model_name, metrics in model_comparison.items():
-            # metrics가 dict가 아닌 경우 처리
-            if isinstance(metrics, (int, float)):
-                # 단순 점수인 경우 Composite_Score로 처리
+        for model_name, metrics in model_data.items():
+            if use_details:
+                # model_details 사용 (실제 성능 지표 포함)
                 detailed_performance.append({
                     'Model': model_name,
-                    'Accuracy': 0,
-                    'Precision': 0,
-                    'Recall': 0,
-                    'F1_Score': 0,
-                    'AUC': 0,
-                    'Composite_Score': round(metrics, 4)
+                    'Accuracy': round(metrics.get('accuracy', 0), 4),
+                    'Precision': round(metrics.get('precision', 0), 4),
+                    'Recall': round(metrics.get('recall', 0), 4),
+                    'F1_Score': round(metrics.get('f1', 0), 4),
+                    'AUC': round(metrics.get('auc', 0), 4),
+                    'Composite_Score': round(metrics.get('composite_score', 0), 4)
                 })
             else:
-                # dict인 경우 정상 처리
-                detailed_performance.append({
-                    'Model': model_name,
-                    'Accuracy': round(metrics.get('Accuracy', 0), 4),
-                    'Precision': round(metrics.get('Precision', 0), 4),
-                    'Recall': round(metrics.get('Recall', 0), 4),
-                    'F1_Score': round(metrics.get('F1_Score', 0), 4),
-                    'AUC': round(metrics.get('AUC', 0), 4),
-                    'Composite_Score': round(metrics.get('Composite_Score', 0), 4)
-                })
+                # metrics가 dict가 아닌 경우 처리 (기존 방식)
+                if isinstance(metrics, (int, float)):
+                    # 단순 점수인 경우 Composite_Score로 처리
+                    detailed_performance.append({
+                        'Model': model_name,
+                        'Accuracy': 0,
+                        'Precision': 0,
+                        'Recall': 0,
+                        'F1_Score': 0,
+                        'AUC': 0,
+                        'Composite_Score': round(metrics, 4)
+                    })
+                else:
+                    # dict인 경우 정상 처리
+                    detailed_performance.append({
+                        'Model': model_name,
+                        'Accuracy': round(metrics.get('Accuracy', 0), 4),
+                        'Precision': round(metrics.get('Precision', 0), 4),
+                        'Recall': round(metrics.get('Recall', 0), 4),
+                        'F1_Score': round(metrics.get('F1_Score', 0), 4),
+                        'AUC': round(metrics.get('AUC', 0), 4),
+                        'Composite_Score': round(metrics.get('Composite_Score', 0), 4)
+                    })
         
         # 데이터프레임 생성 및 정렬
         df_performance = pd.DataFrame(detailed_performance)
