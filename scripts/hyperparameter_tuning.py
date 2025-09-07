@@ -67,8 +67,8 @@ def hyperparameter_tuning():
             model_results = model_trainer.run_pipeline()
         
         # 전처리된 데이터 가져오기
-        X_val = model_results['X_validation']  # 전처리된 데이터
-        y_val = model_results['y_validation']
+        X_val = model_results['X_val']  # 전처리된 데이터
+        y_val = model_results['y_val']
         X_train = model_results['X_train']
         y_train = model_results['y_train']
         preprocessor = model_results['preprocessor']
@@ -100,27 +100,27 @@ def hyperparameter_tuning():
         # 7. 하이퍼파라미터 그리드 정의 (성능 상위 3개 모델만)
         param_grids = {}
         
-        # 1단계: 넓은 범위로 최적 구간 탐색 (빠른 실행)
-        # Logistic Regression - 넓은 범위 탐색
+        # 2단계: 최적 구간 주변 세밀 탐색 (3개 모델 모두)
+        # Logistic Regression - 1.0 주변 세밀 탐색
         param_grids['Logistic Regression'] = {
-            'C': [0.01, 0.1, 1.0, 10.0, 100.0],  # 10배씩 차이
-            'penalty': ['l1', 'l2'],
+            'C': [0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3],  # 1.0 주변 세밀하게
+            'penalty': ['l2'],  # 성공한 penalty 유지
             'max_iter': [1000]
         }
         
-        # SVM - 넓은 범위 탐색
+        # SVM - 0.1 주변 세밀 탐색 (linear kernel)
         param_grids['SVM'] = {
-            'C': [0.001, 0.01, 0.1, 1.0, 10.0],  # 10배씩 차이
-            'kernel': ['rbf', 'linear'],
-            'gamma': ['scale', 'auto']
+            'C': [0.05, 0.08, 0.1, 0.12, 0.15, 0.2],  # 0.1 주변 세밀하게
+            'kernel': ['linear'],  # 성공한 kernel 유지
+            'gamma': ['scale']
         }
         
-        # LightGBM - 넓은 범위 탐색
+        # LightGBM - 기본값 주변 세밀 탐색 (튜닝 실패했으므로 기본값 기준)
         if _has_lgbm:
             param_grids['LightGBM'] = {
-                'n_estimators': [50, 100, 200, 500, 1000],  # 2배씩 차이
-                'learning_rate': [0.01, 0.1, 0.3, 0.5, 1.0],  # 3-5배씩 차이
-                'max_depth': [3, 6, 9, 12, 15]  # 3씩 차이
+                'n_estimators': [50, 100, 150, 200, 250],  # 기본값 100 주변
+                'learning_rate': [0.05, 0.1, 0.15, 0.2, 0.25],  # 기본값 0.1 주변
+                'max_depth': [3, 4, 5, 6, 7]  # 기본값 3 주변
             }
         
         # 8. 모델 정의 (성능 상위 3개 모델만)
@@ -341,6 +341,10 @@ def hyperparameter_tuning():
             joblib.dump(model_results, outputs_dir / "model_results.pkl")
             
             logger.info("✅ 최종 모델이 튜닝된 모델로 업데이트되었습니다")
+            
+            # 모델 성능 정보 업데이트
+            from scripts.save_model_performance import save_model_performance
+            save_model_performance(model_results)
         else:
             logger.info(f"기존 모델이 더 우수합니다. {original_best_score:.4f} > {tuned_best_score:.4f}")
         

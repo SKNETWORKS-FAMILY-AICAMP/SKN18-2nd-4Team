@@ -113,17 +113,18 @@ def save_model_performance(model_results=None):
         print("\n" + "="*80)
         print(f"✅ 상세 성능 결과가 {performance_csv_path}에 저장되었습니다.")
         
-        # 채택 모델 정보
+        # 채택 모델 정보 저장
         best_model_info = {
             'Best_Model': df_performance.iloc[0]['Model'],
             'Best_Score': df_performance.iloc[0]['Composite_Score'],
             'Selection_Criteria': 'Composite Score (Weighted Average)',
-            'Weight_Formula': 'Accuracy(0.2) + Precision(0.2) + Recall(0.2) + F1(0.2) + AUC(0.2)'
+            'Weight_Formula': 'Precision(0.4) + F1(0.3) + Accuracy(0.2) + Recall(0.1)'
         }
         
         # 채택 모델 정보 CSV 저장
         adoption_csv_path = outputs_dir / "model_adoption_info.csv"
         pd.DataFrame([best_model_info]).to_csv(adoption_csv_path, index=False, encoding='utf-8-sig')
+        print(f"✅ 모델 채택 정보가 {adoption_csv_path}에 저장되었습니다.")
         
         logger.info(f"✅ 모델 성능 저장 완료: {len(df_performance)}개 모델")
         

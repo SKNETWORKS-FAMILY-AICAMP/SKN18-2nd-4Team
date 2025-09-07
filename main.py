@@ -28,36 +28,24 @@ def main():
         from scripts.run_final_modeling import run_final_modeling
         run_final_modeling(force_retrain=args.force_retrain)
         
-        # 성능 기록 자동 업데이트
-        print("📊 성능 기록 업데이트...")
-        print("📊 성능 기록 업데이트는 수동으로 진행됩니다.")
         
     elif args.mode == 'tune':
         # 하이퍼파라미터 튜닝
         from scripts.hyperparameter_tuning import hyperparameter_tuning
         hyperparameter_tuning()
         
-        # 성능 기록 자동 업데이트
-        print("📊 성능 기록 업데이트...")
-        print("📊 성능 기록 업데이트는 수동으로 진행됩니다.")
         
     elif args.mode == 'regularize':
         # 정규화 강화
         from scripts.regularization_improvement import regularization_improvement
         regularization_improvement()
         
-        # 성능 기록 자동 업데이트
-        print("📊 성능 기록 업데이트...")
-        print("📊 성능 기록 업데이트는 수동으로 진행됩니다.")
         
     elif args.mode == 'ensemble':
         # 앙상블 모델
         from scripts.ensemble_modeling import ensemble_modeling
         ensemble_modeling()
         
-        # 성능 기록 자동 업데이트
-        print("📊 성능 기록 업데이트...")
-        print("📊 성능 기록 업데이트는 수동으로 진행됩니다.")
         
     elif args.mode == 'all':
         # 전체 파이프라인

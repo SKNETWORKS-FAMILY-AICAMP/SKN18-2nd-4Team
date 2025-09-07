@@ -18,7 +18,6 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score, StratifiedKFold
 from sklearn.metrics import make_scorer, f1_score, roc_auc_score
-import joblib
 
 # 프로젝트 루트를 Python 경로에 추가
 project_root = Path(__file__).parent
@@ -71,8 +70,8 @@ def regularization_improvement():
             model_results = model_trainer.run_pipeline()
         
         # 전처리된 데이터 가져오기
-        X_val = model_results['X_validation']  # validation 데이터 사용
-        y_val = model_results['y_validation']
+        X_val = model_results['X_val']  # validation 데이터 사용
+        y_val = model_results['y_val']
         X_train = model_results['X_train']
         y_train = model_results['y_train']
         preprocessor = model_results['preprocessor']
@@ -256,6 +255,10 @@ def regularization_improvement():
             joblib.dump(model_results, outputs_dir / "model_results.pkl")
             
             logger.info("✅ 최종 모델이 정규화된 모델로 업데이트되었습니다")
+            
+            # 모델 성능 정보 업데이트
+            from scripts.save_model_performance import save_model_performance
+            save_model_performance(model_results)
         else:
             logger.info(f"기존 모델이 더 우수합니다. {current_best_score:.4f} > {regularized_best_score:.4f}")
         

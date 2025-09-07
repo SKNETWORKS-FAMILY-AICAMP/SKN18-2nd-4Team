@@ -89,6 +89,24 @@ def run_final_modeling(force_retrain=False):
             model_trainer.best_model = model_results.get('best_model')
             model_trainer.preprocessor = model_results.get('preprocessor')
             model_trainer.best_model_name = model_results.get('best_model_name')
+            
+            # 최종 모델로 SHAP 분석 재실행 (5단계에서)
+            logger.info("🔍 최종 모델로 SHAP 분석 재실행")
+            try:
+                # 검증 데이터 준비 (전처리)
+                X_val = model_results.get('X_val')
+                y_val = model_results.get('y_val')
+                if X_val is not None and y_val is not None:
+                    shap_results = model_trainer._shap_analysis(X_val, y_val)
+                    if shap_results:
+                        model_results['shap_results'] = shap_results
+                        logger.info("✅ SHAP 분석 완료 (최종 모델)")
+                    else:
+                        logger.warning("SHAP 분석 실패")
+                else:
+                    logger.warning("검증 데이터가 없어 SHAP 분석을 건너뜁니다")
+            except Exception as e:
+                logger.warning(f"SHAP 분석 중 오류: {e}")
         
         # 4. 시각화
         from src.visualization.plotter import ModelVisualizer

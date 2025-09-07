@@ -4,7 +4,7 @@
 
 ### 루트 디렉토리 (메인 파일들)
 
-- `main.py` - **메인 실행 파일** (이것만 기억하면 됨!)
+- `main.py` - **메인 실행 파일**
 - `config_final.yaml` - 설정 파일
 - `README.md` - 프로젝트 문서
 - `USAGE.md` - 사용법 가이드
@@ -85,7 +85,6 @@ python scripts/save_model_performance.py
 ### 성능 분석
 
 - `outputs/detailed_model_performance.csv` - 상세 모델 성능 순위
-- `outputs/model_adoption_info.csv` - 최고 모델 선택 정보
 - `outputs/model_performance_scores.csv` - 기본 성능 점수
 
 ### 고급 모델링 결과

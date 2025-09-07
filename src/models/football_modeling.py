@@ -216,8 +216,8 @@ class FootballModelTrainer:
             'shap_results': shap_results,
             'X_train': X_train,      # 훈련 데이터 추가
             'y_train': y_train,      # 훈련 타겟 추가
-            'X_validation': X_val,   # validation 데이터
-            'y_validation': y_val,   # validation 타겟
+            'X_val': X_val,   # validation 데이터
+            'y_val': y_val,   # validation 타겟
             'X_2324': X_2324,
             # 검사 결과 추가
             'data_quality_results': quality_results,

@@ -118,8 +118,9 @@ class FootballFeatureEngineer:
         return np.nan
     
     def create_engineered_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """11개 피처 엔지니어링 적용"""
+        """피처 엔지니어링 적용"""
         logger.info("🔧 피처 엔지니어링 적용 중...")
+        original_cols = df.shape[1]
         df_fe = df.copy()
         
         # 통계 계산 (fit 단계)
@@ -209,7 +210,8 @@ class FootballFeatureEngineer:
                 axis=1
             )
         
-        logger.info(f"✅ 피처 엔지니어링 완료: {df_fe.shape[1] - df.shape[1]}개 피처 추가")
+        added_features = df_fe.shape[1] - original_cols
+        logger.info(f"✅ 피처 엔지니어링 완료: {added_features}개 피처 추가")
         return df_fe
     
     def get_feature_types(self, df: pd.DataFrame) -> Dict[str, List[str]]:
