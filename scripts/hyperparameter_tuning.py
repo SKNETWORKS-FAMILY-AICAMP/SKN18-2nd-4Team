@@ -80,34 +80,47 @@ def hyperparameter_tuning():
         # 5. 교차 검증 설정
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
         
-        # 6. 평가 지표 설정
-        from sklearn.metrics import f1_score, roc_auc_score
+        # 6. 평가 지표 설정 - 복합점수와 일치시킴
+        from sklearn.metrics import f1_score, roc_auc_score, accuracy_score, precision_score, recall_score
+        
+        def composite_scorer(y_true, y_pred):
+            """복합점수 계산: Precision 중심 가중평균 (Precision 40% + F1 30% + Accuracy 20% + Recall 10%)"""
+            accuracy = accuracy_score(y_true, y_pred)
+            precision = precision_score(y_true, y_pred, zero_division=0)
+            recall = recall_score(y_true, y_pred, zero_division=0)
+            f1 = f1_score(y_true, y_pred, zero_division=0)
+            # Precision을 중시하는 가중평균
+            composite = (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
+            return composite
+        
+        composite_scorer_func = make_scorer(composite_scorer)
         f1_scorer = make_scorer(f1_score)
         auc_scorer = make_scorer(roc_auc_score)
         
         # 7. 하이퍼파라미터 그리드 정의 (성능 상위 3개 모델만)
         param_grids = {}
         
-        # Logistic Regression (성능 1위) - 1단계 재검증: 넓은 범위에서 최적 구간 찾기
+        # 1단계: 넓은 범위로 최적 구간 탐색 (빠른 실행)
+        # Logistic Regression - 넓은 범위 탐색
         param_grids['Logistic Regression'] = {
-            'C': [0.1, 0.5, 1.0, 5.0, 10.0],  # 넓은 범위에서 비교
-            'penalty': ['l1', 'l2'],           # penalty 비교
-            'solver': ['liblinear']            # 안정적 solver
+            'C': [0.01, 0.1, 1.0, 10.0, 100.0],  # 10배씩 차이
+            'penalty': ['l1', 'l2'],
+            'max_iter': [1000]
         }
         
-        # SVM (성능 2위) - 1단계 재검증: 넓은 범위에서 최적 구간 찾기
+        # SVM - 넓은 범위 탐색
         param_grids['SVM'] = {
-            'C': [0.01, 0.1, 1.0, 10.0, 100.0],  # 넓은 범위에서 비교
-            'kernel': ['rbf', 'linear'],          # 커널 비교
-            'gamma': ['scale', 'auto']            # 감마 비교
+            'C': [0.001, 0.01, 0.1, 1.0, 10.0],  # 10배씩 차이
+            'kernel': ['rbf', 'linear'],
+            'gamma': ['scale', 'auto']
         }
         
-        # LightGBM (성능 3위) - 1단계 재검증: 주요 파라미터 넓은 범위 비교
+        # LightGBM - 넓은 범위 탐색
         if _has_lgbm:
             param_grids['LightGBM'] = {
-                'n_estimators': [50, 100, 200, 500],   # 넓은 범위에서 비교
-                'learning_rate': [0.01, 0.1, 0.3],    # 넓은 범위에서 비교
-                'max_depth': [3, 5, 7]                 # depth 비교
+                'n_estimators': [50, 100, 200, 500, 1000],  # 2배씩 차이
+                'learning_rate': [0.01, 0.1, 0.3, 0.5, 1.0],  # 3-5배씩 차이
+                'max_depth': [3, 6, 9, 12, 15]  # 3씩 차이
             }
         
         # 8. 모델 정의 (성능 상위 3개 모델만)
@@ -174,7 +187,7 @@ def hyperparameter_tuning():
                         model,
                         param_combo,
                         cv=cv,
-                        scoring=f1_scorer,
+                        scoring=composite_scorer_func,
                         n_jobs=-1,
                         verbose=0
                     )
@@ -198,7 +211,7 @@ def hyperparameter_tuning():
                     model,
                     current_params,
                     cv=cv,
-                    scoring=f1_scorer,
+                    scoring=composite_scorer_func,
                     n_jobs=-1,
                     verbose=1
                 )
@@ -238,7 +251,8 @@ def hyperparameter_tuning():
             auc = roc_auc_score(y_val, y_pred_proba)
             
             # 복합 점수 계산 (균등 가중)
-            composite_score = (accuracy + precision + recall + f1 + auc) / 5
+            # Precision 중심 가중평균 (GridSearchCV와 일치)
+            composite_score = (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
             
             best_models[model_name] = {
                 'model': best_model,

@@ -149,7 +149,17 @@ def ensemble_modeling():
             
             # 이미 전처리된 데이터 사용 (Pipeline 불필요)
             # 교차 검증
-            cv_scores = cross_val_score(model, X_train_processed, y_train, cv=cv, scoring=f1_scorer)
+            # 복합점수 기준으로 교차 검증 (Precision 중심 가중평균)
+            def composite_scorer(y_true, y_pred):
+                from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+                accuracy = accuracy_score(y_true, y_pred)
+                precision = precision_score(y_true, y_pred, zero_division=0)
+                recall = recall_score(y_true, y_pred, zero_division=0)
+                f1 = f1_score(y_true, y_pred, zero_division=0)
+                return (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
+            
+            composite_scorer_func = make_scorer(composite_scorer)
+            cv_scores = cross_val_score(model, X_train_processed, y_train, cv=cv, scoring=composite_scorer_func)
             
             # 전체 데이터로 훈련
             model.fit(X_train_processed, y_train)
@@ -174,8 +184,9 @@ def ensemble_modeling():
             f1 = f1_score(y_val, y_pred)
             auc = roc_auc_score(y_val, y_pred_proba) if has_proba else 0
             
-            # 복합 점수 계산 (균등 가중)
-            composite_score = (accuracy + precision + recall + f1 + auc) / 5
+            # 복합 점수 계산 (Precision 중심 가중평균)
+            # Precision 40% + F1 30% + Accuracy 20% + Recall 10%
+            composite_score = (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
             
             ensemble_results[model_name] = {
                 'model': model,

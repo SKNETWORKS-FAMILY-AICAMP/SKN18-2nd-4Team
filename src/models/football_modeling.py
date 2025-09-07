@@ -355,7 +355,7 @@ class FootballModelTrainer:
             
             # 이미 전처리된 데이터이므로 모델만 사용
             # 교차 검증 (전처리된 데이터로 직접 수행)
-            cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='f1', n_jobs=1)
+            cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='f1', n_jobs=-1)
             
             # 모델 훈련
             model.fit(X_train, y_train)
@@ -371,8 +371,9 @@ class FootballModelTrainer:
             f1 = f1_score(y_val, y_pred)
             auc = roc_auc_score(y_val, y_pred_proba) if y_pred_proba is not None else 0
             
-            # 복합 점수 계산 (균등 가중)
-            composite_score = (accuracy + precision + recall + f1 + auc) / 5
+            # 복합 점수 계산 (Precision 중심 가중평균)
+            # Precision 40% + F1 30% + Accuracy 20% + Recall 10%
+            composite_score = (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
             model_scores[name] = composite_score
             
             # 상세 성능 지표 저장

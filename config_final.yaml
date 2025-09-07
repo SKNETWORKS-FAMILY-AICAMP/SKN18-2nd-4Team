@@ -11,10 +11,10 @@ model:
   test_season: 23/24
   prediction_season: 23/24
   composite_weights:
-    auc: 0.4
-    f1: 0.3
-    precision: 0.2
-    recall: 0.1
+    precision: 0.4 # 가장 중요 (Precision 개선 목표)
+    f1: 0.3 # 균형 지표
+    accuracy: 0.2 # 전체 정확도
+    recall: 0.1 # 민감도
   output_model_path: outputs/final_model.pkl
   output_preprocessor_path: outputs/preprocessor.pkl
 
