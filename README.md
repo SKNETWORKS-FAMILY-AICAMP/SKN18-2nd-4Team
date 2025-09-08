@@ -602,57 +602,98 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 ## 📊 모델 분석 결과
 
-### 모델 성능 시각화
+### 🔎모델 성능 시각화
+#### ▶️ 모델별 성능 비교
+- 8개 모델별 Composite Score 비교 결과
 
-<div align="center">
-<table>
-<tr>
-<td width="50%">
+| 모델   | 점수    | 설명   |
+|--------|---------|--------|
+| **LGBM**     | **0.467**   | 부스팅 계열 중 가장 빠르고 효율적. 대용량 데이터 처리와 성능 모두 우수 |
+| LR     | 0.450   | 단순하고 해석 용이. 데이터가 선형적일 때도 좋은 성능 발휘 |
+| XGB    | 0.428   | 안정적이고 강력한 부스팅 모델. 하이퍼파라미터 튜닝 여지가 큼 |
+| SVM    | 0.419   | 비선형 데이터 분류에 강점. 하지만 대규모 데이터에서는 속도가 느릴 수 있음 |
+| GBoost | 0.409   | 부스팅 계열 기본 모델. 성능은 준수하지만 LGBM/XGB 대비 느림 |
+| DT     | 0.393   | 구조 단순, 직관적. 하지만 과적합 위험이 높음 |
+| KNN    | 0.358   | 직관적이고 간단. 그러나 차원이 높아질수록 성능 저하 |
+| RF     | 0.344   | 다수의 트리를 조합한 앙상블. 최적화 부족 시 성능 제한적 |
 
-#### 모델 성능 비교
+![model_comparison](outputs/model_comparison.png)
 
-![Model Comparison](outputs/model_comparison.png)
-_8개 모델의 성능 지표 비교_
+---
 
-</td>
-<td width="50%">
+#### ▶️ 혼동 행렬
+- **장점**
+    - 음성 클래스(0) 탐지(TN 249)가 비교적 잘 되고 있음
+    - Recall(0.57) 수준은 “실제 양성 절반 이상은 찾아낸다”는 의미
+- **단점**
+    - Precision(0.38)이 낮음 → 양성으로 예측했을 때 신뢰도가 떨어짐
+    - FP(153)가 많아서 False Alarm 문제가 있음
 
-#### 혼동 행렬
+---
+
+    🔩 필요한 개선사항
+        - 클래스 불균형 해결 (SMOTE, class_weight 조정)
+        - 모델 튜닝 (threshold 조정 → Precision/Recall trade-off 개선)
+        - 추가 피처 활용으로 예측력 보강
+
+|                | Predicted 0 | Predicted 1 |
+|----------------|-------------|-------------|
+| **Actual 0**   | **249 (TN)** | 153 (FP)    |
+| **Actual 1**   | 73 (FN)     | **95 (TP)** |
+- **TN (249)**: 실제 0을 정확히 0으로 예측
+- **FP (153)**: 실제 0인데 잘못 1로 예측 (False Positive)
+- FN (73): 실제 1인데 놓친 경우 (False Negative)
+- TP (95): 실제 1을 정확히 1로 예측
 
 ![Confusion Matrix](outputs/confusion_matrix.png)
-_최고 모델의 예측 정확도 분석_
 
-</td>
-</tr>
-<tr>
-<td width="50%">
 
-#### ROC 곡선
+---
+
+#### ▶️ ROC 곡선
+- 양성과 음성을 구분하는 **모델의 분별력이 크지 않음**
+- AUC = 0.621
+    - AUC (Area Under Curve) 값은 0.5 = 랜덤, 1.0 = 완벽한 분류기 의미
+    - 여기서 0.621 → 랜덤보다는 확실히 낫지만, 모델의 분류 성능은 제한적
+- 곡선 형태
+    - ROC 곡선이 대각선 기준선에서 크게 벗어나지 못함
+- **장점**: 완전한 랜덤(0.5)보다 높은 AUC 값 ➡️ 일정 수준의 예측 능력 보유
+- **단점**: 실제로 활용하기에 낮은 AUC 0.621 ➡️ 특히 불균형 데이터일 경우 더 문제
+
+---
+
+    🔩 필요한 개선사항
+    - 데이터 전처리 (클래스 불균형 처리, Feature Scaling)
+    - 특성 엔지니어링 (새로운 Feature 추가)
+    - 모델 튜닝 (하이퍼파라미터 최적화, 앙상블 기법 적용)
+    - 다른 알고리즘 비교 (LightGBM, XGBoost, Neural Network 등)
 
 ![ROC Curve](outputs/roc_curve.png)
-_모델의 분류 성능 곡선_
 
-</td>
-<td width="50%">
+---
 
-#### 피처 중요도
+#### ▶️ 피처 중요도(상위 30개)
+- **가장 중요한 변수**: `age_at_season` (선수 나이)
+- **징계 관련 변수**: yellow_cards, red_cards, discipline_level 등이 상위
+- **공격 성과**: assists > goals 순으로 중요, 출전 시간 지표도 큰 기여
+- **클럽 특성**: squad_size, average_age, national_team_players 등 팀 단위 특성도 중요
+- **국가 변수**: 특정 국가 출신 여부가 반영되지만, 데이터 편향 가능성 있음
+
+---
+
+- 선수 개인 특성(나이, 징계, 공격 성과, 시장 가치) + 클럽 환경(스쿼드 규모, 외국인 비율, 대표팀 배출)
+   ➡️ 모델 성능에 핵심적으로 기여.
+- 공격 성과(골) 중요도 < **어시스트, 출전 시간, 규율 관련 지표 중요도**
+- 국가 특성은 데이터 편향 위험이 있어, 해석에 주의 필요
 
 ![Feature Importance](outputs/feature_importance.png)
-_상위 30개 피처의 중요도 순위_
 
-</td>
-</tr>
-</table>
-</div>
+---
 
-### SHAP 분석
+### 📊 SHAP 분석
+#### ▶️ SHAP 요약 플롯
 
-<div align="center">
-<table>
-<tr>
-<td width="50%">
-
-#### SHAP 요약 플롯
+---
 
 ![SHAP Summary](outputs/shap_summary.png)
 _상위 20개 피처의 SHAP 값 분포_
@@ -660,15 +701,14 @@ _상위 20개 피처의 SHAP 값 분포_
 </td>
 <td width="50%">
 
-#### SHAP 바 플롯
+---
+
+#### ▶️ SHAP 바 플롯
 
 ![SHAP Bar](outputs/shap_bar.png)
 _피처별 평균 SHAP 중요도 순위_
 
-</td>
-</tr>
-</table>
-</div>
+---
 
 ### 오버피팅 분석
 
