@@ -80,7 +80,9 @@ Communication: Discord
 ├── test_df.csv              # 원본 테스트 데이터 (861 rows × 27 columns)
 └── README.md                # 데이터 설명서
 ```
-
+### `data/final/` (전처리된 데이터)
+---
+├── final_df.csv             # streamlit 구현 데이터 (14,873 rows × 27 columns)
 ---
 
 ## 🔧 피처 엔지니어링 및 전처리 파이프라인
@@ -394,34 +396,48 @@ Communication: Discord
 
 ```
 SKN18-2nd-4Team/
-├── main.py                     # 🎯 중앙 실행 파일
+|  
 ├── data/
+|   ├── streamlit/              # streamlit 구현 데이터
+│   │   ├── imgs/               # streamlit Img 데이터
+│   │   │     ├── mainpage/     # mainpage 이미지
+│   │   |     ├── club/         # club 로고 이미지
+│   │   │     └── player/       # player 사진 이미지
+│   │   └── final_df.csv        # streamlit 구현 csv 
+|   |            
 │   ├── curated/                # 정제된 데이터
 │   │   ├── train_df.csv        # 훈련 데이터 (12/13-22/23)
 │   │   └── test_df.csv         # 테스트 데이터 (24/25)
 │   └── raw/                    # 원본 데이터 (9개 CSV 파일)
-├── src/                        # 핵심 모듈
-│   ├── features/
-│   │   └── feature_engineering.py  # 피처 엔지니어링 + 전처리
-│   ├── models/
-│   │   └── football_modeling.py    # 모델 훈련 + 평가
-│   ├── data/
-│   │   └── data_loader_new.py       # 데이터 로딩
-│   ├── utils/
-│   │   └── config.py               # 설정 관리
-│   └── visualization/
-│       └── plotter.py              # 시각화 (ModelVisualizer)
-├── scripts/                        # 실행 스크립트
-│   ├── run_final_modeling.py       # 기본 모델링
-│   ├── hyperparameter_tuning.py    # 하이퍼파라미터 튜닝
-│   ├── regularization_improvement.py # 정규화 강화
-│   ├── ensemble_modeling.py        # 앙상블 모델링
-│   └── save_model_performance.py   # 성능 저장
-└── outputs/                        # 결과 파일 (자동 생성)
-    ├── *.png                       # 시각화 결과
-    └── *.csv                       # 예측 결과 + 성능 지표
-```
-
+├──model/
+|   ├── main.py                 # 🎯 중앙 실행 파일
+|   ├── src/                    # 핵심 모듈
+|   |   ├── features/
+|   |   │   └── feature_engineering.py  # 피처 엔지니어링 + 전처리
+|   |   ├── models/
+|   |   │   └── football_modeling.py    # 모델 훈련 + 평가
+|   |   ├── data/
+|   |   │   └── data_loader_new.py      # 데이터 로딩
+|   |   ├── utils/
+|   |   │   └── config.py               # 설정 관리
+|   |   └── visualization/
+|   │       └── plotter.py              # 시각화 (ModelVisualizer)
+|   |
+|   ├── scripts/                          # 실행 스크립트
+|   │   ├── run_final_modeling.py         # 기본 모델링
+|   │   ├── hyperparameter_tuning.py      # 하이퍼파라미터 튜닝
+|   │   ├── regularization_improvement.py # 정규화 강화
+|   │   ├── ensemble_modeling.py        # 앙상블 모델링
+|   │   └── save_model_performance.py   # 성능 저장
+|   └── outputs/                        # 결과 파일 (자동 생성)
+|       ├── *.png                       # 시각화 결과
+|       └── *.csv                       # 예측 결과 + 성능 지표
+|
+└── streamlit/                  # 웹서비스화
+        ├── app.py              # Mainpage
+        └── pages/
+            ├── player_search.py        # 선수정보 조회 페이지
+            └── transfer_predictor.py   # 모델예측 결과 조회 페이지
 ---
 
 ## 🚀 **전체 파이프라인 (`--mode all`) 실행 과정**
