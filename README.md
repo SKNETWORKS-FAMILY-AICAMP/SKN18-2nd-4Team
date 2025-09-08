@@ -64,9 +64,9 @@
 - 직관적인 사용자 인터페이스
 
 </td>
-<td width="100%">
+<td width="70%">
 
-![웹 애플리케이션 메인](assets/images/web_introduce01.png)
+<img src="assets/images/web_introduce01.png" alt="웹 애플리케이션 메인" width="600">
 
 </td>
 </tr>
@@ -82,7 +82,7 @@
 </td>
 <td width="70%">
 
-![웹 애플리케이션 상세](assets/images/web_introduce02.png)
+<img src="assets/images/web_introduce02.png" alt="웹 애플리케이션 상세" width="600">
 
 </td>
 </tr>
@@ -442,7 +442,7 @@
 | DT      | 0.345     | 구조 단순, 직관적. 하지만 과적합 위험이 높음                              |
 | RF      | 0.140     | 다수의 트리를 조합한 앙상블. 최적화 부족 시 성능 제한적                   |
 
-![model_comparison](outputs/model_comparison.png)
+<img src="outputs/model_comparison.png" alt="모델 성능 비교" width="500">
 
 ---
 
@@ -472,7 +472,7 @@
 - FN (73): 실제 1인데 놓친 경우 (False Negative)
 - TP (95): 실제 1을 정확히 1로 예측
 
-![Confusion Matrix](outputs/confusion_matrix.png)
+<img src="outputs/confusion_matrix.png" alt="혼동 행렬" width="500">
 
 ---
 
@@ -504,7 +504,7 @@
 - 공격 성과(골) 중요도 < **어시스트, 출전 시간, 규율 관련 지표 중요도**
 - 국가 특성은 데이터 편향 위험이 있어, 해석에 주의 필요
 
-![Feature Importance](outputs/feature_importance.png)
+<img src="outputs/feature_importance.png" alt="피처 중요도" width="500">
 
 ---
 
@@ -518,7 +518,7 @@
 - **국가 특성**: 특정 출신 국가 변수(country_of_birth_Romania 등)가 강하게 작용하지만 데이터 편향 가능성 존재
 - **팀 환경 + 개인 성과 + 시장 가치**의 조합을 중심으로 이적 확률 판단
 
-![SHAP Summary](outputs/shap_summary.png)
+<img src="outputs/shap_summary.png" alt="SHAP 요약" width="500">
 
 ---
 
@@ -532,7 +532,7 @@
 - **징계 변수**: `red_cards`도 반영되지만 상대적 영향력은 낮음
 - **팀 환경(구단, 평균 연령, 국가 특성)**을 강하게 고려하며, 그 다음으로 **개인 성과와 시장 가치**가 기여하는 구조
 
-![SHAP Bar](outputs/shap_bar.png)
+<img src="outputs/shap_bar.png" alt="SHAP 바 플롯" width="500">
 
 ---
 
@@ -578,7 +578,7 @@
     - 모델 단순화 (복잡도 줄이기 → 트리 깊이 축소, feature 수 줄이기 등)
     - 하이퍼파라미터 튜닝 (learning rate, max_depth 등 조정)
 
-![Learning Curves](outputs/learning_curves.png)
+<img src="outputs/learning_curves.png" alt="학습 곡선" width="500">
 
 #### 오버피팅 현황
 
