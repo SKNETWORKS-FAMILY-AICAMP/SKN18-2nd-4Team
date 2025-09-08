@@ -61,29 +61,29 @@ def run_final_modeling(force_retrain=False):
         # 3. 데이터 로드
         from src.data.data_loader_new import DataLoaderNew
         data_loader = DataLoaderNew(config)
-        train_df, test_df = data_loader.load_all_data()
+        train_df, valid_df, test_df, pred_df = data_loader.load_all_data()
         
         print(f"📊 최종 데이터 로드 완료:")
         print(f"  - Train: {train_df.shape[0]:,} rows x {train_df.shape[1]} columns")
+        print(f"  - Valid: {valid_df.shape[0]:,} rows x {valid_df.shape[1]} columns")
         print(f"  - Test: {test_df.shape[0]:,} rows x {test_df.shape[1]} columns")
+        print(f"  - Pred: {pred_df.shape[0]:,} rows x {pred_df.shape[1]} columns")
         print(f"  - Train 이적률: {train_df['transfer'].mean()*100:.1f}%")
+        print(f"  - Valid 이적률: {valid_df['transfer'].mean()*100:.1f}%")
         print(f"  - Test 이적률: {test_df['transfer'].mean()*100:.1f}%")
         
         # 3. 모델링 실행
         from src.models.football_modeling import FootballModelTrainer
         
-        # 전체 데이터 합치기 (모델링용)
-        all_data = pd.concat([train_df, test_df], ignore_index=True)
-        
         # 모델 훈련 (기존 결과가 있으면 재사용)
         if model_results is None:
             logger.info("🔥 새로운 모델 학습 시작")
-            model_trainer = FootballModelTrainer(all_data, config)
+            model_trainer = FootballModelTrainer(train_df, valid_df, test_df, pred_df, config)
             model_results = model_trainer.run_pipeline()
         else:
             logger.info("♻️ 기존 개선된 모델 재사용")
             # 예측만을 위해 trainer 초기화 (학습 없이)
-            model_trainer = FootballModelTrainer(all_data, config)
+            model_trainer = FootballModelTrainer(train_df, valid_df, test_df, pred_df, config)
             model_trainer.model_results = model_results
             # 기존 결과에서 필요한 속성들 복원
             model_trainer.best_model = model_results.get('best_model')
