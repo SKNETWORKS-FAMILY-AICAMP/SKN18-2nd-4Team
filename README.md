@@ -4,58 +4,108 @@
 
 ## 🏃🏻 팀 이름 : 발로차
 
-## 🖥️ 팀원 역할
+### 🖥️ 팀원 역할
 
-- 이름 역 할 세부 역할 Github
-- 임승옥 팀장👑 streamlit 구현 @Seung-OK Im
-- 김수미 팀원 모델 학습 @ghyeju0904
-- 손주영 팀원 데이터 처리 @sonjuyeong-00
-- 양진아 팀원 모듈화 @JINA1003
-- 정동석 팀원 모델 학습 @dsj-1004
+|  이름  | 역 할  |   세부 역할    | Github         |
+| :----: | :----: | :------------: | :------------- |
+| 임승옥 | 팀장👑 | streamlit 구현 | @Seung-OK Im   |
+| 김수미 |  팀원  |   모델 학습    | @ghyeju0904    |
+| 손주영 |  팀원  |  데이터 처리   | @sonjuyeong-00 |
+| 양진아 |  팀원  |     모듈화     | @JINA1003      |
+| 정동석 |  팀원  |   모델 학습    | @dsj-1004      |
 
 ## 📋 프로젝트 개요
 
-## ⚽ 프로젝트명 : All in One Place
+### ⚽ 프로젝트명 : All in One Place
 
-## 📈 프로젝트 소개 및 기대효과
+### 📈 프로젝트 소개 및 기대효과
 
 - 세계에서 인기 있는 리그 중 하나인 프리미엄리그의 선수 정보 탐색 및 향후 이적 가능성 확인 플랫폼
-- 실시간 선수 탐색 + AI 기반 이적 예측 웹 서비스 제공
+- **실시간 선수 탐색 + AI 기반 이적 예측 웹 서비스 제공**
 
 ## 🎯 주요 목표
 
-- 이적 예측: 24/25 시즌 선수들의 이적 가능성 예측
-- 모델 비교: 8개 머신러닝 모델의 성능 비교 및 최적 모델 선택
-- 피처 엔지니어링: 13개의 고급 피처를 통한 예측 성능 향상
-- 오버피팅 분석: 학습 곡선과 검증 곡선을 통한 모델 안정성 평가
-  데이터 정보
+- **이적 예측**: 24/25 시즌 선수들의 이적 가능성 예측
+- **모델 비교**: 8개 머신러닝 모델의 성능 비교 및 최적 모델 선택
+- **피처 엔지니어링**: 13개의 고급 피처를 통한 예측 성능 향상
+- **오버피팅 분석**: 학습 곡선과 검증 곡선을 통한 모델 안정성 평가
 
-데이터 출처
+## 데이터 정보
 
-Kaggle Football Data from Transfermarkt 데이터 (https://www.kaggle.com/datasets/davidcariboo/player-scores?select=competitions.csv)
-데이터 범위
+### 데이터 출처
 
-프리미어리그 데이터12~25 에서 뽑았다(수정예정)
+- **Kaggle** Football Data from Transfermarkt 데이터 (https://www.kaggle.com/datasets/davidcariboo/player-scores?select=competitions.csv)
+
+### 데이터 범위
+
+- 전체 축구 리그 중 프리미어리그(GB1) 데이터 추출
+- 시간 범위 : `12 ~`25
 
 ## 화면구성
 
 []
 
-## 요구사항
+### 요구사항
 
-데이터 수집 및 통합
-데이터베이스 설계 및 구축
-24/25시즌 epl 참가 선수 조회 시스템
-24/25 선수 개인 활약 기반 이적 예측 시스템
-시각화 및 사용자 UI
+- 데이터 수집 및 통합
+- 데이터베이스 설계 및 구축
+- 24/25시즌 epl 참가 선수 조회 시스템
+- 24/25 선수 개인 활약 기반 이적 예측 시스템
+- 시각화 및 사용자 UI
 
 ## 🛠️ 기술 스택
 
-Frontend: Streamlit
-Backend: Python
-UI/UX: Figma
-Environment: Visual Studio Code / Git / Github
-Communication: Discord
+### Frontend
+
+- **Streamlit**: 웹 애플리케이션 개발 및 배포
+
+### Backend
+
+- **Python**: 3.13 - 메인 개발 언어
+
+### UI/UX
+
+- **Figma**: 사용자 인터페이스 설계 및 프로토타이핑
+
+### Environment
+
+- **Visual Studio Code**: 통합 개발 환경
+- **Git**: 버전 관리 시스템
+- **Github**: 코드 저장소 및 협업 플랫폼
+
+### Communication
+
+- **Discord**: 팀 커뮤니케이션 및 협업
+
+### 핵심 라이브러리
+
+- **Pandas**: 데이터 처리 및 조작
+- **NumPy**: 수치 연산
+- **Scikit-learn**: 머신러닝 파이프라인
+  - `ColumnTransformer`: 피처 타입별 전처리
+  - `SimpleImputer`: 결측치 처리 (중앙값/최빈값)
+  - `StandardScaler`: 수치형 피처 정규화
+  - `OneHotEncoder`: 범주형 피처 인코딩
+  - `Pipeline`: 전처리-모델 파이프라인 구축
+
+### 머신러닝 모델
+
+- **Linear Models**: Logistic Regression, SVM
+- **Tree-based**: Decision Tree, Random Forest
+- **Boosting**: Gradient Boosting, XGBoost, LightGBM
+- **Instance-based**: K-Nearest Neighbors
+
+### 모델 해석 및 시각화
+
+- **SHAP**: 모델 해석 (TreeExplainer, LinearExplainer, KernelExplainer)
+- **Matplotlib**: 기본 시각화
+- **Seaborn**: 통계 시각화
+
+### 개발 도구
+
+- **Joblib**: 모델 직렬화
+- **Logging**: 실행 로그 관리
+- **Pathlib**: 파일 경로 관리
 
 ## 📊 데이터 구조
 
@@ -73,11 +123,11 @@ Communication: Discord
 └── competitions.csv         # 대회 정보 (리그, 컵 대회)
 ```
 
-### `data/curated/` (전처리된 데이터)
+### `data/curated/` (정제된 데이터)
 
 ```
-├── train_df.csv             # 원본 훈련 데이터 (14,873 rows × 27 columns)
-├── test_df.csv              # 원본 테스트 데이터 (861 rows × 27 columns)
+├── train_df.csv             # 훈련 데이터 (14,873 rows × 27 columns)
+├── test_df.csv              # 테스트 데이터 (861 rows × 27 columns)
 └── README.md                # 데이터 설명서
 ```
 
@@ -624,39 +674,6 @@ _24/25 시즌 이적 확률 분포 및 포지션별 분석_
 </tr>
 </table>
 </div>
-
-## 🔧 기술 스택
-
-### 핵심 라이브러리
-
-- **Python**: 3.13
-- **Pandas**: 데이터 처리 및 조작
-- **NumPy**: 수치 연산
-- **Scikit-learn**: 머신러닝 파이프라인
-  - `ColumnTransformer`: 피처 타입별 전처리
-  - `SimpleImputer`: 결측치 처리 (중앙값/최빈값)
-  - `StandardScaler`: 수치형 피처 정규화
-  - `OneHotEncoder`: 범주형 피처 인코딩
-  - `Pipeline`: 전처리-모델 파이프라인 구축
-
-### 머신러닝 모델
-
-- **Linear Models**: Logistic Regression, SVM
-- **Tree-based**: Decision Tree, Random Forest
-- **Boosting**: Gradient Boosting, XGBoost, LightGBM
-- **Instance-based**: K-Nearest Neighbors
-
-### 모델 해석 및 시각화
-
-- **SHAP**: 모델 해석 (TreeExplainer, LinearExplainer, KernelExplainer)
-- **Matplotlib**: 기본 시각화
-- **Seaborn**: 통계 시각화
-
-### 개발 도구
-
-- **Joblib**: 모델 직렬화
-- **Logging**: 실행 로그 관리
-- **Pathlib**: 파일 경로 관리
 
 ---
 
