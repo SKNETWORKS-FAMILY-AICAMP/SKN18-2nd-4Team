@@ -836,6 +836,54 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 - **최종 모델**: Bagging (RF) 앙상블 (0.4901 점수)
 - **예측 파일**: `outputs/24_25_transfer_predictions.csv` (570명, 255명 이적 예측)
 
+### Streamlit 화면구현
+<table>
+<tr>
+<td width="50%">
+
+**메인 화면**
+- 선수 검색 페이지 및 이적률 예측 서비스 페이 이동
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Main Page](assets/images/web01.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**선수 상세 정보: Player Search Page**
+- 24/25 시즌 팀별 선수 조회
+- 선수이름 버튼시 선수 24/25시즌 성적 및 개별 정보 조회
+- 프리미어 리그 활동시, 활동 시즌별 성적 및 선수 시장 가치 정보 제공
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Player Search Page](assets/images/web02-1.png)
+![웹 애플리케이션 Player Search Page](assets/images/web02-2.png)
+</td>
+</tr>
+</table>
+
+**이적률 예측 정보: Transfer Predictor Page**
+- 24/25 시즌 선수의 25/26 시즌 이적 예측률 제공
+- 1) 선수이름으로 조회
+- 2) 포지션, 나이, 시장 가치,주 사용 발로 필터링하여 해당하는 선수의 예측률 제공
+- 해당 선수의 예측률 및 프리미어 리그 활동시 같은 포지션 대비 시즌별 평균 승리수,
+ 시장가치와 비교한 정보 제공
+
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Player Search Page](assets/images/web03.png)
+
+</td>
+</tr>
+</table>
+
+
+
 ---
 
 <<<<<<< HEAD
