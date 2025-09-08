@@ -691,75 +691,69 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 ---
 
 ### 📊 SHAP 분석
-#### ▶️ SHAP 요약 플롯
-
----
+#### ▶️ SHAP 요약 플롯(상위 20개)
+- **클럽 요인**: 특정 구단 소속 여부(Fulham, Arsenal, Newcastle 등)와 팀 평균 나이가 이적 확률에 큰 영향
+- **개인 성과**: 골, 시장 가치(player_market_value_in_eur, player_highest_market_value_in_eur)가 중요 변수
+- **시즌 경험**: 시즌 출전, 팀 성적(우승 수, 순위 등)도 모델 예측에 기여
+- **국가 특성**: 특정 출신 국가 변수(country_of_birth_Romania 등)가 강하게 작용하지만 데이터 편향 가능성 존재
+- **팀 환경 + 개인 성과 + 시장 가치**의 조합을 중심으로 이적 확률 판단
 
 ![SHAP Summary](outputs/shap_summary.png)
-_상위 20개 피처의 SHAP 값 분포_
-
-</td>
-<td width="50%">
 
 ---
 
 #### ▶️ SHAP 바 플롯
+- **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
+- **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
+- **팀 특성**: `club_average_age`, 소속 클럽(Arsenal, Newcastle, Tottenham, Man City 등) 변수가 다수 포함
+- **개인 성과**: `goals`, `player_market_value_in_eur`, `player_highest_market_value_in_eur`도 중요한 역할
+- **시즌 경험**: 출전 경기 수, 팀 순위, 우승 횟수 등이 추가적 기여
+- **징계 변수**: `red_cards`도 반영되지만 상대적 영향력은 낮음
+- **팀 환경(구단, 평균 연령, 국가 특성)**을 강하게 고려하며, 그 다음으로 **개인 성과와 시장 가치**가 기여하는 구조
 
 ![SHAP Bar](outputs/shap_bar.png)
-_피처별 평균 SHAP 중요도 순위_
 
 ---
 
 ### 오버피팅 분석
-
-<div align="center">
-<table>
-<tr>
-<td width="50%">
-
 #### 학습 곡선 분석
+**1️⃣ Learning Curves**
+- 파란색 (Training Score): 약 0.93~1.0 수준 → 훈련 데이터에서는 매우 높은 성능
+- 빨간색 (Validation Score): 0.70 → 0.60 수준까지 점차 하락
+- 회색 영역 (Gap): 훈련 점수가 높게 유지되는데 검증 점수는 떨어짐 → 전형적인 과적합 패턴
+- 학습 데이터에는 잘 맞추지만, 일반화 성능은 부족
+
+---
+
+**2️⃣ Overfitting Analysis**
+- Score Gap (Train – Val) 값이 대부분 0.3 이상
+- 경고선 (0.1)과 심각선 (0.15)을 크게 초과
+- 최대 갭은 0.408까지 치솟음
+- **과적합이 심각하게 발생했음을 확인할 수 있음
+
+---
+
+**3️⃣ Final Performance Comparison (좌하단)**
+- Training Score: 0.939
+- Validation Score: 0.604
+- 약 0.335 차이 발생
+- 학습 데이터에서는 뛰어나지만, **실제 평가 데이터에서는 성능이 크게 떨어짐**
+
+---
+
+**📌 종합 결론**
+- 모델은 현재 훈련 데이터에 심하게 과적합되어 있음
+- Validation 성능(0.604)은 실사용에 부족한 수준
+
+---
+
+    **🔩 필요한 개선사항**
+    - 정규화 기법 적용 (L1/L2 Regularization, Dropout 등)
+    - 데이터 확장 (더 많은 학습 샘플 확보)
+    - 모델 단순화 (복잡도 줄이기 → 트리 깊이 축소, feature 수 줄이기 등)
+    - 하이퍼파라미터 튜닝 (learning rate, max_depth 등 조정)
 
 ![Learning Curves](outputs/learning_curves.png)
-_모델의 학습 곡선과 오버피팅 분석_
-
-</td>
-<td width="50%">
-
-#### 오버피팅 현황
-
-**현재 모델들은 심각한 오버피팅을 보이고 있습니다:**
-
-- **Random Forest**: 훈련 점수 1.0000, 검증 점수 0.0475 (차이: 0.9525)
-- **Logistic Regression**: 훈련 점수 0.4715, 검증 점수 0.2353 (차이: 0.2362)
-- **Gradient Boosting**: 훈련 점수 0.4462, 검증 점수 0.0328 (차이: 0.4134)
-
-**권장사항:**
-
-- 정규화 강화 필요
-- 더 많은 데이터 수집 고려
-- 모델 복잡도 감소
-
-</td>
-</tr>
-</table>
-</div>
-
-### 예측 결과 시각화
-
-<div align="center">
-<table>
-<tr>
-<td width="100%">
-
-#### 예측 분포 분석
-
-![Prediction Distribution](outputs/prediction_distribution.png)
-_24/25 시즌 이적 확률 분포 및 포지션별 분석_
-
-</td>
-</tr>
-</table>
-</div>
 
 ---
 
