@@ -1,0 +1,514 @@
+player_name,club_name,position,predicted_transfer,transfer_probability,transfer_probability_percent
+Bilal El Khannouss,Leicester City Football Club,Midfield,1,0.9384367637427636,93.8
+Toby Collyer,Manchester United Football Club,Midfield,1,0.9207878423207083,92.1
+Dara O'Shea,Ipswich Town Football Club,Defender,1,0.9171032326976221,91.7
+Kalvin Phillips,Ipswich Town Football Club,Midfield,1,0.9129587284562095,91.3
+Harry Winks,Leicester City Football Club,Midfield,1,0.9114680472115435,91.1
+Mateo Kovacic,Manchester City Football Club,Midfield,1,0.9112255911399898,91.1
+Paul Onuachu,Southampton Football Club,Attack,1,0.9104628340085157,91.0
+Ram?n Sosa,Nottingham Forest Football Club,Attack,1,0.9101624272707939,91.0
+Takehiro Tomiyasu,Arsenal Football Club,Defender,1,0.9051670939757441,90.5
+Rodrigo Bentancur,Tottenham Hotspur Football Club,Midfield,1,0.8970631755361054,89.7
+Orel Mangala,Everton Football Club,Midfield,1,0.8966976883990615,89.7
+Boubakary Soumar?,Leicester City Football Club,Midfield,1,0.8929437313848628,89.3
+Gon?alo Guedes,Wolverhampton Wanderers Football Club,Attack,1,0.8883832887256908,88.8
+Ben Godfrey,Ipswich Town Football Club,Defender,1,0.8871287328984727,88.7
+Stephy Mavididi,Leicester City Football Club,Attack,1,0.8835137826699831,88.4
+Wilfred Ndidi,Leicester City Football Club,Midfield,1,0.8820566007853526,88.2
+Jan Bednarek,Southampton Football Club,Defender,1,0.8793262827186783,87.9
+Woyo Coulibaly,Leicester City Football Club,Defender,1,0.8792303691632676,87.9
+Leif Davis,Ipswich Town Football Club,Defender,1,0.8779269644436448,87.8
+Ryan Christie,Association Football Club Bournemouth,Midfield,1,0.8751307950441627,87.5
+Donyell Malen,Aston Villa Football Club,Attack,1,0.8747502751537384,87.5
+Mathis Amougou,Chelsea Football Club,Midfield,1,0.8744751823867493,87.4
+Mykhaylo Mudryk,Chelsea Football Club,Attack,1,0.8742481765496158,87.4
+Yukinari Sugawara,Southampton Football Club,Defender,1,0.8738788924522598,87.4
+Carlos Soler,West Ham United Football Club,Midfield,1,0.8700773537765963,87.0
+Kieran Tierney,Arsenal Football Club,Defender,1,0.8697827398841648,87.0
+Mason Mount,Manchester United Football Club,Midfield,1,0.8655509056093108,86.6
+Mats Wieffer,Brighton and Hove Albion Football Club,Midfield,1,0.8628268459407363,86.3
+Maxwel Cornet,Southampton Football Club,Attack,1,0.85923838785117,85.9
+Oscar Bobb,Manchester City Football Club,Attack,1,0.853094533306008,85.3
+Kiernan Dewsbury-Hall,Chelsea Football Club,Midfield,1,0.8522567936889401,85.2
+James Maddison,Tottenham Hotspur Football Club,Midfield,1,0.8471552826075026,84.7
+Nathan Broadhead,Ipswich Town Football Club,Attack,1,0.8456688908071783,84.6
+James Ward-Prowse,West Ham United Football Club,Midfield,1,0.8451486341519149,84.5
+Taiwo Awoniyi,Nottingham Forest Football Club,Attack,1,0.8443771099201639,84.4
+Djed Spence,Tottenham Hotspur Football Club,Defender,1,0.8438894465014458,84.4
+Josh Acheampong,Chelsea Football Club,Defender,1,0.8433010642354759,84.3
+Nasser Djiga,Wolverhampton Wanderers Football Club,Defender,1,0.8422204808291829,84.2
+Lucas Bergvall,Tottenham Hotspur Football Club,Midfield,1,0.8411508775379166,84.1
+Niclas F?llkrug,West Ham United Football Club,Attack,1,0.8388533349633354,83.9
+Arijanet Muric,Ipswich Town Football Club,Goalkeeper,1,0.83719622961988,83.7
+Odsonne Edouard,Crystal Palace Football Club,Attack,1,0.8335985252319962,83.4
+Oliver Skipp,Leicester City Football Club,Midfield,1,0.8328707975408989,83.3
+Romain Esse,Crystal Palace Football Club,Midfield,1,0.8323791410325664,83.2
+Axel Tuanzebe,Ipswich Town Football Club,Defender,1,0.831566241114775,83.2
+Max Aarons,Association Football Club Bournemouth,Defender,1,0.8313215078674498,83.1
+Tyrique George,Chelsea Football Club,Attack,1,0.8286763362274479,82.9
+Juli?n Araujo,Association Football Club Bournemouth,Defender,1,0.8282696373518499,82.8
+Boubacar Traor?,Wolverhampton Wanderers Football Club,Midfield,1,0.827663986174567,82.8
+James Justin,Leicester City Football Club,Defender,1,0.8253387901792613,82.5
+Sean Longstaff,Newcastle United Football Club,Midfield,1,0.8235634147396867,82.4
+Tyler Adams,Association Football Club Bournemouth,Midfield,1,0.8209130817829606,82.1
+Enes ?nal,Association Football Club Bournemouth,Attack,1,0.8203905827183933,82.0
+Scott McTominay,Manchester United Football Club,Midfield,1,0.8200406532126477,82.0
+Guido Rodr?guez,West Ham United Football Club,Midfield,1,0.8175621855434432,81.8
+Luis Sinisterra,Association Football Club Bournemouth,Attack,1,0.8174650388030626,81.7
+Flynn Downes,Southampton Football Club,Midfield,1,0.8159229367912211,81.6
+Wataru Endo,Liverpool Football Club,Midfield,1,0.8152721315859018,81.5
+Ben Chilwell,Crystal Palace Football Club,Defender,1,0.8148432695941962,81.5
+William Osula,Newcastle United Football Club,Attack,1,0.8138791872281652,81.4
+Luke Shaw,Manchester United Football Club,Defender,1,0.8128387743712656,81.3
+Nathan Patterson,Everton Football Club,Defender,1,0.8123018644169601,81.2
+Noni Madueke,Chelsea Football Club,Attack,1,0.8120038390241272,81.2
+Aaron Ramsdale,Southampton Football Club,Goalkeeper,1,0.8103273406590478,81.0
+Andr?,Wolverhampton Wanderers Football Club,Midfield,1,0.809300739863236,80.9
+Ibrahim Sangar?,Nottingham Forest Football Club,Midfield,1,0.8081495273009642,80.8
+Boubacar Kamara,Aston Villa Football Club,Midfield,1,0.8061138435453985,80.6
+Konstantinos Mavropanos,West Ham United Football Club,Defender,1,0.8060753799872805,80.6
+Leon Bailey,Aston Villa Football Club,Attack,1,0.8039973272105398,80.4
+Santiago Bueno,Wolverhampton Wanderers Football Club,Defender,1,0.8035984131741155,80.4
+Ross Stewart,Southampton Football Club,Attack,1,0.8033060912399039,80.3
+Marc Cucurella,Chelsea Football Club,Defender,1,0.801794544294206,80.2
+Renato Veiga,Chelsea Football Club,Defender,1,0.8008016114470039,80.1
+Edson ?lvarez,West Ham United Football Club,Midfield,1,0.800759075382104,80.1
+Kosta Nedeljkovic,Aston Villa Football Club,Defender,1,0.7999366823486774,80.0
+Timo Werner,Tottenham Hotspur Football Club,Attack,1,0.7988085765186613,79.9
+Lamare Bogarde,Aston Villa Football Club,Midfield,1,0.7977418005407672,79.8
+Dominic Calvert-Lewin,Everton Football Club,Attack,1,0.7975850945615507,79.8
+Marco Asensio,Aston Villa Football Club,Attack,1,0.7964183046300255,79.6
+Ricardo Pereira,Leicester City Football Club,Defender,1,0.7950858754813793,79.5
+Danny Ings,West Ham United Football Club,Attack,1,0.794686279910218,79.5
+Victor Lindel?f,Manchester United Football Club,Defender,1,0.7946130982072235,79.5
+Yunus Emre Konak,Brentford Football Club,Midfield,1,0.7907210352027048,79.1
+Eric da Silva Moreira,Nottingham Forest Football Club,Midfield,1,0.7894763244877213,78.9
+Callum Wilson,Newcastle United Football Club,Attack,1,0.789451018878196,78.9
+Sergio Reguil?n,Tottenham Hotspur Football Club,Defender,1,0.7890179489206735,78.9
+Yves Bissouma,Tottenham Hotspur Football Club,Midfield,1,0.7889465284406768,78.9
+Jadon Sancho,Chelsea Football Club,Attack,1,0.7888010330535631,78.9
+Solly March,Brighton and Hove Albion Football Club,Attack,1,0.7865440709102935,78.7
+Tomas Soucek,West Ham United Football Club,Midfield,1,0.7849911349906651,78.5
+Jo?o F?lix,Chelsea Football Club,Attack,1,0.784261613691169,78.4
+Dominic Solanke,Tottenham Hotspur Football Club,Attack,1,0.782898348048233,78.3
+Liam Delap,Ipswich Town Football Club,Attack,1,0.7824555024211475,78.2
+Crysencio Summerville,West Ham United Football Club,Attack,1,0.7795852766398529,78.0
+Aaron Wan-Bissaka,West Ham United Football Club,Defender,1,0.7789814757341599,77.9
+Evan Ferguson,Brighton and Hove Albion Football Club,Attack,1,0.7787397825170222,77.9
+Reece James,Chelsea Football Club,Defender,1,0.7773574696814225,77.7
+Harvey Barnes,Newcastle United Football Club,Attack,1,0.7769232955188923,77.7
+Chiquinho,Wolverhampton Wanderers Football Club,Attack,1,0.7759889344066305,77.6
+Mois?s Caicedo,Chelsea Football Club,Midfield,1,0.7749391851487374,77.5
+Ross Barkley,Aston Villa Football Club,Midfield,1,0.7747297233600143,77.5
+Christopher Nkunku,Chelsea Football Club,Attack,1,0.773604535466269,77.4
+Armando Broja,Everton Football Club,Attack,1,0.7735979977129405,77.4
+Nathan Ak?,Manchester City Football Club,Defender,1,0.773510812493299,77.4
+Carlos Alcaraz,Southampton Football Club,Midfield,1,0.7722431720505423,77.2
+Jack Grealish,Manchester City Football Club,Attack,1,0.7704191644886408,77.0
+Mateus Fernandes,Southampton Football Club,Midfield,1,0.7690325238934977,76.9
+Pervis Estupi??n,Brighton and Hove Albion Football Club,Defender,1,0.7664798949311341,76.6
+Marc Guiu,Chelsea Football Club,Attack,1,0.7660837360338922,76.6
+Patson Daka,Leicester City Football Club,Attack,1,0.766039190282231,76.6
+Beto,Everton Football Club,Attack,1,0.7637704611606615,76.4
+Philip Billing,Association Football Club Bournemouth,Midfield,1,0.7632502311249535,76.3
+Mads Hermansen,Leicester City Football Club,Goalkeeper,1,0.7632172812853344,76.3
+Emiliano Mart?nez,Aston Villa Football Club,Goalkeeper,1,0.7625658354152449,76.3
+Jens Cajuste,Ipswich Town Football Club,Midfield,1,0.7622788467509284,76.2
+Michael Kayode,Brentford Football Club,Defender,1,0.7622262681993489,76.2
+R?ben Dias,Manchester City Football Club,Defender,1,0.7621865516466523,76.2
+Jaden Philogene,Aston Villa Football Club,Attack,1,0.7616731779548455,76.2
+Carlos Forbs,Wolverhampton Wanderers Football Club,Attack,1,0.7616657396294387,76.2
+Marshall Munetsi,Wolverhampton Wanderers Football Club,Midfield,1,0.7614188325781507,76.1
+Ayden Heaven,Manchester United Football Club,Defender,1,0.7602751652158823,76.0
+Archie Gray,Tottenham Hotspur Football Club,Defender,1,0.7598659503305196,76.0
+Lesley Ugochukwu,Southampton Football Club,Midfield,1,0.7597996643349998,76.0
+Caleb Okoli,Leicester City Football Club,Defender,1,0.7595553079125267,76.0
+Beno?t Badiashile,Chelsea Football Club,Defender,1,0.7571241964490592,75.7
+Omari Hutchinson,Ipswich Town Football Club,Midfield,1,0.7561696893804382,75.6
+David Brooks,Association Football Club Bournemouth,Attack,1,0.7552858660348851,75.5
+Andr?s Garc?a,Aston Villa Football Club,Defender,1,0.7534248332362873,75.3
+Richarlison,Tottenham Hotspur Football Club,Attack,1,0.7528318043760369,75.3
+Rodri,Manchester City Football Club,Midfield,1,0.7507995588761353,75.1
+Robert S?nchez,Chelsea Football Club,Goalkeeper,1,0.7501118258352065,75.0
+Jan Paul van Hecke,Brighton and Hove Albion Football Club,Defender,1,0.7486820147674036,74.9
+Jarrod Bowen,West Ham United Football Club,Attack,1,0.7481763671107273,74.8
+Iliman Ndiaye,Everton Football Club,Attack,1,0.7472126293107911,74.7
+Frank Onyeka,Brentford Football Club,Midfield,1,0.7457585474903193,74.6
+Vitor Reis,Manchester City Football Club,Defender,1,0.7451392912959308,74.5
+Matheus Nunes,Manchester City Football Club,Midfield,1,0.7423182161494959,74.2
+Kevin Danso,Tottenham Hotspur Football Club,Defender,1,0.7414470355865481,74.1
+Kaoru Mitoma,Brighton and Hove Albion Football Club,Attack,1,0.7411557374169392,74.1
+Cheick Doucour?,Crystal Palace Football Club,Midfield,1,0.7405197884517679,74.1
+Luke Woolfenden,Ipswich Town Football Club,Defender,1,0.7373375111588049,73.7
+Eberechi Eze,Crystal Palace Football Club,Midfield,1,0.7366251053701818,73.7
+Dane Scarlett,Tottenham Hotspur Football Club,Attack,1,0.7355075810532827,73.6
+Jacob Ramsey,Aston Villa Football Club,Midfield,1,0.7349419185678977,73.5
+Evanilson,Association Football Club Bournemouth,Attack,1,0.7337590880794954,73.4
+Enzo Fern?ndez,Chelsea Football Club,Midfield,1,0.7328000023718708,73.3
+Abdoulaye Doucour?,Everton Football Club,Midfield,1,0.7327885649267121,73.3
+Mario Lemina,Wolverhampton Wanderers Football Club,Midfield,1,0.7315029957020891,73.2
+Tyrell Malacia,Manchester United Football Club,Defender,1,0.7314090549640127,73.1
+Samuel Edozie,Southampton Football Club,Attack,1,0.7311718983882554,73.1
+Harry Toffolo,Nottingham Forest Football Club,Defender,1,0.7285666689719511,72.9
+Pedro Lima,Wolverhampton Wanderers Football Club,Defender,1,0.7272770525462994,72.7
+Tyler Dibling,Southampton Football Club,Attack,1,0.7266800305983476,72.7
+Ryan Fraser,Southampton Football Club,Attack,1,0.7263925894639864,72.6
+Tosin Adarabioyo,Chelsea Football Club,Defender,1,0.7262792866540229,72.6
+Alejandro Garnacho,Manchester United Football Club,Attack,1,0.7249119400065227,72.5
+Rom?o Lavia,Chelsea Football Club,Midfield,1,0.7243481489561866,72.4
+Wout Faes,Leicester City Football Club,Defender,1,0.7224724400219558,72.2
+Tommy Doyle,Wolverhampton Wanderers Football Club,Midfield,1,0.7221697638775529,72.2
+Malo Gusto,Chelsea Football Club,Defender,1,0.7158996519022146,71.6
+Joe Aribo,Southampton Football Club,Midfield,1,0.7133783117134521,71.3
+Ben Johnson,Ipswich Town Football Club,Defender,1,0.7086189402773496,70.9
+John McGinn,Aston Villa Football Club,Midfield,1,0.7076577785869953,70.8
+Cristian Romero,Tottenham Hotspur Football Club,Defender,1,0.7071955867467383,70.7
+Kobbie Mainoo,Manchester United Football Club,Midfield,1,0.7059321243213014,70.6
+Julio Enciso,Brighton and Hove Albion Football Club,Midfield,1,0.7044956847566651,70.4
+Cameron Burgess,Ipswich Town Football Club,Defender,1,0.7029232257736828,70.3
+Timothy Castagne,Fulham Football Club,Defender,1,0.6997832329744939,70.0
+Jordan Pickford,Everton Football Club,Goalkeeper,1,0.6986785588235157,69.9
+Lucas Paquet?,West Ham United Football Club,Midfield,1,0.6982947483362204,69.8
+Elliot Anderson,Nottingham Forest Football Club,Midfield,1,0.6973524813485119,69.7
+Abdukodir Khusanov,Manchester City Football Club,Defender,1,0.6931546698380338,69.3
+Chermiti,Everton Football Club,Attack,1,0.6923589252470431,69.2
+Eddie Nketiah,Crystal Palace Football Club,Attack,1,0.6916536189785076,69.2
+Albert Gr©ªnbaek,Southampton Football Club,Midfield,1,0.6905606845501859,69.1
+Pedro Porro,Tottenham Hotspur Football Club,Defender,1,0.6901048967082247,69.0
+Ola Aina,Nottingham Forest Football Club,Defender,1,0.6872517103463855,68.7
+Diogo Dalot,Manchester United Football Club,Defender,1,0.6864212542023386,68.6
+Kyle Walker-Peters,Southampton Football Club,Defender,1,0.6863781159193667,68.6
+Jacob Greaves,Ipswich Town Football Club,Defender,1,0.6859359468524123,68.6
+Carlos Baleba,Brighton and Hove Albion Football Club,Midfield,1,0.6841390081730677,68.4
+Callum Hudson-Odoi,Nottingham Forest Football Club,Attack,1,0.6830089347659041,68.3
+Jesper Lindstr©ªm,Everton Football Club,Attack,1,0.6819319882485599,68.2
+Nicolas Jackson,Chelsea Football Club,Attack,1,0.6816391759689538,68.2
+Manuel Akanji,Manchester City Football Club,Defender,1,0.6794061907103527,67.9
+Omar Marmoush,Manchester City Football Club,Attack,1,0.6785755296211444,67.9
+Sammie Szmodics,Ipswich Town Football Club,Midfield,1,0.6780496660737791,67.8
+Noussair Mazraoui,Manchester United Football Club,Defender,1,0.6769487951120492,67.7
+Kepa Arrizabalaga,Association Football Club Bournemouth,Goalkeeper,1,0.6768931660502993,67.7
+Mikel Merino,Arsenal Football Club,Midfield,1,0.6761548620896998,67.6
+Adama Traor?,Fulham Football Club,Attack,1,0.6750262997685623,67.5
+Matheus Cunha,Wolverhampton Wanderers Football Club,Attack,1,0.6734766026174211,67.3
+Matt Targett,Newcastle United Football Club,Defender,1,0.6727029781952759,67.3
+James Tarkowski,Everton Football Club,Defender,1,0.6722606918072839,67.2
+Jean-Ricner Bellegarde,Wolverhampton Wanderers Football Club,Midfield,1,0.672032376271489,67.2
+Ra?l Jim?nez,Fulham Football Club,Attack,1,0.6718191286908853,67.2
+Igor,Brighton and Hove Albion Football Club,Defender,1,0.6715794965657621,67.2
+Federico Chiesa,Liverpool Football Club,Attack,1,0.6707695121150078,67.1
+Brennan Johnson,Tottenham Hotspur Football Club,Attack,1,0.670489963693323,67.0
+Jean-Clair Todibo,West Ham United Football Club,Defender,1,0.670077658330847,67.0
+Lewis Miley,Newcastle United Football Club,Midfield,1,0.6685918395148587,66.9
+Issahaku Fatawu,Leicester City Football Club,Attack,1,0.6677297877061075,66.8
+Matty Cash,Aston Villa Football Club,Defender,1,0.6665507245221516,66.7
+Andr? Onana,Manchester United Football Club,Goalkeeper,1,0.666505353455014,66.7
+Mathys Tel,Tottenham Hotspur Football Club,Attack,1,0.6645347071118047,66.5
+Carlos Vin?cius,Fulham Football Club,Attack,1,0.6619017641397275,66.2
+Kamaldeen Sulemana,Southampton Football Club,Attack,1,0.6609457334954606,66.1
+Ryan Sessegnon,Fulham Football Club,Defender,1,0.6604467255431008,66.0
+?lex Moreno,Nottingham Forest Football Club,Defender,1,0.6601810680241507,66.0
+Jo?o Pedro,Brighton and Hove Albion Football Club,Attack,1,0.6599140119966747,66.0
+Gabriel Jesus,Arsenal Football Club,Attack,1,0.6578840522997711,65.8
+Rodrigo Gomes,Wolverhampton Wanderers Football Club,Midfield,1,0.6569402871138286,65.7
+Jefferson Lerma,Crystal Palace Football Club,Midfield,1,0.6564381368365035,65.6
+Mathias Jensen,Brentford Football Club,Midfield,1,0.655544029292224,65.6
+Ferdi Kad©¥o?lu,Brighton and Hove Albion Football Club,Defender,1,0.6546710650525922,65.5
+Dejan Kulusevski,Tottenham Hotspur Football Club,Midfield,1,0.6543885570345439,65.4
+Pape Matar Sarr,Tottenham Hotspur Football Club,Midfield,1,0.6529930042637296,65.3
+Axel Disasi,Chelsea Football Club,Defender,1,0.6523442640413138,65.2
+Matthijs de Ligt,Manchester United Football Club,Defender,1,0.6490453372572196,64.9
+Jarell Quansah,Liverpool Football Club,Defender,1,0.648630518721374,64.9
+Pau Torres,Aston Villa Football Club,Defender,1,0.6471752669151515,64.7
+Filip J©ªrgensen,Chelsea Football Club,Goalkeeper,1,0.6468669168015746,64.7
+Christian Walton,Ipswich Town Football Club,Goalkeeper,1,0.6468587093116738,64.7
+George Hirst,Ipswich Town Football Club,Attack,1,0.6443483952411942,64.4
+Danilo,Nottingham Forest Football Club,Midfield,1,0.643436723381581,64.3
+Emmanuel Agbadou,Wolverhampton Wanderers Football Club,Defender,1,0.6400632193737558,64.0
+Kenny Tete,Fulham Football Club,Defender,1,0.6391864863636896,63.9
+James Garner,Everton Football Club,Midfield,1,0.6376080343417768,63.8
+Diego Carlos,Aston Villa Football Club,Defender,1,0.6342326087576085,63.4
+Dango Ouattara,Association Football Club Bournemouth,Attack,1,0.6329150756790188,63.3
+Pedro Neto,Chelsea Football Club,Attack,1,0.6326539681469686,63.3
+Alex Iwobi,Fulham Football Club,Attack,1,0.6308545329284828,63.1
+Marcos Senesi,Association Football Club Bournemouth,Defender,1,0.6275171437113434,62.8
+Oleksandr Zinchenko,Arsenal Football Club,Defender,1,0.6269021343075408,62.7
+Ederson,Manchester City Football Club,Goalkeeper,1,0.6256799177198935,62.6
+Nathan Wood,Southampton Football Club,Defender,1,0.6254068920412762,62.5
+Marcus Tavernier,Association Football Club Bournemouth,Midfield,1,0.6250531157313209,62.5
+Jannik Vestergaard,Leicester City Football Club,Defender,1,0.6237999498242635,62.4
+Jack Harrison,Everton Football Club,Attack,1,0.6234956728259587,62.3
+Nick Pope,Newcastle United Football Club,Goalkeeper,1,0.6231254938214528,62.3
+Raheem Sterling,Arsenal Football Club,Attack,1,0.6219722218566948,62.2
+Luis Guilherme,West Ham United Football Club,Attack,1,0.6218012103607048,62.2
+Danny Ward,Leicester City Football Club,Goalkeeper,1,0.6193251216188831,61.9
+Matt O'Riley,Brighton and Hove Albion Football Club,Midfield,1,0.617803780732223,61.8
+Jakub Moder,Brighton and Hove Albion Football Club,Midfield,1,0.616184397267972,61.6
+Lloyd Kelly,Newcastle United Football Club,Defender,1,0.6141251103141473,61.4
+Mikey Moore,Tottenham Hotspur Football Club,Attack,1,0.6135616486923474,61.4
+Igor Thiago,Brentford Football Club,Attack,1,0.6129312760792263,61.3
+Will Hughes,Crystal Palace Football Club,Midfield,1,0.6123732811479903,61.2
+Alex Palmer,Ipswich Town Football Club,Goalkeeper,1,0.6122694324123598,61.2
+Chadi Riad,Crystal Palace Football Club,Defender,1,0.6099446005737426,61.0
+Alex Scott,Association Football Club Bournemouth,Midfield,1,0.6083752339167778,60.8
+James McAtee,Manchester City Football Club,Midfield,1,0.6069312909083933,60.7
+Guglielmo Vicario,Tottenham Hotspur Football Club,Goalkeeper,1,0.6058343520787918,60.6
+Will Smallbone,Southampton Football Club,Midfield,1,0.6050095991207007,60.5
+Patrick Dorgu,Manchester United Football Club,Defender,1,0.6035549582934712,60.4
+Ollie Watkins,Aston Villa Football Club,Attack,1,0.603189185412305,60.3
+Matheus Fran?a,Crystal Palace Football Club,Midfield,1,0.6014783788460014,60.1
+Pablo Sarabia,Wolverhampton Wanderers Football Club,Attack,1,0.598909464851077,59.9
+Issa Diop,Fulham Football Club,Defender,1,0.5988732941767934,59.9
+Alphonse Areola,West Ham United Football Club,Goalkeeper,1,0.5936917421513765,59.4
+Ezri Konsa,Aston Villa Football Club,Defender,1,0.592648391130562,59.3
+Nico Gonz?lez,Manchester City Football Club,Midfield,1,0.592101037514848,59.2
+Emerson,West Ham United Football Club,Defender,1,0.5911766601833424,59.1
+Tino Livramento,Newcastle United Football Club,Defender,1,0.5890802975917945,58.9
+Wilson Odobert,Tottenham Hotspur Football Club,Attack,1,0.5882662933205235,58.8
+Nico O'Reilly,Manchester City Football Club,Midfield,1,0.5875116815201649,58.8
+Harrison Reed,Fulham Football Club,Midfield,1,0.5866497570840491,58.7
+Paris Maghoma,Brentford Football Club,Midfield,1,0.5848259815588465,58.5
+Trevoh Chalobah,Crystal Palace Football Club,Defender,1,0.584400444693933,58.4
+Luke Thomas,Leicester City Football Club,Defender,1,0.5833595623565941,58.3
+Simon Adingra,Brighton and Hove Albion Football Club,Attack,1,0.5797197614913908,58.0
+Lucas Digne,Aston Villa Football Club,Defender,1,0.5794675750932384,57.9
+Diego G?mez,Brighton and Hove Albion Football Club,Midfield,1,0.578125461739327,57.8
+Jarrad Branthwaite,Everton Football Club,Defender,1,0.5760281009572326,57.6
+Ian Maatsen,Aston Villa Football Club,Defender,1,0.5740135099750859,57.4
+Wes Burns,Ipswich Town Football Club,Attack,1,0.5719738891145891,57.2
+Jos? S?,Wolverhampton Wanderers Football Club,Goalkeeper,1,0.5699636614763607,57.0
+Leny Yoro,Manchester United Football Club,Defender,1,0.5687608124418417,56.9
+N?lson Semedo,Wolverhampton Wanderers Football Club,Defender,1,0.5664358007567923,56.6
+Mohammed Kudus,West Ham United Football Club,Attack,1,0.5638216112284042,56.4
+Conor Coady,Leicester City Football Club,Defender,1,0.5635598728433026,56.4
+Adam Webster,Brighton and Hove Albion Football Club,Defender,1,0.5633390302184433,56.3
+Vitezslav Jaros,Liverpool Football Club,Goalkeeper,1,0.5622879374022799,56.2
+Conor Chaplin,Ipswich Town Football Club,Attack,1,0.5621723510274481,56.2
+?lkay G?ndo?an,Manchester City Football Club,Midfield,1,0.5578277290625507,55.8
+Tim Iroegbunam,Everton Football Club,Midfield,1,0.5568819497127125,55.7
+Alfie Dorrington,Tottenham Hotspur Football Club,Defender,1,0.555012738306221,55.5
+Toti,Wolverhampton Wanderers Football Club,Defender,1,0.554670002243065,55.5
+Lewis Cook,Association Football Club Bournemouth,Midfield,1,0.5511042483228432,55.1
+Mads Roerslev,Brentford Football Club,Defender,1,0.5498724949294681,55.0
+Sven Botman,Newcastle United Football Club,Defender,1,0.5476563729038573,54.8
+Yankuba Minteh,Brighton and Hove Albion Football Club,Attack,1,0.5470428710541952,54.7
+Armel Bella-Kotchap,Southampton Football Club,Defender,1,0.5459862548298958,54.6
+H?kon Rafn Valdimarsson,Brentford Football Club,Goalkeeper,1,0.5434782320508628,54.3
+Harry Maguire,Manchester United Football Club,Defender,1,0.541804718946393,54.2
+Bart Verbruggen,Brighton and Hove Albion Football Club,Goalkeeper,1,0.5418045095775753,54.2
+Antony,Manchester United Football Club,Attack,1,0.5410865411765248,54.1
+Chiedozie Ogbene,Ipswich Town Football Club,Attack,1,0.5388089391663704,53.9
+Taylor Harwood-Bellis,Southampton Football Club,Defender,1,0.5373019789586645,53.7
+Yegor Yarmolyuk,Brentford Football Club,Midfield,1,0.5359813735997881,53.6
+Micky van de Ven,Tottenham Hotspur Football Club,Defender,1,0.5355893318524079,53.6
+John Stones,Manchester City Football Club,Defender,1,0.5352332921043204,53.5
+Samuel Amo-Ameyaw,Southampton Football Club,Attack,1,0.5350481625131469,53.5
+Jacob Murphy,Newcastle United Football Club,Attack,1,0.5345406418388802,53.5
+Cameron Archer,Southampton Football Club,Attack,1,0.5340479318711506,53.4
+Ben White,Arsenal Football Club,Defender,1,0.5340317639557706,53.4
+James Hill,Association Football Club Bournemouth,Defender,1,0.5301497729999521,53.0
+Jota Silva,Nottingham Forest Football Club,Attack,1,0.5288015535037345,52.9
+Dean Henderson,Crystal Palace Football Club,Goalkeeper,1,0.5287507010595037,52.9
+Wesley Fofana,Chelsea Football Club,Defender,1,0.5263513788581169,52.6
+Oliver Scarles,West Ham United Football Club,Defender,1,0.5240763647276016,52.4
+Bernd Leno,Fulham Football Club,Goalkeeper,1,0.5225978237997618,52.3
+Hee-chan Hwang,Wolverhampton Wanderers Football Club,Attack,1,0.522596587590008,52.3
+Jorge Cuenca,Fulham Football Club,Defender,1,0.5220636430447523,52.2
+Facundo Buonanotte,Leicester City Football Club,Midfield,1,0.5216313441287547,52.2
+Amadou Onana,Aston Villa Football Club,Midfield,1,0.5212697878414538,52.1
+Thomas Partey,Arsenal Football Club,Midfield,1,0.5197984680353999,52.0
+Bobby De Cordova-Reid,Leicester City Football Club,Attack,1,0.5185776122621927,51.9
+Joe Willock,Newcastle United Football Club,Midfield,1,0.5175276764472108,51.8
+Maximilian Kilman,West Ham United Football Club,Defender,1,0.5163220086507606,51.6
+Adam Wharton,Crystal Palace Football Club,Midfield,1,0.515420438634238,51.5
+Chris Richards,Crystal Palace Football Club,Defender,1,0.5149443397024246,51.5
+Daniel Jebbison,Association Football Club Bournemouth,Attack,1,0.514198325298749,51.4
+Manuel Ugarte,Manchester United Football Club,Midfield,1,0.5133688984089999,51.3
+Billy Gilmour,Brighton and Hove Albion Football Club,Midfield,1,0.5107201296891108,51.1
+Dean Huijsen,Association Football Club Bournemouth,Defender,1,0.5088978125366049,50.9
+Isma?la Sarr,Crystal Palace Football Club,Attack,1,0.5085613004128782,50.9
+Matt Doherty,Wolverhampton Wanderers Football Club,Defender,1,0.508071502627882,50.8
+Emiliano Buend?a,Aston Villa Football Club,Midfield,1,0.5074893888659979,50.7
+Harvey Elliott,Liverpool Football Club,Midfield,1,0.5051185915151317,50.5
+Jack Hinshelwood,Brighton and Hove Albion Football Club,Midfield,1,0.5036212428193602,50.4
+Anton?n Kinsk?,Tottenham Hotspur Football Club,Goalkeeper,0,0.4998385281665914,50.0
+Jake O'Brien,Everton Football Club,Defender,0,0.4995857682942671,50.0
+Rasmus H©ªjlund,Manchester United Football Club,Attack,0,0.4980507888122129,49.8
+Joelinton,Newcastle United Football Club,Midfield,0,0.4969634106107999,49.7
+Kevin Schade,Brentford Football Club,Attack,0,0.49594107593108877,49.6
+Harry Wilson,Fulham Football Club,Attack,0,0.49586859833608815,49.6
+Marc Gu?hi,Crystal Palace Football Club,Defender,0,0.4957106293091955,49.6
+Marcus Rashford,Manchester United Football Club,Attack,0,0.4927149248643395,49.3
+Fabian Sch?r,Newcastle United Football Club,Defender,0,0.4916747617701814,49.2
+Yoane Wissa,Brentford Football Club,Attack,0,0.4904090497525672,49.0
+Emile Smith Rowe,Fulham Football Club,Midfield,0,0.4894115117965523,48.9
+Georginio Rutter,Brighton and Hove Albion Football Club,Attack,0,0.48802351474278727,48.8
+Jakub Kiwior,Arsenal Football Club,Defender,0,0.48696558578332205,48.7
+Michael Keane,Everton Football Club,Defender,0,0.48645251186452004,48.6
+Daniel Mu?oz,Crystal Palace Football Club,Defender,0,0.4843055516898798,48.4
+F?bio Carvalho,Brentford Football Club,Midfield,0,0.48426960329851754,48.4
+Matz Sels,Nottingham Forest Football Club,Goalkeeper,0,0.4828984774060644,48.3
+Savinho,Manchester City Football Club,Attack,0,0.4821821562912034,48.2
+Jack Taylor,Ipswich Town Football Club,Midfield,0,0.4815675408067589,48.2
+Jack Clarke,Ipswich Town Football Club,Attack,0,0.48123266398608655,48.1
+Joe Gomez,Liverpool Football Club,Defender,0,0.47671940406858954,47.7
+Anthony Elanga,Nottingham Forest Football Club,Attack,0,0.47577139500848215,47.6
+J©ªrgen Strand Larsen,Wolverhampton Wanderers Football Club,Attack,0,0.4742755316686751,47.4
+Bernardo Silva,Manchester City Football Club,Midfield,0,0.47010547033015443,47.0
+Levi Colwill,Chelsea Football Club,Defender,0,0.4688183242085486,46.9
+Andrew Irving,West Ham United Football Club,Midfield,0,0.46364804240457097,46.4
+Massimo Luongo,Ipswich Town Football Club,Midfield,0,0.46360697547300783,46.4
+Vitaly Janelt,Brentford Football Club,Midfield,0,0.46277926357659643,46.3
+Victor Kristiansen,Leicester City Football Club,Defender,0,0.4601298510215441,46.0
+Morato,Nottingham Forest Football Club,Defender,0,0.45448538081277734,45.4
+Tyrick Mitchell,Crystal Palace Football Club,Defender,0,0.4520743345329199,45.2
+Jack Stephens,Southampton Football Club,Defender,0,0.45198818585933054,45.2
+Daichi Kamada,Crystal Palace Football Club,Midfield,0,0.45049943372625,45.0
+Emil Krafth,Newcastle United Football Club,Defender,0,0.4434356678978566,44.3
+Vitaliy Mykolenko,Everton Football Club,Defender,0,0.44152471208799193,44.2
+Jamie Vardy,Leicester City Football Club,Attack,0,0.43874668185791693,43.9
+Ben Davies,Tottenham Hotspur Football Club,Defender,0,0.4373758155142174,43.7
+Justin Kluivert,Association Football Club Bournemouth,Midfield,0,0.4358514508306171,43.6
+Amad Diallo,Manchester United Football Club,Attack,0,0.4316846482782861,43.2
+Joachim Andersen,Crystal Palace Football Club,Defender,0,0.43027460039497367,43.0
+Bruno Fernandes,Manchester United Football Club,Midfield,0,0.4297747553663325,43.0
+Nicol?s Dom?nguez,Nottingham Forest Football Club,Midfield,0,0.42699889559348714,42.7
+Martin ¨ªdegaard,Arsenal Football Club,Midfield,0,0.4263111956807735,42.6
+Jo?o Gomes,Wolverhampton Wanderers Football Club,Midfield,0,0.4171166099065653,41.7
+Nikola Milenkovi?,Nottingham Forest Football Club,Defender,0,0.4162442502306776,41.6
+Destiny Udogie,Tottenham Hotspur Football Club,Defender,0,0.4158322779365618,41.6
+Eiran Cashin,Brighton and Hove Albion Football Club,Defender,0,0.4151662128545313,41.5
+Maxence Lacroix,Crystal Palace Football Club,Defender,0,0.41466134352571093,41.5
+Neco Williams,Nottingham Forest Football Club,Defender,0,0.41196040413805257,41.2
+Konstantinos Tsimikas,Liverpool Football Club,Defender,0,0.41167183506857075,41.2
+Jonny Evans,Manchester United Football Club,Defender,0,0.4100097668886982,41.0
+Youri Tielemans,Aston Villa Football Club,Midfield,0,0.4058764189852117,40.6
+Jordan Ayew,Crystal Palace Football Club,Attack,0,0.40300206127703225,40.3
+Ben Mee,Brentford Football Club,Defender,0,0.4026211225098313,40.3
+Christian N©ªrgaard,Brentford Football Club,Midfield,0,0.4021326915714549,40.2
+Darwin N??ez,Liverpool Football Club,Attack,0,0.40160683495564786,40.2
+Antonee Robinson,Fulham Football Club,Defender,0,0.3998190625582341,40.0
+Welington,Southampton Football Club,Defender,0,0.3951621576393758,39.5
+Joshua Zirkzee,Manchester United Football Club,Attack,0,0.3943592487068521,39.4
+Rico Lewis,Manchester City Football Club,Defender,0,0.3888402319986408,38.9
+J?r?my Doku,Manchester City Football Club,Attack,0,0.3861897742534885,38.6
+Rico Henry,Brentford Football Club,Defender,0,0.3860319914102989,38.6
+Tariq Lamptey,Brighton and Hove Albion Football Club,Defender,0,0.3842239578100399,38.4
+Kristoffer Ajer,Brentford Football Club,Defender,0,0.38000222107837645,38.0
+David Raya,Arsenal Football Club,Goalkeeper,0,0.3783199402794712,37.8
+Ryan Yates,Nottingham Forest Football Club,Midfield,0,0.3769747986203425,37.7
+Craig Dawson,Wolverhampton Wanderers Football Club,Defender,0,0.3747516201356412,37.5
+Stefan Ortega,Manchester City Football Club,Goalkeeper,0,0.3730455280329031,37.3
+Conor Bradley,Liverpool Football Club,Defender,0,0.37028397000838925,37.0
+Leandro Trossard,Arsenal Football Club,Attack,0,0.3696753624057707,37.0
+Jeffrey Schlupp,Crystal Palace Football Club,Midfield,0,0.3670272340599842,36.7
+Radu Dr?gu?in,Tottenham Hotspur Football Club,Defender,0,0.36546485112832205,36.5
+Tyrone Mings,Aston Villa Football Club,Defender,0,0.3624838149679529,36.2
+Brajan Gruda,Brighton and Hove Albion Football Club,Attack,0,0.3613345279721607,36.1
+Antoine Semenyo,Association Football Club Bournemouth,Midfield,0,0.3612850230620219,36.1
+Mikkel Damsgaard,Brentford Football Club,Midfield,0,0.36065737995278735,36.1
+Milos Kerkez,Association Football Club Bournemouth,Defender,0,0.350613684548022,35.1
+Neto,Association Football Club Bournemouth,Goalkeeper,0,0.3491987639136685,34.9
+Willian,Fulham Football Club,Attack,0,0.3432000263880299,34.3
+Caoimh?n Kelleher,Liverpool Football Club,Goalkeeper,0,0.34246140109266404,34.2
+Lisandro Mart?nez,Manchester United Football Club,Defender,0,0.3414665157097549,34.1
+Yasin Ayari,Brighton and Hove Albion Football Club,Midfield,0,0.34058822775654096,34.1
+Ilya Zabarnyi,Association Football Club Bournemouth,Defender,0,0.34006858662323763,34.0
+Sam Johnstone,Wolverhampton Wanderers Football Club,Goalkeeper,0,0.33653479835930067,33.7
+Dan Burn,Newcastle United Football Club,Defender,0,0.32615271092589293,32.6
+Conor Townsend,Ipswich Town Football Club,Defender,0,0.3202615166759343,32.0
+Morgan Gibbs-White,Nottingham Forest Football Club,Midfield,0,0.3168191148931004,31.7
+Riccardo Calafiori,Arsenal Football Club,Defender,0,0.3142962847773771,31.4
+Kyle Walker,Manchester City Football Club,Defender,0,0.31287968382182485,31.3
+Charlie Taylor,Southampton Football Club,Defender,0,0.3076925514253617,30.8
+Keane Lewis-Potter,Brentford Football Club,Attack,0,0.30726026044263904,30.7
+Morgan Rogers,Aston Villa Football Club,Midfield,0,0.3054541055217052,30.5
+Cole Palmer,Chelsea Football Club,Midfield,0,0.3050737811937979,30.5
+Andreas Pereira,Fulham Football Club,Midfield,0,0.30028012776034474,30.0
+Casemiro,Manchester United Football Club,Midfield,0,0.29859182441347953,29.9
+James Bree,Southampton Football Club,Defender,0,0.298248137695744,29.8
+Yerson Mosquera,Wolverhampton Wanderers Football Club,Defender,0,0.29625294130426016,29.6
+Kasey McAteer,Leicester City Football Club,Attack,0,0.2896723640577372,29.0
+Sepp van den Berg,Brentford Football Club,Defender,0,0.2892987448486113,28.9
+Reiss Nelson,Arsenal Football Club,Attack,0,0.28760958196654357,28.8
+Harry Amass,Manchester United Football Club,Defender,0,0.28678128048950846,28.7
+Brandon Austin,Tottenham Hotspur Football Club,Goalkeeper,0,0.28537309737666544,28.5
+Willy Boly,Nottingham Forest Football Club,Defender,0,0.2853712183846733,28.5
+Mark Flekken,Brentford Football Club,Goalkeeper,0,0.2849068726779165,28.5
+Sandro Tonali,Newcastle United Football Club,Midfield,0,0.2773416239615179,27.7
+Anthony Gordon,Newcastle United Football Club,Attack,0,0.2738745424791543,27.4
+Vladim?r Coufal,West Ham United Football Club,Defender,0,0.2727809474311735,27.3
+Ryan Manning,Southampton Football Club,Defender,0,0.2711371733149935,27.1
+Jean-Philippe Mateta,Crystal Palace Football Club,Attack,0,0.2709924848855248,27.1
+Dwight McNeil,Everton Football Club,Midfield,0,0.26921617332037434,26.9
+Alexis Mac Allister,Liverpool Football Club,Midfield,0,0.26640900446682747,26.6
+Phil Foden,Manchester City Football Club,Attack,0,0.2653795831305882,26.5
+Diogo Jota,Liverpool Football Club,Attack,0,0.26370652273995543,26.4
+Murillo,Nottingham Forest Football Club,Defender,0,0.2537884639976655,25.4
+Christian Eriksen,Manchester United Football Club,Midfield,0,0.2526001024928832,25.3
+Andrew Robertson,Liverpool Football Club,Defender,0,0.24874845130372672,24.9
+Heung-min Son,Tottenham Hotspur Football Club,Attack,0,0.24650402734929314,24.7
+Jo?l Veltman,Brighton and Hove Albion Football Club,Defender,0,0.24063230423831208,24.1
+Josko Gvardiol,Manchester City Football Club,Defender,0,0.24016341301524324,24.0
+Sa?a Luki?,Fulham Football Club,Midfield,0,0.23535190815340346,23.5
+Trent Alexander-Arnold,Liverpool Football Club,Defender,0,0.23163237715689314,23.2
+Ji-soo Kim,Brentford Football Club,Defender,0,0.22817215154140622,22.8
+Sander Berge,Fulham Football Club,Midfield,0,0.22762611124775017,22.8
+Fraser Forster,Tottenham Hotspur Football Club,Goalkeeper,0,0.22750508871678973,22.8
+Lukasz Fabianski,West Ham United Football Club,Goalkeeper,0,0.22635830224480397,22.6
+Kieran Trippier,Newcastle United Football Club,Defender,0,0.22557259705466493,22.6
+Lewis Dunk,Brighton and Hove Albion Football Club,Defender,0,0.21900322104398418,21.9
+Bruno Guimar?es,Newcastle United Football Club,Midfield,0,0.2184730434848488,21.8
+Kevin De Bruyne,Manchester City Football Club,Midfield,0,0.21544513651320193,21.5
+Robin Olsen,Aston Villa Football Club,Goalkeeper,0,0.21338643984440486,21.3
+Luis D?az,Liverpool Football Club,Attack,0,0.19837671964988887,19.8
+Myles Lewis-Skelly,Arsenal Football Club,Defender,0,0.1977632543510246,19.8
+S?amus Coleman,Everton Football Club,Defender,0,0.19495758386020937,19.5
+Lewis Hall,Newcastle United Football Club,Defender,0,0.19325586222545788,19.3
+Curtis Jones,Liverpool Football Club,Midfield,0,0.19187359547799768,19.2
+Nathaniel Clyne,Crystal Palace Football Club,Defender,0,0.18900636534291246,18.9
+Rayan A?t-Nouri,Wolverhampton Wanderers Football Club,Defender,0,0.18841444708672345,18.8
+Jorginho,Arsenal Football Club,Midfield,0,0.1875255594325546,18.8
+Kaelan Casey,West Ham United Football Club,Defender,0,0.18383391369553542,18.4
+Bryan Mbeumo,Brentford Football Club,Attack,0,0.1795287967218234,18.0
+Cody Gakpo,Liverpool Football Club,Attack,0,0.17417661568524762,17.4
+Tom Cairney,Fulham Football Club,Midfield,0,0.17033625387078916,17.0
+Joe Lumley,Southampton Football Club,Goalkeeper,0,0.16873386896522574,16.9
+Bukayo Saka,Arsenal Football Club,Attack,0,0.1660576390829099,16.6
+Adam Lallana,Southampton Football Club,Midfield,0,0.16592139096342873,16.6
+Idrissa Gueye,Everton Football Club,Midfield,0,0.1645985070753403,16.5
+Alex McCarthy,Southampton Football Club,Goalkeeper,0,0.16387172187953353,16.4
+Gabriel Magalh?es,Arsenal Football Club,Defender,0,0.15096665488476516,15.1
+Nathan Collins,Brentford Football Club,Defender,0,0.14596906235381665,14.6
+Rodrigo Muniz,Fulham Football Club,Attack,0,0.13988526752695765,14.0
+Adam Smith,Association Football Club Bournemouth,Defender,0,0.13820038570571266,13.8
+Joel Ward,Crystal Palace Football Club,Defender,0,0.13288746684069583,13.3
+Kai Havertz,Arsenal Football Club,Attack,0,0.12488166991240211,12.5
+Jurrien Timber,Arsenal Football Club,Defender,0,0.12340753970183331,12.3
+Caleb Kporha,Crystal Palace Football Club,Defender,0,0.12316985568477742,12.3
+Michail Antonio,West Ham United Football Club,Attack,0,0.12234891322737901,12.2
+Alisson,Liverpool Football Club,Goalkeeper,0,0.12230233279717989,12.2
+Chris Wood,Nottingham Forest Football Club,Attack,0,0.12041825949322066,12.0
+Gabriel Martinelli,Arsenal Football Club,Attack,0,0.11615334659745148,11.6
+Josh King,Fulham Football Club,Midfield,0,0.11283924293435715,11.3
+Calvin Bassey,Fulham Football Club,Defender,0,0.11180643005759584,11.2
+Danny Welbeck,Brighton and Hove Albion Football Club,Attack,0,0.10954514159191558,11.0
+Dominik Szoboszlai,Liverpool Football Club,Midfield,0,0.10578462371136044,10.6
+Mohamed Salah,Liverpool Football Club,Attack,0,0.10440917218914383,10.4
+Ibrahima Konat?,Liverpool Football Club,Defender,0,0.09711313788449454,9.7
+James Milner,Brighton and Hove Albion Football Club,Midfield,0,0.0957695571859752,9.6
+Martin D?bravka,Newcastle United Football Club,Goalkeeper,0,0.09378190975329444,9.4
+Ethan Nwaneri,Arsenal Football Club,Attack,0,0.09140947174095922,9.1
+Sam Morsy,Ipswich Town Football Club,Midfield,0,0.08515274907405057,8.5
+Declan Rice,Arsenal Football Club,Midfield,0,0.07840039693486132,7.8
+Jakub Stolarczyk,Leicester City Football Club,Goalkeeper,0,0.07204533047998303,7.2
+Ethan Pinnock,Brentford Football Club,Defender,0,0.061903581906903905,6.2
+Aaron Cresswell,West Ham United Football Club,Defender,0,0.05906336695234261,5.9
+William Saliba,Arsenal Football Club,Defender,0,0.05628587270396057,5.6
+Justin Devenny,Crystal Palace Football Club,Midfield,0,0.056128419984952285,5.6
+Ashley Young,Everton Football Club,Defender,0,0.05362220692739272,5.4
+Ryan Gravenberch,Liverpool Football Club,Midfield,0,0.0504036588759111,5.0
+Erling Haaland,Manchester City Football Club,Attack,0,0.04793077676568115,4.8
+Jason Steele,Brighton and Hove Albion Football Club,Goalkeeper,0,0.042050341777339025,4.2
+Virgil van Dijk,Liverpool Football Club,Defender,0,0.039831621604157354,4.0
+Alexander Isak,Newcastle United Football Club,Attack,0,0.02626969160159364,2.6
