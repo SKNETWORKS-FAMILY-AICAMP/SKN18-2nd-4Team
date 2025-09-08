@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import pathlib
+
+def cwd():
+    """현재 작업 디렉토리를 반환"""
+    return pathlib.Path.cwd()
 
 # ============================================================================
 # ⚙️ Page Setup
@@ -142,8 +147,8 @@ def load_and_merge_data(path_db2, path_db1, name_col_db1, birth_date_col_db1):
 # ============================================================================
 # 📁 File Paths
 # ============================================================================
-DB2_FILE_PATH = 'C:/dev/study/2nd_mini_project/skn18-2nd-4team2/data/DB2.csv'
-DB1_FILE_PATH = 'C:/dev/study/2nd_mini_project/skn18-2nd-4team2/data/DB1.csv'
+DB2_FILE_PATH = str(cwd() / "data" / "streamlit" / "data" / "DB2.csv")
+DB1_FILE_PATH = str(cwd() / "data" / "streamlit" / "data" / "DB1.csv")
 DB1_PLAYER_NAME_COLUMN = 'player_name'
 DB1_BIRTH_DATE_COLUMN = 'date_of_birth'
 

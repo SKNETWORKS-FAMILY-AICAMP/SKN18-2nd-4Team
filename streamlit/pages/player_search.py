@@ -4,6 +4,11 @@ from io import StringIO
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as pgo 
+import pathlib
+
+def cwd():
+    """현재 작업 디렉토리를 반환"""
+    return pathlib.Path.cwd()
 
 # =============================
 # Config
@@ -15,7 +20,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-CSV_PATH = "C:/dev/study/2nd_mini_project/skn18-2nd-4team2/data/DB1.csv"
+CSV_PATH = cwd() / "data" / "streamlit" / "data" / "DB1.csv"
 TARGET_SEASON = "24/25"
 
 # =============================
@@ -471,7 +476,7 @@ def get_local_img(player_name):
     if player_name is None:
         return None  # 선수 이름이 없으면 바로 None 반환
 
-    img_folder = "./pages/imgs/player"
+    img_folder = cwd() / "data" / "streamlit" / "data" / "imgs" / "player"
     name_variants = [
         f"{player_name}.png", f"{player_name}.jpg",
         f"{player_name.replace(' ', '_')}.png",
