@@ -57,37 +57,6 @@ UI/UX: Figma
 Environment: Visual Studio Code / Git / Github
 Communication: Discord
 
-### 핵심 라이브러리
-
-- **Python**: 3.13
-- **Pandas**: 데이터 처리 및 조작
-- **NumPy**: 수치 연산
-- **Scikit-learn**: 머신러닝 파이프라인
-  - `ColumnTransformer`: 피처 타입별 전처리
-  - `SimpleImputer`: 결측치 처리 (중앙값/최빈값)
-  - `StandardScaler`: 수치형 피처 정규화
-  - `OneHotEncoder`: 범주형 피처 인코딩
-  - `Pipeline`: 전처리-모델 파이프라인 구축
-
-### 머신러닝 모델
-
-- **Linear Models**: Logistic Regression, SVM
-- **Tree-based**: Decision Tree, Random Forest
-- **Boosting**: Gradient Boosting, XGBoost, LightGBM
-- **Instance-based**: K-Nearest Neighbors
-
-### 모델 해석 및 시각화
-
-- **SHAP**: 모델 해석 (TreeExplainer, LinearExplainer, KernelExplainer)
-- **Matplotlib**: 기본 시각화
-- **Seaborn**: 통계 시각화
-
-### 개발 도구
-
-- **Joblib**: 모델 직렬화
-- **Logging**: 실행 로그 관리
-- **Pathlib**: 파일 경로 관리
-
 ## 📊 데이터 구조
 
 `data/raw/` (원본 데이터)
@@ -535,13 +504,6 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 - `outputs/24_25_transfer_predictions.csv`: 24/25 시즌 예측 결과
 - `outputs/prediction_distribution.png`: 예측 분포
 
-### 예측 결과 시각화
-
-<div align="center">
-<table>
-<tr>
-<td width="100%">
-
 ## 📊 모델 분석 결과
 
 ### 모델 성능 시각화
@@ -551,6 +513,42 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 <tr>
 <td width="50%">
 
+#### 모델 성능 비교
+
+![Model Comparison](outputs/model_comparison.png)
+_8개 모델의 성능 지표 비교_
+
+</td>
+<td width="50%">
+
+#### 혼동 행렬
+
+![Confusion Matrix](outputs/confusion_matrix.png)
+_최고 모델의 예측 정확도 분석_
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### ROC 곡선
+
+![ROC Curve](outputs/roc_curve.png)
+_모델의 분류 성능 곡선_
+
+</td>
+<td width="50%">
+
+#### 피처 중요도
+
+![Feature Importance](outputs/feature_importance.png)
+_상위 30개 피처의 중요도 순위_
+
+</td>
+</tr>
+</table>
+</div>
+
 ### SHAP 분석
 
 <div align="center">
@@ -558,12 +556,74 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 <tr>
 <td width="50%">
 
+#### SHAP 요약 플롯
+
+![SHAP Summary](outputs/shap_summary.png)
+_상위 20개 피처의 SHAP 값 분포_
+
+</td>
+<td width="50%">
+
+#### SHAP 바 플롯
+
+![SHAP Bar](outputs/shap_bar.png)
+_피처별 평균 SHAP 중요도 순위_
+
+</td>
+</tr>
+</table>
+</div>
+
 ### 오버피팅 분석
 
 <div align="center">
 <table>
 <tr>
 <td width="50%">
+
+#### 학습 곡선 분석
+
+![Learning Curves](outputs/learning_curves.png)
+_모델의 학습 곡선과 오버피팅 분석_
+
+</td>
+<td width="50%">
+
+#### 오버피팅 현황
+
+**현재 모델들은 심각한 오버피팅을 보이고 있습니다:**
+
+- **Random Forest**: 훈련 점수 1.0000, 검증 점수 0.0475 (차이: 0.9525)
+- **Logistic Regression**: 훈련 점수 0.4715, 검증 점수 0.2353 (차이: 0.2362)
+- **Gradient Boosting**: 훈련 점수 0.4462, 검증 점수 0.0328 (차이: 0.4134)
+
+**권장사항:**
+
+- 정규화 강화 필요
+- 더 많은 데이터 수집 고려
+- 모델 복잡도 감소
+
+</td>
+</tr>
+</table>
+</div>
+
+### 예측 결과 시각화
+
+<div align="center">
+<table>
+<tr>
+<td width="100%">
+
+#### 예측 분포 분석
+
+![Prediction Distribution](outputs/prediction_distribution.png)
+_24/25 시즌 이적 확률 분포 및 포지션별 분석_
+
+</td>
+</tr>
+</table>
+</div>
 
 ## 🔧 기술 스택
 
