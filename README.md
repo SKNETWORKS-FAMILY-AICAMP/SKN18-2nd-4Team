@@ -292,18 +292,18 @@
 
 ### 모델 순위 (기본 성능)
 
-1. 🥇 **LightGBM**: 0.4675 (Precision 중심 복합점수)
-2. 🥈 **Logistic Regression**: 0.4500 (Precision 중심 복합점수)
-3. 🥉 **XGBoost**: 0.4283 (Precision 중심 복합점수)
-4. SVM: 0.4191
-5. Gradient Boosting: 0.4089
-6. Decision Tree: 0.3928
-7. KNN: 0.3580
-8. Random Forest: 0.3435
+1. 🥇 **XGBoost**: 0.4746 (Precision 중심 복합점수)
+2. 🥈 **Logistic Regression**: 0.4537 (Precision 중심 복합점수)
+3. 🥉 **SVM**: 0.4409 (Precision 중심 복합점수)
+4. Gradient Boosting: 0.4156
+5. LightGBM: 0.4093
+6. KNN: 0.3948
+7. Decision Tree: 0.3446
+8. Random Forest: 0.1397
 
-### 최고 성능 모델: LightGBM
+### 최고 성능 모델: XGBoost
 
-- **복합 점수**: 0.4675 (Precision 중심 가중평균)
+- **복합 점수**: 0.4746 (Precision 중심 가중평균)
 - **선택 기준**: 복합 점수 (Precision 중심 가중평균)
 - **가중 공식**: Precision×0.4 + F1×0.3 + Accuracy×0.2 + Recall×0.1
 
@@ -358,64 +358,232 @@
 
 | 순위 | 모델                    | 복합 점수  | Accuracy | Precision | Recall | F1-Score | AUC    |
 | ---- | ----------------------- | ---------- | -------- | --------- | ------ | -------- | ------ |
-| 🥇   | **LightGBM**            | **0.4675** | 0.6035   | 0.3831    | 0.5655 | 0.4567   | 0.6212 |
-| 🥈   | **Logistic Regression** | **0.4500** | 0.4596   | 0.3325    | 0.8274 | 0.4744   | 0.6121 |
-| 🥉   | **XGBoost**             | **0.4283** | 0.6754   | 0.4206    | 0.2679 | 0.3273   | 0.5959 |
+| 🥇   | **XGBoost**             | **0.4746** | 0.5921   | 0.3826    | 0.6159 | 0.4720   | 0.6297 |
+| 🥈   | **Logistic Regression** | **0.4537** | 0.4729   | 0.3376    | 0.8110 | 0.4767   | 0.5967 |
+| 🥉   | **SVM**                 | **0.4409** | 0.4747   | 0.3307    | 0.7561 | 0.4601   | 0.5874 |
 
 ### 📈 성능 향상 추적
 
 #### **1️⃣ 하이퍼파라미터 튜닝 결과**
 
-| 모델                | 튜닝 전 | 튜닝 후    | 향상도      | 최적 파라미터                         |
-| ------------------- | ------- | ---------- | ----------- | ------------------------------------- |
-| Logistic Regression | 0.4500  | **0.4467** | **-0.0033** | C=1.0, penalty='l2'                   |
-| LightGBM            | 0.4675  | **0.4257** | **-0.0418** | 기본값 유지 (튜닝 실패)               |
-| SVM                 | 0.4191  | **0.4354** | **+0.0163** | C=0.1, kernel='linear', gamma='scale' |
+| 모델                | 튜닝 전 | 튜닝 후    | 향상도      | 최적 파라미터                      |
+| ------------------- | ------- | ---------- | ----------- | ---------------------------------- |
+| XGBoost             | 0.4746  | **0.4503** | **-0.0243** | 기본값 유지 (튜닝 실패)            |
+| Logistic Regression | 0.4537  | **0.4503** | **-0.0034** | C=1.0, penalty='l2'                |
+| SVM                 | 0.4409  | **0.4354** | **-0.0055** | C=1.0, kernel='rbf', gamma='scale' |
 
-**🏆 하이퍼파라미터 튜닝 최고 모델: Logistic Regression 0.4467**
+**🏆 하이퍼파라미터 튜닝 최고 모델: XGBoost 0.4503 (기본값 유지)**
 
 #### **2️⃣ 정규화 개선 결과 (완료)**
 
 | 모델                     | 정규화 전 | 정규화 후  | 향상도      | 적용 기법             |
 | ------------------------ | --------- | ---------- | ----------- | --------------------- |
-| LightGBM (Regularized)   | 0.4675    | **0.4583** | **+0.0116** | reg_alpha, reg_lambda |
-| Logistic Regression (L1) | 0.4500    | **0.4406** | **-0.0094** | L1 Regularization     |
-| SVM (RBF)                | 0.4191    | **0.4390** | **+0.0199** | RBF Kernel + C Tuning |
-| Logistic Regression (L2) | 0.4500    | **0.4357** | **-0.0143** | L2 Regularization     |
+| XGBoost (Regularized)    | 0.4746    | **0.4212** | **-0.0534** | reg_alpha, reg_lambda |
+| Logistic Regression (L1) | 0.4537    | **0.4406** | **-0.0131** | L1 Regularization     |
+| Logistic Regression (L2) | 0.4537    | **0.4469** | **-0.0068** | L2 Regularization     |
+| SVM (RBF)                | 0.4409    | **0.4390** | **-0.0019** | RBF Kernel + C Tuning |
 
-**🏆 정규화 최고 모델: LightGBM (Regularized) 0.4583**
+**🏆 정규화 최고 모델: Logistic Regression (L2) 0.4469**
 
 #### **3️⃣ 앙상블 모델링 결과 (완료)**
 
-| 앙상블 방법   | 개별 모델 최고점수 | 앙상블 점수 | 향상도      | 구성 모델                |
-| ------------- | ------------------ | ----------- | ----------- | ------------------------ |
-| Voting (Soft) | 0.4675             | **0.4675**  | **+0.0000** | LightGBM, LR, SVM        |
-| Voting (Hard) | 0.4675             | 0.4675      | +0.0000     | LightGBM, LR, SVM        |
-| Stacking      | 0.4675             | 0.4675      | +0.0000     | LightGBM, LR, SVM + Meta |
-| Bagging (RF)  | 0.4675             | 0.4675      | +0.0000     | Random Forest 앙상블     |
-| Bagging (GB)  | 0.4675             | 0.4675      | +0.0000     | Gradient Boosting 앙상블 |
+| 앙상블 방법      | 개별 모델 최고점수 | 앙상블 점수 | 향상도      | 구성 모델                |
+| ---------------- | ------------------ | ----------- | ----------- | ------------------------ |
+| **Bagging (RF)** | 0.4746             | **0.4901**  | **+0.0155** | Random Forest 앙상블     |
+| Voting (Soft)    | 0.4746             | 0.4774      | +0.0028     | XGBoost, LR, SVM         |
+| Voting (Hard)    | 0.4746             | 0.4566      | -0.0180     | XGBoost, LR, SVM         |
+| Bagging (GB)     | 0.4746             | 0.4230      | -0.0516     | Gradient Boosting 앙상블 |
+| Stacking         | 0.4746             | 0.4152      | -0.0594     | XGBoost, LR, SVM + Meta  |
 
-**🏆 앙상블 최고 모델: 기본 LightGBM 0.4675 (앙상블 효과 없음)**
+**🏆 앙상블 최고 모델: Bagging (RF) 0.4901 (3.27% 향상)**
 
 ### 🏆 최종 성능 요약
 
-| 단계                    | 최고 모델              | 복합 점수 | 전 단계 대비 향상 | 누적 향상도 |
-| ----------------------- | ---------------------- | --------- | ----------------- | ----------- |
-| **기준선**              | LightGBM               | 0.4675    | -                 | -           |
-| **하이퍼파라미터 튜닝** | Logistic Regression    | 0.4467    | **-0.0208**       | **-4.45%**  |
-| **정규화 개선**         | LightGBM (Regularized) | 0.4583    | **+0.0116**       | **+2.48%**  |
-| **앙상블 모델링**       | LightGBM (기본)        | 0.4675    | **+0.0000**       | **+0.00%**  |
+| 단계                    | 최고 모델           | 복합 점수  | 전 단계 대비 향상 | 누적 향상도 |
+| ----------------------- | ------------------- | ---------- | ----------------- | ----------- |
+| **기준선**              | XGBoost             | 0.4746     | -                 | -           |
+| **하이퍼파라미터 튜닝** | XGBoost             | 0.4503     | **-0.0243**       | **-5.12%**  |
+| **정규화 개선**         | Logistic Regression | 0.4469     | **-0.0034**       | **-5.84%**  |
+| **앙상블 모델링**       | **Bagging (RF)**    | **0.4901** | **+0.0432**       | **+3.27%**  |
 
-**📊 최종 결과**: 기본 LightGBM 모델이 최고 성능 (0.4675)
+**📊 최종 결과**: Bagging (RF) 앙상블 모델이 최고 성능 (0.4901)
 
 ---
 
 ## 📊 현재 예측 결과
 
-- **총 선수**: 513명 (중복 제거 후)
-- **예측 이적**: 8명 (1.6%)
-- **고위험 선수 (60%+)**: 모델 학습 후 업데이트
+- **총 선수**: 570명
+- **예측 이적**: 255명 (44.7%)
+- **고위험 선수 (60%+)**: 176명 (30.9%)
 - **예측 파일**: `outputs/24_25_transfer_predictions.csv`
+
+---
+
+## 📊 모델 분석 결과
+
+### 모델 성능 시각화
+
+<div align="center">
+<table>
+<tr>
+<td width="50%">
+
+#### 모델 성능 비교
+
+- 8개 모델별 Composite Score 비교 결과
+
+| 모델    | 점수      | 설명                                                                      |
+| ------- | --------- | ------------------------------------------------------------------------- |
+| **XGB** | **0.475** | 안정적이고 강력한 부스팅 모델. 하이퍼파라미터 튜닝 여지가 큼              |
+| LR      | 0.454     | 단순하고 해석 용이. 데이터가 선형적일 때도 좋은 성능 발휘                 |
+| SVM     | 0.441     | 비선형 데이터 분류에 강점. 하지만 대규모 데이터에서는 속도가 느릴 수 있음 |
+| GBoost  | 0.416     | 부스팅 계열 기본 모델. 성능은 준수하지만 XGB/LGBM 대비 느림               |
+| LGBM    | 0.409     | 부스팅 계열 중 가장 빠르고 효율적. 대용량 데이터 처리와 성능 모두 우수    |
+| KNN     | 0.395     | 직관적이고 간단. 그러나 차원이 높아질수록 성능 저하                       |
+| DT      | 0.345     | 구조 단순, 직관적. 하지만 과적합 위험이 높음                              |
+| RF      | 0.140     | 다수의 트리를 조합한 앙상블. 최적화 부족 시 성능 제한적                   |
+
+![model_comparison](outputs/model_comparison.png)
+
+---
+
+#### 혼동 행렬
+
+**XGBoost 모델 (최고 성능) 성능 분석:**
+
+- **장점**
+  - 높은 Recall(0.616) → 실제 이적 선수의 61.6%를 정확히 예측
+  - 적절한 Accuracy(0.592) → 전체 예측의 59.2%가 정확
+  - 균형잡힌 F1-Score(0.472) → Precision과 Recall의 조화평균
+- **단점**
+  - 낮은 Precision(0.383) → 이적으로 예측한 선수 중 38.3%만 실제 이적
+  - False Positive가 많아서 False Alarm 문제 존재
+
+---
+
+**🔩 개선된 모델 성능:**
+
+|              | Predicted 0  | Predicted 1 |
+| ------------ | ------------ | ----------- |
+| **Actual 0** | **249 (TN)** | 153 (FP)    |
+| **Actual 1** | 73 (FN)      | **95 (TP)** |
+
+- **TN (249)**: 실제 0을 정확히 0으로 예측
+- **FP (153)**: 실제 0인데 잘못 1로 예측 (False Positive)
+- FN (73): 실제 1인데 놓친 경우 (False Negative)
+- TP (95): 실제 1을 정확히 1로 예측
+
+![Confusion Matrix](outputs/confusion_matrix.png)
+
+---
+
+#### ROC 곡선
+
+- 양성과 음성을 구분하는 **모델의 분별력이 크지 않음**
+- **AUC = 0.630**
+  - AUC (Area Under Curve) 값은 0.5 = 랜덤, 1.0 = 완벽한 분류기 의미
+  - 여기서 0.630 → 랜덤보다는 확실히 낫지만, 모델의 분류 성능은 제한적
+- **곡선 형태**
+  - ROC 곡선이 대각선 기준선에서 크게 벗어나지 못함
+- **장점**: 완전한 랜덤(0.5)보다 높은 AUC 값 ➡️ 일정 수준의 예측 능력 보유
+- **단점**: 실제로 활용하기에 낮은 AUC 0.621 ➡️ 특히 불균형 데이터일 경우 더 문제
+
+---
+
+#### ▶️ 피처 중요도(상위 30개)
+
+- **가장 중요한 변수**: `age_at_season` (선수 나이)
+- **징계 관련 변수**: yellow_cards, red_cards, discipline_level 등이 상위
+- **공격 성과**: assists > goals 순으로 중요, 출전 시간 지표도 큰 기여
+- **클럽 특성**: squad_size, average_age, national_team_players 등 팀 단위 특성도 중요
+- **국가 변수**: 특정 국가 출신 여부가 반영되지만, 데이터 편향 가능성 있음
+
+---
+
+- 선수 개인 특성(나이, 징계, 공격 성과, 시장 가치) + 클럽 환경(스쿼드 규모, 외국인 비율, 대표팀 배출)
+  ➡️ 모델 성능에 핵심적으로 기여.
+- 공격 성과(골) 중요도 < **어시스트, 출전 시간, 규율 관련 지표 중요도**
+- 국가 특성은 데이터 편향 위험이 있어, 해석에 주의 필요
+
+![Feature Importance](outputs/feature_importance.png)
+
+---
+
+### SHAP 분석
+
+<div align="center">
+<table>
+<tr>
+<td width="50%">
+
+#### SHAP 요약 플롯
+
+![SHAP Summary](outputs/shap_summary.png)
+_상위 20개 피처의 SHAP 값 분포_
+
+</td>
+<td width="50%">
+
+#### SHAP 바 플롯
+
+![SHAP Bar](outputs/shap_bar.png)
+_피처별 평균 SHAP 중요도 순위_
+
+</td>
+</tr>
+</table>
+</div>
+
+### 오버피팅 분석
+
+<div align="center">
+<table>
+<tr>
+<td width="50%">
+
+#### 학습 곡선 분석
+
+![Learning Curves](outputs/learning_curves.png)
+_모델의 학습 곡선과 오버피팅 분석_
+
+</td>
+<td width="50%">
+
+#### 오버피팅 현황
+
+**현재 모델들은 심각한 오버피팅을 보이고 있습니다:**
+
+- **Random Forest**: 훈련 점수 1.0000, 검증 점수 0.0475 (차이: 0.9525)
+- **Logistic Regression**: 훈련 점수 0.4715, 검증 점수 0.2353 (차이: 0.2362)
+- **Gradient Boosting**: 훈련 점수 0.4462, 검증 점수 0.0328 (차이: 0.4134)
+
+**권장사항:**
+
+- 정규화 강화 필요
+- 더 많은 데이터 수집 고려
+- 모델 복잡도 감소
+
+</td>
+</tr>
+</table>
+</div>
+
+### 예측 결과 시각화
+
+<div align="center">
+<table>
+<tr>
+<td width="100%">
+
+#### 예측 분포 분석
+
+![Prediction Distribution](outputs/prediction_distribution.png)
+_24/25 시즌 이적 확률 분포 및 포지션별 분석_
+
+</td>
+</tr>
+</table>
+</div>
 
 ---
 
@@ -600,127 +768,6 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 - `outputs/24_25_transfer_predictions.csv`: 24/25 시즌 예측 결과
 - `outputs/prediction_distribution.png`: 예측 분포
 
-## 📊 모델 분석 결과
-
-### 모델 성능 시각화
-
-<div align="center">
-<table>
-<tr>
-<td width="50%">
-
-#### 모델 성능 비교
-
-![Model Comparison](outputs/model_comparison.png)
-_8개 모델의 성능 지표 비교_
-
-</td>
-<td width="50%">
-
-#### 혼동 행렬
-
-![Confusion Matrix](outputs/confusion_matrix.png)
-_최고 모델의 예측 정확도 분석_
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### ROC 곡선
-
-![ROC Curve](outputs/roc_curve.png)
-_모델의 분류 성능 곡선_
-
-</td>
-<td width="50%">
-
-#### 피처 중요도
-
-![Feature Importance](outputs/feature_importance.png)
-_상위 30개 피처의 중요도 순위_
-
-</td>
-</tr>
-</table>
-</div>
-
-### SHAP 분석
-
-<div align="center">
-<table>
-<tr>
-<td width="50%">
-
-#### SHAP 요약 플롯
-
-![SHAP Summary](outputs/shap_summary.png)
-_상위 20개 피처의 SHAP 값 분포_
-
-</td>
-<td width="50%">
-
-#### SHAP 바 플롯
-
-![SHAP Bar](outputs/shap_bar.png)
-_피처별 평균 SHAP 중요도 순위_
-
-</td>
-</tr>
-</table>
-</div>
-
-### 오버피팅 분석
-
-<div align="center">
-<table>
-<tr>
-<td width="50%">
-
-#### 학습 곡선 분석
-
-![Learning Curves](outputs/learning_curves.png)
-_모델의 학습 곡선과 오버피팅 분석_
-
-</td>
-<td width="50%">
-
-#### 오버피팅 현황
-
-**현재 모델들은 심각한 오버피팅을 보이고 있습니다:**
-
-- **Random Forest**: 훈련 점수 1.0000, 검증 점수 0.0475 (차이: 0.9525)
-- **Logistic Regression**: 훈련 점수 0.4715, 검증 점수 0.2353 (차이: 0.2362)
-- **Gradient Boosting**: 훈련 점수 0.4462, 검증 점수 0.0328 (차이: 0.4134)
-
-**권장사항:**
-
-- 정규화 강화 필요
-- 더 많은 데이터 수집 고려
-- 모델 복잡도 감소
-
-</td>
-</tr>
-</table>
-</div>
-
-### 예측 결과 시각화
-
-<div align="center">
-<table>
-<tr>
-<td width="100%">
-
-#### 예측 분포 분석
-
-![Prediction Distribution](outputs/prediction_distribution.png)
-_24/25 시즌 이적 확률 분포 및 포지션별 분석_
-
-</td>
-</tr>
-</table>
-</div>
-
 ---
 
 ## 🔄 모델 개선 과정 및 자동 예측 재실행
@@ -755,9 +802,9 @@ _24/25 시즌 이적 확률 분포 및 포지션별 분석_
 
 ### 🎯 현재 상태
 
-- **기본 모델 사용** (개선 기법들이 성능 향상에 실패)
-- **최종 모델**: LightGBM (0.4675 점수)
-- **예측 파일**: `outputs/24_25_transfer_predictions.csv` (513명, 중복 제거 후)
+- **앙상블 모델 사용** (Bagging RF가 성능 향상에 성공)
+- **최종 모델**: Bagging (RF) 앙상블 (0.4901 점수)
+- **예측 파일**: `outputs/24_25_transfer_predictions.csv` (570명, 255명 이적 예측)
 
 ---
 

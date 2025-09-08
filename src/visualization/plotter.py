@@ -223,8 +223,17 @@ class ModelVisualizer:
         """예측 결과 분포"""
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
         
-        # 이적 확률 분포
-        ax1.hist(predictions['transfer_probability_percent'], bins=30, alpha=0.7, color='skyblue')
+        # 이적 확률 분포 (퍼센트로 변환)
+        if 'transfer_probability_percent' in predictions.columns:
+            prob_col = 'transfer_probability_percent'
+        else:
+            prob_col = 'transfer_probability'
+            # 0-1 범위를 0-100으로 변환
+            predictions = predictions.copy()
+            predictions['transfer_probability_percent'] = predictions[prob_col] * 100
+            prob_col = 'transfer_probability_percent'
+        
+        ax1.hist(predictions[prob_col], bins=30, alpha=0.7, color='skyblue')
         ax1.set_title('Transfer Probability Distribution', fontsize=14, fontweight='bold')
         ax1.set_xlabel('Transfer Probability (%)', fontsize=12)
         ax1.set_ylabel('Count', fontsize=12)

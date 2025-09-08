@@ -1,2 +1,2 @@
 ﻿Best_Model,Best_Score,Selection_Criteria,Weight_Formula
-LightGBM,0.4675,Composite Score (Weighted Average),Precision(0.4) + F1(0.3) + Accuracy(0.2) + Recall(0.1)
+XGBoost,0.4746,Composite Score (Weighted Average),Precision(0.4) + F1(0.3) + Accuracy(0.2) + Recall(0.1)

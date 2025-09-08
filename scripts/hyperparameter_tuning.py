@@ -40,7 +40,7 @@ def hyperparameter_tuning():
         
         config = Config("config_final.yaml")
         data_loader = DataLoaderNew(config)
-        train_df, test_df = data_loader.load_all_data()
+        train_df, valid_df, test_df, pred_df = data_loader.load_all_data()
         
         print(f"📊 데이터 로드 완료:")
         print(f"  - Train: {train_df.shape[0]:,} rows")
@@ -100,26 +100,7 @@ def hyperparameter_tuning():
         # 7. 하이퍼파라미터 그리드 정의 (성능 상위 3개 모델만)
         param_grids = {}
         
-        # LightGBM - 1위 모델 (기본값 주변 좁은 범위)
-        if _has_lgbm:
-            param_grids['LightGBM'] = {
-                'n_estimators': [100, 150, 200],  # 기본값 100 주변 3개만
-                'learning_rate': [0.1, 0.15, 0.2],  # 기본값 0.1 주변 3개만
-                'max_depth': [3, 4, 5],  # 기본값 3 주변 3개만
-                'num_leaves': [31, 40, 50],  # 기본값 31 주변 3개만
-                'subsample': [0.9, 1.0],  # 기본값 1.0 주변 2개만
-                'colsample_bytree': [0.9, 1.0]  # 기본값 1.0 주변 2개만
-            }
-        
-        # Logistic Regression - 2위 모델 (1.0 주변 좁은 범위)
-        param_grids['Logistic Regression'] = {
-            'C': [0.8, 1.0, 1.2],  # 1.0 주변 3개만
-            'penalty': ['l2'],  # L2만 탐색 (더 안정적)
-            'max_iter': [1000],
-            'solver': ['lbfgs']  # L2에 최적화된 solver
-        }
-        
-        # XGBoost - 3위 모델 (기본값 주변 좁은 범위)
+        # XGBoost - 1위 모델 (기본값 주변 좁은 범위)
         try:
             import xgboost as xgb
             param_grids['XGBoost'] = {
@@ -132,22 +113,39 @@ def hyperparameter_tuning():
         except ImportError:
             logger.warning("XGBoost가 설치되지 않았습니다. XGBoost 튜닝을 건너뜁니다.")
         
-        # 8. 모델 정의 (성능 상위 3개 모델만)
-        from sklearn.linear_model import LogisticRegression
-        
-        models = {
-            'Logistic Regression': LogisticRegression(random_state=42, class_weight='balanced')
+        # Logistic Regression - 2위 모델 (1.0 주변 좁은 범위)
+        param_grids['Logistic Regression'] = {
+            'C': [0.8, 1.0, 1.2],  # 1.0 주변 3개만
+            'penalty': ['l2'],  # L2만 탐색 (더 안정적)
+            'max_iter': [1000],
+            'solver': ['lbfgs']  # L2에 최적화된 solver
         }
         
-        if _has_lgbm:
-            models['LightGBM'] = LGBMClassifier(random_state=42, class_weight='balanced')
+        # SVM - 3위 모델 (기본값 주변 좁은 범위)
+        param_grids['SVM'] = {
+            'C': [0.1, 1.0, 10.0],  # 기본값 1.0 주변 3개만
+            'kernel': ['rbf'],  # RBF만 탐색 (가장 일반적)
+            'gamma': ['scale', 'auto']  # 기본값 scale 주변 2개만
+        }
         
-        # XGBoost 모델 추가
+        # 8. 모델 정의 (성능 상위 3개 모델만)
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.svm import SVC
+        
+        models = {}
+        
+        # XGBoost - 1위 모델
         try:
             import xgboost as xgb
             models['XGBoost'] = xgb.XGBClassifier(random_state=42, eval_metric='logloss')
         except ImportError:
             logger.warning("XGBoost가 설치되지 않았습니다. XGBoost 모델을 건너뜁니다.")
+        
+        # Logistic Regression - 2위 모델
+        models['Logistic Regression'] = LogisticRegression(random_state=42, class_weight='balanced')
+        
+        # SVM - 3위 모델
+        models['SVM'] = SVC(random_state=42, class_weight='balanced', probability=True)
         
         # 파라미터 그리드 정리 (Pipeline 사용하지 않으므로 접두사 제거 불필요)
         

@@ -26,7 +26,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import (classification_report, confusion_matrix, accuracy_score, 
                            precision_score, recall_score, f1_score, roc_auc_score, 
-                           roc_curve, precision_recall_curve, auc)
+                           roc_curve, precision_recall_curve)
+from sklearn.metrics import auc as sklearn_auc
 from sklearn.utils.class_weight import compute_class_weight
 
 # Optional libraries
@@ -441,11 +442,11 @@ class FootballModelTrainer:
         
         # ROC 곡선
         fpr, tpr, _ = roc_curve(y_val, y_pred_proba) if y_pred_proba is not None else ([], [], [])
-        roc_auc_score = auc(fpr, tpr) if len(fpr) > 0 else 0
+        roc_auc_value = sklearn_auc(fpr, tpr) if len(fpr) > 0 else 0
         
         # Precision-Recall 곡선
         precision_curve, recall_curve, _ = precision_recall_curve(y_val, y_pred_proba) if y_pred_proba is not None else ([], [], [])
-        pr_auc_score = auc(recall_curve, precision_curve) if len(precision_curve) > 0 else 0
+        pr_auc_score = sklearn_auc(recall_curve, precision_curve) if len(precision_curve) > 0 else 0
         
         results = {
             'accuracy': accuracy,
@@ -453,7 +454,7 @@ class FootballModelTrainer:
             'recall': recall,
             'f1': f1,
             'auc': auc,
-            'roc_auc': roc_auc_score,
+            'roc_auc': roc_auc_value,
             'pr_auc': pr_auc_score,
             'classification_report': report,
             'confusion_matrix': cm,
@@ -480,7 +481,7 @@ class FootballModelTrainer:
             'probabilities': prediction_proba
         }
     
-    def predict(self, pred_data: pd.DataFrame) -> np.ndarray:
+    def predict(self, pred_data: pd.DataFrame) -> pd.DataFrame:
         """24/25 시즌 예측 (pred_df 사용)"""
         logger.info("🔮 24/25 시즌 예측 시작")
         
@@ -498,10 +499,19 @@ class FootballModelTrainer:
         X_pred_processed = self.preprocessor.transform(X_pred)
         
         # 예측
-        predictions = self.best_model.predict(X_pred_processed)
+        predictions_binary = self.best_model.predict(X_pred_processed)
+        predictions_proba = self.best_model.predict_proba(X_pred_processed)[:, 1] if hasattr(self.best_model, 'predict_proba') else None
         
-        logger.info(f"✅ 24/25 예측 완료: {len(predictions)}개 선수, 이적 예상 {predictions.sum()}명")
-        return predictions
+        # 결과 DataFrame 생성
+        result_df = pred_data_processed[['player_name', 'position', 'club_name']].copy()
+        result_df['transfer_prediction'] = predictions_binary
+        if predictions_proba is not None:
+            result_df['transfer_probability'] = predictions_proba
+        else:
+            result_df['transfer_probability'] = predictions_binary.astype(float)
+        
+        logger.info(f"✅ 24/25 예측 완료: {len(result_df)}개 선수, 이적 예상 {predictions_binary.sum()}명")
+        return result_df
     
     def save_model(self, output_dir: Path):
         """모델 및 전처리기 저장"""

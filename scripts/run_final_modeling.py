@@ -145,8 +145,11 @@ def run_final_modeling(force_retrain=False):
         print(f"\n📊 최종 결과:")
         print(f"  - 최고 모델: {model_results['best_model_name']}")
         print(f"  - 예측 선수 수: {len(predictions):,}명")
-        print(f"  - 예측 이적: {predictions['predicted_transfer'].sum()}명")
-        print(f"  - 고위험 선수 (60%+): {len(predictions[predictions['transfer_probability_percent'] >= 60])}명")
+        print(f"  - 예측 이적: {predictions['transfer_prediction'].sum()}명")
+        # 고위험 선수 계산 (60% 이상)
+        high_risk_threshold = 0.6  # 60% = 0.6
+        high_risk_count = len(predictions[predictions['transfer_probability'] >= high_risk_threshold])
+        print(f"  - 고위험 선수 (60%+): {high_risk_count}명")
         
     except Exception as e:
         logger.error(f"최종 모델링 오류: {e}")
