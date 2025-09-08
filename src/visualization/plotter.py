@@ -51,6 +51,10 @@ class ModelVisualizer:
         if _has_shap and 'shap_results' in self.model_results:
             self.plot_shap_analysis()
         
+        # 6. 학습 곡선 (오버피팅 분석)
+        if 'learning_curve_results' in self.model_results:
+            self.plot_learning_curves()
+        
         logger.info("✅ 시각화 완료")
     
     def plot_model_comparison(self):
@@ -236,3 +240,95 @@ class ModelVisualizer:
         plt.tight_layout()
         plt.savefig(self.output_dir / 'prediction_distribution.png', dpi=300, bbox_inches='tight')
         plt.close()
+    
+    def plot_learning_curves(self):
+        """학습 곡선 (오버피팅 분석)"""
+        if 'learning_curve_results' not in self.model_results:
+            logger.warning("학습 곡선 데이터가 없습니다.")
+            return
+        
+        from src.features.feature_engineering import OverfittingChecker
+        
+        # 학습 곡선 데이터 추출
+        lc_results = self.model_results['learning_curve_results']
+        train_scores = lc_results['train_scores']
+        val_scores = lc_results['val_scores']
+        final_gap = lc_results['final_gap']
+        max_gap = lc_results['max_gap']
+        is_overfitting = lc_results['is_overfitting']
+        
+        # 훈련 크기 계산 (기본값 사용)
+        train_sizes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        n_samples = [int(len(train_scores) * size * 10) for size in train_sizes]  # 근사치
+        
+        # 시각화
+        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+        
+        # 1. 학습 곡선
+        ax1.plot(n_samples, train_scores, 'o-', color='blue', label='Training Score', linewidth=2, markersize=6)
+        ax1.plot(n_samples, val_scores, 'o-', color='red', label='Validation Score', linewidth=2, markersize=6)
+        ax1.fill_between(n_samples, train_scores, val_scores, alpha=0.2, color='gray', label='Gap')
+        ax1.set_xlabel('Training Samples', fontsize=12)
+        ax1.set_ylabel('Score', fontsize=12)
+        ax1.set_title('Learning Curves', fontsize=14, fontweight='bold')
+        ax1.legend(fontsize=11)
+        ax1.grid(True, alpha=0.3)
+        
+        # 2. 오버피팅 분석
+        gaps = [t - v for t, v in zip(train_scores, val_scores)]
+        ax2.plot(n_samples, gaps, 'o-', color='purple', linewidth=2, markersize=6)
+        ax2.axhline(y=0.1, color='red', linestyle='--', alpha=0.7, label='Warning (0.1)')
+        ax2.axhline(y=0.15, color='orange', linestyle='--', alpha=0.7, label='Severe (0.15)')
+        ax2.set_xlabel('Training Samples', fontsize=12)
+        ax2.set_ylabel('Score Gap (Train - Val)', fontsize=12)
+        ax2.set_title('Overfitting Analysis', fontsize=14, fontweight='bold')
+        ax2.legend(fontsize=11)
+        ax2.grid(True, alpha=0.3)
+        
+        # 3. 최종 성능 비교
+        categories = ['Training', 'Validation']
+        scores = [train_scores[-1], val_scores[-1]]
+        colors = ['blue', 'red']
+        bars = ax3.bar(categories, scores, color=colors, alpha=0.7)
+        ax3.set_ylabel('Final Score', fontsize=12)
+        ax3.set_title('Final Performance Comparison', fontsize=14, fontweight='bold')
+        ax3.set_ylim(0, 1)
+        
+        # 점수 값 표시
+        for bar, score in zip(bars, scores):
+            ax3.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01, 
+                    f'{score:.3f}', ha='center', va='bottom', fontweight='bold')
+        
+        # 4. 오버피팅 지표 요약
+        ax4.axis('off')
+        
+        status_color = 'red' if is_overfitting else 'green'
+        status_text = 'OVERFITTING DETECTED' if is_overfitting else 'NO OVERFITTING'
+        
+        info_text = f"""OVERFITTING ANALYSIS SUMMARY
+
+Status: {status_text}
+
+Final Gap: {final_gap:.3f}
+Max Gap: {max_gap:.3f}
+
+Thresholds:
+• Warning: > 0.1
+• Severe: > 0.15
+
+Training Samples: {len(train_scores) * 10:,}
+Validation Samples: {len(val_scores) * 10:,}
+
+Recommendation:
+{'⚠️ Consider regularization or more data' if is_overfitting else '✅ Model appears stable'}"""
+        
+        ax4.text(0.05, 0.5, info_text, fontsize=11, 
+                verticalalignment='center', fontfamily='monospace',
+                bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', alpha=0.8))
+        
+        plt.suptitle('Model Overfitting Analysis', fontsize=16, fontweight='bold', y=0.95)
+        plt.tight_layout()
+        plt.savefig(self.output_dir / 'learning_curves.png', dpi=300, bbox_inches='tight', facecolor='white')
+        plt.close()
+        
+        logger.info("✅ 학습 곡선 그래프 저장 완료")

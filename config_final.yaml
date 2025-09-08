@@ -8,8 +8,8 @@ data:
 
 model:
   random_state: 42
-  test_season: 23/24
-  prediction_season: 23/24
+  test_season: 24/25
+  prediction_season: 24/25
   composite_weights:
     precision: 0.4 # 가장 중요 (Precision 개선 목표)
     f1: 0.3 # 균형 지표
@@ -42,7 +42,7 @@ features:
 
 output:
   output_dir: outputs
-  predictions_csv: outputs/23_24_transfer_predictions.csv
+  predictions_csv: outputs/24_25_transfer_predictions.csv
   model_comparison_plot: outputs/model_comparison.png
   shap_summary_plot: outputs/shap_summary.png
   feature_importance_plot: outputs/feature_importance.png

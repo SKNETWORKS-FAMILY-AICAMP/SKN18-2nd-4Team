@@ -88,29 +88,36 @@ def regularization_improvement():
         # 6. 정규화된 모델 정의 (성능 상위 3개 모델만)
         regularized_models = {}
         
-        # Logistic Regression with L1/L2 regularization (성능 1위)
+        # LightGBM with regularization (성능 1위)
+        if _has_lgbm:
+            regularized_models['LightGBM (Regularized)'] = LGBMClassifier(
+                n_estimators=100, learning_rate=0.1, num_leaves=31,
+                max_depth=5, subsample=0.8, colsample_bytree=0.8,
+                reg_alpha=0.1, reg_lambda=0.1,  # L1, L2 정규화 추가
+                class_weight='balanced', random_state=42
+            )
+        
+        # Logistic Regression with L1/L2 regularization (성능 2위)
         regularized_models['Logistic Regression (L1)'] = LogisticRegression(
             penalty='l1', C=0.1, solver='liblinear', 
             class_weight='balanced', random_state=42, max_iter=1000
         )
         regularized_models['Logistic Regression (L2)'] = LogisticRegression(
-            penalty='l2', C=0.1, 
+            penalty='l2', C=0.1, solver='lbfgs',
             class_weight='balanced', random_state=42, max_iter=1000
         )
         
-        # SVM with regularization (성능 2위)
-        regularized_models['SVM (RBF)'] = SVC(
-            C=0.1, kernel='rbf', gamma='scale',
-            class_weight='balanced', random_state=42, probability=True
-        )
-        
-        # LightGBM with regularization (성능 3위)
-        if _has_lgbm:
-            regularized_models['LightGBM (Regularized)'] = LGBMClassifier(
-                n_estimators=100, learning_rate=0.1, num_leaves=31,  # 더 빠른 설정
-                max_depth=5, subsample=0.8, colsample_bytree=0.8,
-                class_weight='balanced', random_state=42
+        # XGBoost with regularization (성능 3위)
+        try:
+            import xgboost as xgb
+            regularized_models['XGBoost (Regularized)'] = xgb.XGBClassifier(
+                n_estimators=100, learning_rate=0.1, max_depth=6,
+                subsample=0.8, colsample_bytree=0.8,
+                reg_alpha=0.1, reg_lambda=0.1,  # L1, L2 정규화 추가
+                random_state=42, eval_metric='logloss'
             )
+        except ImportError:
+            logger.warning("XGBoost가 설치되지 않았습니다. XGBoost 정규화를 건너뜁니다.")
         
         # 7. 정규화된 모델 훈련 및 평가
         regularization_results = {}

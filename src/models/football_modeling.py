@@ -226,16 +226,13 @@ class FootballModelTrainer:
             'cv_consistency_results': cv_results
         }
         
-        # 9. 시각화 (SHAP, 피처 중요도)
+        # 9. 시각화 (SHAP, 피처 중요도, 학습 곡선)
         try:
             from src.visualization.plotter import ModelVisualizer
             visualizer = ModelVisualizer(self.model_results, self.output_dir)
             
-            # SHAP 분석 플롯
-            visualizer.plot_shap_analysis()
-            
-            # 피처 중요도 플롯  
-            visualizer.plot_feature_importance()
+            # 모든 시각화 생성 (학습 곡선 포함)
+            visualizer.create_all_plots()
             
             logger.info("✅ 시각화 완료")
         except Exception as e:

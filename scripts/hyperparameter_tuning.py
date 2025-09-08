@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 하이퍼파라미터 튜닝
-- 성능 상위 3개 모델 최적화: Logistic Regression, SVM, LightGBM
+- 성능 상위 3개 모델 최적화: LightGBM, Logistic Regression, XGBoost
 - GridSearchCV를 통한 체계적 탐색
 """
 
@@ -100,49 +100,56 @@ def hyperparameter_tuning():
         # 7. 하이퍼파라미터 그리드 정의 (성능 상위 3개 모델만)
         param_grids = {}
         
-        # 2단계: 최적 구간 주변 세밀 탐색 (3개 모델 모두)
-        # Logistic Regression - 1.0 주변 세밀 탐색
-        param_grids['Logistic Regression'] = {
-            'C': [0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3],  # 1.0 주변 세밀하게
-            'penalty': ['l2'],  # 성공한 penalty 유지
-            'max_iter': [1000]
-        }
-        
-        # SVM - 0.1 주변 세밀 탐색 (linear kernel)
-        param_grids['SVM'] = {
-            'C': [0.05, 0.08, 0.1, 0.12, 0.15, 0.2],  # 0.1 주변 세밀하게
-            'kernel': ['linear'],  # 성공한 kernel 유지
-            'gamma': ['scale']
-        }
-        
-        # LightGBM - 기본값 주변 세밀 탐색 (튜닝 실패했으므로 기본값 기준)
+        # LightGBM - 1위 모델 (기본값 주변 좁은 범위)
         if _has_lgbm:
             param_grids['LightGBM'] = {
-                'n_estimators': [50, 100, 150, 200, 250],  # 기본값 100 주변
-                'learning_rate': [0.05, 0.1, 0.15, 0.2, 0.25],  # 기본값 0.1 주변
-                'max_depth': [3, 4, 5, 6, 7]  # 기본값 3 주변
+                'n_estimators': [100, 150, 200],  # 기본값 100 주변 3개만
+                'learning_rate': [0.1, 0.15, 0.2],  # 기본값 0.1 주변 3개만
+                'max_depth': [3, 4, 5],  # 기본값 3 주변 3개만
+                'num_leaves': [31, 40, 50],  # 기본값 31 주변 3개만
+                'subsample': [0.9, 1.0],  # 기본값 1.0 주변 2개만
+                'colsample_bytree': [0.9, 1.0]  # 기본값 1.0 주변 2개만
             }
+        
+        # Logistic Regression - 2위 모델 (1.0 주변 좁은 범위)
+        param_grids['Logistic Regression'] = {
+            'C': [0.8, 1.0, 1.2],  # 1.0 주변 3개만
+            'penalty': ['l2'],  # L2만 탐색 (더 안정적)
+            'max_iter': [1000],
+            'solver': ['lbfgs']  # L2에 최적화된 solver
+        }
+        
+        # XGBoost - 3위 모델 (기본값 주변 좁은 범위)
+        try:
+            import xgboost as xgb
+            param_grids['XGBoost'] = {
+                'n_estimators': [100, 150, 200],  # 기본값 100 주변 3개만
+                'learning_rate': [0.1, 0.15, 0.2],  # 기본값 0.1 주변 3개만
+                'max_depth': [4, 5, 6],  # 기본값 6 주변 3개만
+                'subsample': [0.9, 1.0],  # 기본값 1.0 주변 2개만
+                'colsample_bytree': [0.9, 1.0]  # 기본값 1.0 주변 2개만
+            }
+        except ImportError:
+            logger.warning("XGBoost가 설치되지 않았습니다. XGBoost 튜닝을 건너뜁니다.")
         
         # 8. 모델 정의 (성능 상위 3개 모델만)
         from sklearn.linear_model import LogisticRegression
-        from sklearn.svm import SVC
         
         models = {
-            'Logistic Regression': LogisticRegression(random_state=42, class_weight='balanced'),
-            'SVM': SVC(random_state=42, class_weight='balanced', probability=True)
+            'Logistic Regression': LogisticRegression(random_state=42, class_weight='balanced')
         }
         
         if _has_lgbm:
             models['LightGBM'] = LGBMClassifier(random_state=42, class_weight='balanced')
         
-        # 파라미터 그리드에서 classifier__ 접두사 제거 (Pipeline 사용하지 않음)
-        for model_name in param_grids:
-            new_params = {}
-            for param, values in param_grids[model_name].items():
-                # classifier__ 접두사 제거
-                new_param = param.replace('classifier__', '')
-                new_params[new_param] = values
-            param_grids[model_name] = new_params
+        # XGBoost 모델 추가
+        try:
+            import xgboost as xgb
+            models['XGBoost'] = xgb.XGBClassifier(random_state=42, eval_metric='logloss')
+        except ImportError:
+            logger.warning("XGBoost가 설치되지 않았습니다. XGBoost 모델을 건너뜁니다.")
+        
+        # 파라미터 그리드 정리 (Pipeline 사용하지 않으므로 접두사 제거 불필요)
         
         # 9. 하이퍼파라미터 튜닝 실행 (전처리된 데이터에 직접 적용)
         tuning_results = {}
@@ -156,75 +163,25 @@ def hyperparameter_tuning():
             # 파라미터 호환성 처리
             current_params = param_grids[model_name].copy()
             
-            # Logistic Regression의 penalty-solver 호환성 처리
-            if model_name == 'Logistic Regression':
-                # penalty에 따라 적절한 solver 자동 선택
-                compatible_params = []
-                for penalty in current_params['penalty']:
-                    param_combo = current_params.copy()
-                    param_combo['penalty'] = [penalty]
-                    
-                    # penalty에 따른 solver 자동 선택
-                    if penalty == 'l1':
-                        param_combo['solver'] = ['liblinear']  # l1은 liblinear 사용
-                        param_combo.pop('l1_ratio', None)     # l1은 l1_ratio 불필요
-                    elif penalty == 'l2':
-                        param_combo['solver'] = ['lbfgs']      # l2는 lbfgs 사용 (빠름)
-                        param_combo.pop('l1_ratio', None)     # l2는 l1_ratio 불필요
-                    elif penalty == 'elasticnet':
-                        param_combo['solver'] = ['saga']       # elasticnet은 saga 사용
-                        # l1_ratio는 유지 (elasticnet 필수 파라미터)
-                    
-                    compatible_params.append(param_combo)
-                
-                # 각 호환 조합별로 개별 튜닝
-                best_score = -1
-                best_params = None
-                best_estimator = None
-                
-                for param_combo in compatible_params:
-                    grid_search = GridSearchCV(
-                        model,
-                        param_combo,
-                        cv=cv,
-                        scoring=composite_scorer_func,
-                        n_jobs=-1,
-                        verbose=0
-                    )
-                    grid_search.fit(X_train_processed, y_train)
-                    
-                    if grid_search.best_score_ > best_score:
-                        best_score = grid_search.best_score_
-                        best_params = grid_search.best_params_
-                        best_estimator = grid_search.best_estimator_
-                
-                # 결과 저장
-                tuning_results[model_name] = {
-                    'best_params': best_params,
-                    'best_score': best_score,
-                    'best_model': best_estimator
-                }
-                
-            else:
-                # SVM과 LightGBM은 기존 방식
-                grid_search = GridSearchCV(
-                    model,
-                    current_params,
-                    cv=cv,
-                    scoring=composite_scorer_func,
-                    n_jobs=-1,
-                    verbose=1
-                )
-                
-                # 하이퍼파라미터 튜닝 실행 (이미 전처리된 데이터 사용)
-                grid_search.fit(X_train_processed, y_train)
-                
-                # 결과 저장
-                tuning_results[model_name] = {
-                    'best_params': grid_search.best_params_,
-                    'best_score': grid_search.best_score_,
-                    'best_model': grid_search.best_estimator_
-                }
+            # 모든 모델에 대해 동일한 방식으로 처리 (단순화)
+            grid_search = GridSearchCV(
+                model,
+                current_params,
+                cv=cv,
+                scoring=composite_scorer_func,
+                n_jobs=-1,
+                verbose=1
+            )
+            
+            # 하이퍼파라미터 튜닝 실행 (이미 전처리된 데이터 사용)
+            grid_search.fit(X_train_processed, y_train)
+            
+            # 결과 저장
+            tuning_results[model_name] = {
+                'best_params': grid_search.best_params_,
+                'best_score': grid_search.best_score_,
+                'best_model': grid_search.best_estimator_
+            }
             
             logger.info(f"✅ {model_name} 튜닝 완료")
             logger.info(f"   최고 점수: {tuning_results[model_name]['best_score']:.4f}")

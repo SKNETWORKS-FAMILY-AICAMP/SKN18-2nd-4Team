@@ -68,7 +68,7 @@ python scripts/save_model_performance.py
 
 ### 기본 출력
 
-- `outputs/23_24_transfer_predictions.csv` - 예측 결과
+- `outputs/24_25_transfer_predictions.csv` - 예측 결과
 - `outputs/model.pkl` - 최종 모델
 - `outputs/preprocessor.pkl` - 전처리기
 
@@ -159,7 +159,7 @@ python main.py --mode regularize  # 정규화 강화로 오버피팅 완화
 python main.py --mode ensemble    # 앙상블 모델로 성능 향상
 
 # 2단계: 개선된 결과 확인
-python main.py --mode train       # 향상된 모델의 SHAP 분석 및 23/24 예측 (개선된 모델 재사용)
+python main.py --mode train       # 향상된 모델의 SHAP 분석 및 24/25 예측 (개선된 모델 재사용)
 ```
 
 > **스마트 모델 관리**:

@@ -117,7 +117,7 @@ def run_final_modeling(force_retrain=False):
         # 5. 모델 저장
         model_trainer.save_model(output_dir)
         
-        # 6. 23/24 예측 (test 데이터)
+        # 6. 24/25 예측 (test 데이터)
         predictions = model_trainer.predict(test_df)
         
         # 중복 제거 (선수별로 최고 확률만 유지)
@@ -125,7 +125,7 @@ def run_final_modeling(force_retrain=False):
         
         # 확률이 높은 순으로 내림차순 정렬
         predictions_sorted = predictions_dedup.sort_values('transfer_probability', ascending=False)
-        predictions_sorted.to_csv(output_dir / "23_24_transfer_predictions.csv", index=False)
+        predictions_sorted.to_csv(output_dir / "24_25_transfer_predictions.csv", index=False)
         
         # 7. 예측 분포 그래프
         visualizer.plot_prediction_distribution(predictions)

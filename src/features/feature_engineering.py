@@ -210,8 +210,7 @@ class FootballFeatureEngineer:
                 axis=1
             )
         
-        added_features = df_fe.shape[1] - original_cols
-        logger.info(f"✅ 피처 엔지니어링 완료: {added_features}개 피처 추가")
+        logger.info(f"✅ 피처 엔지니어링 완료: {df_fe.shape[1] - df.shape[1]}개 피처 추가")
         return df_fe
     
     def get_feature_types(self, df: pd.DataFrame) -> Dict[str, List[str]]:
@@ -400,3 +399,108 @@ class OverfittingChecker:
             'cv_range': cv_scores.max() - cv_scores.min(),
             'is_stable': cv_scores.std() < 0.05
         }
+    
+    @staticmethod
+    def plot_learning_curves(model, X_train, y_train, X_val, y_val, 
+                            train_sizes: List[float] = None, 
+                            output_path: str = None) -> Dict[str, any]:
+        """학습 곡선 시각화"""
+        import matplotlib.pyplot as plt
+        import numpy as np
+        
+        if train_sizes is None:
+            train_sizes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        
+        # 학습 곡선 데이터 수집
+        learning_curve_results = OverfittingChecker.check_learning_curves(
+            model, X_train, y_train, X_val, y_val, train_sizes
+        )
+        
+        train_scores = learning_curve_results['train_scores']
+        val_scores = learning_curve_results['val_scores']
+        final_gap = learning_curve_results['final_gap']
+        max_gap = learning_curve_results['max_gap']
+        is_overfitting = learning_curve_results['is_overfitting']
+        
+        # 실제 샘플 수 계산
+        n_samples = [int(len(X_train) * size) for size in train_sizes]
+        
+        # 시각화
+        plt.figure(figsize=(12, 8))
+        
+        # 학습 곡선 플롯
+        plt.subplot(2, 2, 1)
+        plt.plot(n_samples, train_scores, 'o-', color='blue', label='Training Score', linewidth=2, markersize=6)
+        plt.plot(n_samples, val_scores, 'o-', color='red', label='Validation Score', linewidth=2, markersize=6)
+        plt.fill_between(n_samples, train_scores, val_scores, alpha=0.2, color='gray', label='Gap')
+        plt.xlabel('Training Samples', fontsize=12)
+        plt.ylabel('Score', fontsize=12)
+        plt.title('Learning Curves', fontsize=14, fontweight='bold')
+        plt.legend(fontsize=11)
+        plt.grid(True, alpha=0.3)
+        
+        # 점수 차이 플롯
+        plt.subplot(2, 2, 2)
+        gaps = [t - v for t, v in zip(train_scores, val_scores)]
+        plt.plot(n_samples, gaps, 'o-', color='purple', linewidth=2, markersize=6)
+        plt.axhline(y=0.1, color='red', linestyle='--', alpha=0.7, label='Overfitting Threshold (0.1)')
+        plt.axhline(y=0.15, color='orange', linestyle='--', alpha=0.7, label='Severe Overfitting (0.15)')
+        plt.xlabel('Training Samples', fontsize=12)
+        plt.ylabel('Score Gap (Train - Val)', fontsize=12)
+        plt.title('Overfitting Analysis', fontsize=14, fontweight='bold')
+        plt.legend(fontsize=11)
+        plt.grid(True, alpha=0.3)
+        
+        # 최종 성능 비교
+        plt.subplot(2, 2, 3)
+        categories = ['Training', 'Validation']
+        scores = [train_scores[-1], val_scores[-1]]
+        colors = ['blue', 'red']
+        bars = plt.bar(categories, scores, color=colors, alpha=0.7)
+        plt.ylabel('Final Score', fontsize=12)
+        plt.title('Final Performance Comparison', fontsize=14, fontweight='bold')
+        plt.ylim(0, 1)
+        
+        # 점수 값 표시
+        for bar, score in zip(bars, scores):
+            plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01, 
+                    f'{score:.3f}', ha='center', va='bottom', fontweight='bold')
+        
+        # 오버피팅 지표 요약
+        plt.subplot(2, 2, 4)
+        plt.axis('off')
+        
+        # 텍스트 정보
+        status_color = 'red' if is_overfitting else 'green'
+        status_text = 'OVERFITTING DETECTED' if is_overfitting else 'NO OVERFITTING'
+        
+        info_text = f"""
+        OVERFITTING ANALYSIS SUMMARY
+        
+        Status: {status_text}
+        
+        Final Gap: {final_gap:.3f}
+        Max Gap: {max_gap:.3f}
+        
+        Thresholds:
+        • Warning: > 0.1
+        • Severe: > 0.15
+        
+        Training Samples: {len(X_train):,}
+        Validation Samples: {len(X_val):,}
+        """
+        
+        plt.text(0.1, 0.5, info_text, fontsize=11, 
+                verticalalignment='center', fontfamily='monospace',
+                bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', alpha=0.8))
+        
+        plt.tight_layout()
+        
+        # 저장
+        if output_path:
+            plt.savefig(output_path, dpi=300, bbox_inches='tight', facecolor='white')
+            print(f"✅ 학습 곡선 그래프 저장: {output_path}")
+        
+        plt.close()
+        
+        return learning_curve_results
