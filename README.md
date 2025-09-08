@@ -518,11 +518,16 @@
 - **국가 특성**: 특정 출신 국가 변수(country_of_birth_Romania 등)가 강하게 작용하지만 데이터 편향 가능성 존재
 - **팀 환경 + 개인 성과 + 시장 가치**의 조합을 중심으로 이적 확률 판단
 
+<<<<<<< HEAD
 <img src="outputs/shap_summary.png" alt="SHAP 요약" width="500">
+=======
+![SHAP Summary](outputs/shap_summary.png)
+>>>>>>> 6bd8784 (chore:README수정)
 
 ---
 
 #### ▶️ SHAP 바 플롯
+<<<<<<< HEAD
 
 - **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
 - **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
@@ -534,6 +539,19 @@
 
 <img src="outputs/shap_bar.png" alt="SHAP 바 플롯" width="500">
 
+=======
+
+- **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
+- **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
+- **팀 특성**: `club_average_age`, 소속 클럽(Arsenal, Newcastle, Tottenham, Man City 등) 변수가 다수 포함
+- **개인 성과**: `goals`, `player_market_value_in_eur`, `player_highest_market_value_in_eur`도 중요한 역할
+- **시즌 경험**: 출전 경기 수, 팀 순위, 우승 횟수 등이 추가적 기여
+- **징계 변수**: `red_cards`도 반영되지만 상대적 영향력은 낮음
+- **팀 환경(구단, 평균 연령, 국가 특성)**을 강하게 고려하며, 그 다음으로 **개인 성과와 시장 가치**가 기여하는 구조
+
+![SHAP Bar](outputs/shap_bar.png)
+
+>>>>>>> 6bd8784 (chore:README수정)
 ---
 
 ### 오버피팅 분석
@@ -578,7 +596,11 @@
     - 모델 단순화 (복잡도 줄이기 → 트리 깊이 축소, feature 수 줄이기 등)
     - 하이퍼파라미터 튜닝 (learning rate, max_depth 등 조정)
 
+<<<<<<< HEAD
 <img src="outputs/learning_curves.png" alt="학습 곡선" width="500">
+=======
+![Learning Curves](outputs/learning_curves.png)
+>>>>>>> 6bd8784 (chore:README수정)
 
 #### 오버피팅 현황
 
@@ -816,6 +838,7 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 ---
 
+<<<<<<< HEAD
 ## 👥 팀원별 프로젝트 소감
 
 <table>
@@ -853,4 +876,6 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 ---
 
+=======
+>>>>>>> 6bd8784 (chore:README수정)
 **최종 업데이트**: 2025년 9월 8일
