@@ -518,11 +518,16 @@
 - **국가 특성**: 특정 출신 국가 변수(country_of_birth_Romania 등)가 강하게 작용하지만 데이터 편향 가능성 존재
 - **팀 환경 + 개인 성과 + 시장 가치**의 조합을 중심으로 이적 확률 판단
 
+<<<<<<< HEAD
 <img src="outputs/shap_summary.png" alt="SHAP 요약" width="500">
+=======
+![SHAP Summary](outputs/shap_summary.png)
+>>>>>>> 6bd8784 (chore:README수정)
 
 ---
 
 #### ▶️ SHAP 바 플롯
+<<<<<<< HEAD
 
 - **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
 - **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
@@ -534,6 +539,19 @@
 
 <img src="outputs/shap_bar.png" alt="SHAP 바 플롯" width="500">
 
+=======
+
+- **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
+- **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
+- **팀 특성**: `club_average_age`, 소속 클럽(Arsenal, Newcastle, Tottenham, Man City 등) 변수가 다수 포함
+- **개인 성과**: `goals`, `player_market_value_in_eur`, `player_highest_market_value_in_eur`도 중요한 역할
+- **시즌 경험**: 출전 경기 수, 팀 순위, 우승 횟수 등이 추가적 기여
+- **징계 변수**: `red_cards`도 반영되지만 상대적 영향력은 낮음
+- **팀 환경(구단, 평균 연령, 국가 특성)**을 강하게 고려하며, 그 다음으로 **개인 성과와 시장 가치**가 기여하는 구조
+
+![SHAP Bar](outputs/shap_bar.png)
+
+>>>>>>> 6bd8784 (chore:README수정)
 ---
 
 ### 오버피팅 분석
@@ -578,7 +596,11 @@
     - 모델 단순화 (복잡도 줄이기 → 트리 깊이 축소, feature 수 줄이기 등)
     - 하이퍼파라미터 튜닝 (learning rate, max_depth 등 조정)
 
+<<<<<<< HEAD
 <img src="outputs/learning_curves.png" alt="학습 곡선" width="500">
+=======
+![Learning Curves](outputs/learning_curves.png)
+>>>>>>> 6bd8784 (chore:README수정)
 
 #### 오버피팅 현황
 
@@ -814,8 +836,57 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 - **최종 모델**: Bagging (RF) 앙상블 (0.4901 점수)
 - **예측 파일**: `outputs/24_25_transfer_predictions.csv` (570명, 255명 이적 예측)
 
+### Streamlit 화면구현
+<table>
+<tr>
+<td width="50%">
+
+**메인 화면**
+- 선수 검색 페이지 및 이적률 예측 서비스 페이 이동
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Main Page](assets/images/web01.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**선수 상세 정보: Player Search Page**
+- 24/25 시즌 팀별 선수 조회
+- 선수이름 버튼시 선수 24/25시즌 성적 및 개별 정보 조회
+- 프리미어 리그 활동시, 활동 시즌별 성적 및 선수 시장 가치 정보 제공
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Player Search Page](assets/images/web02-1.png)
+![웹 애플리케이션 Player Search Page](assets/images/web02-2.png)
+</td>
+</tr>
+</table>
+
+**이적률 예측 정보: Transfer Predictor Page**
+- 24/25 시즌 선수의 25/26 시즌 이적 예측률 제공
+- 1) 선수이름으로 조회
+- 2) 포지션, 나이, 시장 가치,주 사용 발로 필터링하여 해당하는 선수의 예측률 제공
+- 해당 선수의 예측률 및 프리미어 리그 활동시 같은 포지션 대비 시즌별 평균 승리수,
+ 시장가치와 비교한 정보 제공
+
+</td>
+<td width="50%">
+
+![웹 애플리케이션 Player Search Page](assets/images/web03.png)
+
+</td>
+</tr>
+</table>
+
+
+
 ---
 
+<<<<<<< HEAD
 ## 👥 팀원별 프로젝트 소감
 
 <table>
@@ -853,4 +924,6 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 ---
 
+=======
+>>>>>>> 6bd8784 (chore:README수정)
 **최종 업데이트**: 2025년 9월 8일
