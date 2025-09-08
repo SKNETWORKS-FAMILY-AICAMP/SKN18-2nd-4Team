@@ -3,7 +3,9 @@ data:
   curated_dir: data/curated
   processed_dir: data/processed
   train_csv_name: train_df.csv
+  valid_csv_name: valid_df.csv
   test_csv_name: test_df.csv
+  pred_csv_name: pred_df.csv
   target_column: transfer
 
 model:

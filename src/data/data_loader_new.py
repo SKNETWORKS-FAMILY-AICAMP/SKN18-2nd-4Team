@@ -12,7 +12,9 @@ class DataLoaderNew:
         self.config = config
         self.data_dir = self.config.data_curated_dir
         self.train_csv_name = self.config.train_csv_name
+        self.valid_csv_name = self.config.valid_csv_name
         self.test_csv_name = self.config.test_csv_name
+        self.pred_csv_name = self.config.pred_csv_name
 
     def load_train_data(self) -> pd.DataFrame:
         """훈련 데이터 로드"""
@@ -34,6 +36,26 @@ class DataLoaderNew:
         print(f"📊 Test data loaded from {dataset_path}: {df.shape[0]:,} rows x {df.shape[1]} columns")
         return df
 
+    def load_valid_data(self) -> pd.DataFrame:
+        """검증 데이터 로드"""
+        dataset_path = self.data_dir / self.valid_csv_name
+        if not dataset_path.exists():
+            raise FileNotFoundError(f"Valid dataset not found at {dataset_path}")
+
+        df = pd.read_csv(dataset_path, low_memory=True)
+        print(f"📊 Valid data loaded from {dataset_path}: {df.shape[0]:,} rows x {df.shape[1]} columns")
+        return df
+
+    def load_pred_data(self) -> pd.DataFrame:
+        """예측 데이터 로드 (24/25)"""
+        dataset_path = self.data_dir / self.pred_csv_name
+        if not dataset_path.exists():
+            raise FileNotFoundError(f"Prediction dataset not found at {dataset_path}")
+
+        df = pd.read_csv(dataset_path, low_memory=True)
+        print(f"📊 Prediction data loaded from {dataset_path}: {df.shape[0]:,} rows x {df.shape[1]} columns")
+        return df
+
     def prepare_model_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """모델링용 데이터 준비"""
         df_model = df.copy()
@@ -53,13 +75,17 @@ class DataLoaderNew:
         
         return df_model
 
-    def load_all_data(self) -> tuple[pd.DataFrame, pd.DataFrame]:
-        """모든 데이터 로드 (train + test)"""
+    def load_all_data(self) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        """모든 데이터 로드 (train + valid + test + pred)"""
         train_df = self.load_train_data()
+        valid_df = self.load_valid_data()
         test_df = self.load_test_data()
+        pred_df = self.load_pred_data()
         
         # 데이터 준비
         train_df = self.prepare_model_data(train_df)
+        valid_df = self.prepare_model_data(valid_df)
         test_df = self.prepare_model_data(test_df)
+        # pred_df는 target이 없으므로 prepare_model_data 적용 안함
         
-        return train_df, test_df
+        return train_df, valid_df, test_df, pred_df

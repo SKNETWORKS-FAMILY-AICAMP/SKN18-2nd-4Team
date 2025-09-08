@@ -73,7 +73,11 @@ class Config:
     @property
     def train_csv_name(self): return self.get('data.train_csv_name')
     @property
+    def valid_csv_name(self): return self.get('data.valid_csv_name')
+    @property
     def test_csv_name(self): return self.get('data.test_csv_name')
+    @property
+    def pred_csv_name(self): return self.get('data.pred_csv_name')
     @property
     def target_column(self): return self.get('data.target_column')
     

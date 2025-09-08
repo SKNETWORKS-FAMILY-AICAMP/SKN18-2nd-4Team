@@ -104,8 +104,11 @@ class CustomLabelEncoder(BaseEstimator, TransformerMixin):
 class FootballModelTrainer:
     """Football Transfer Prediction 모델 훈련 클래스"""
     
-    def __init__(self, df_model: pd.DataFrame, config):
-        self.df_model = df_model
+    def __init__(self, train_data: pd.DataFrame, valid_data: pd.DataFrame, test_data: pd.DataFrame, pred_data: pd.DataFrame, config):
+        self.train_data = train_data
+        self.valid_data = valid_data
+        self.test_data = test_data
+        self.pred_data = pred_data
         self.config = config
         self.target_col = config.target_column
         self.ordinal_features = config.features_ordinal
@@ -123,8 +126,8 @@ class FootballModelTrainer:
         # 0. 데이터 품질 및 누수 검사
         from src.features.feature_engineering import DataLeakageChecker
         
-        # 데이터 품질 검사
-        quality_results = DataLeakageChecker.check_data_quality(self.df_model)
+        # 데이터 품질 검사 (train 데이터만)
+        quality_results = DataLeakageChecker.check_data_quality(self.train_data)
         logger.info("🔍 데이터 품질 검사 완료")
         if quality_results['high_missing_features']:
             logger.warning(f"높은 결측치 피처: {list(quality_results['high_missing_features'].keys())}")
@@ -134,29 +137,35 @@ class FootballModelTrainer:
             logger.info(f"ℹ️ 중복 행: {quality_results['duplicate_rows']}개 (정상적인 데이터 특성)")
         
         # 시간적 누수 검사
-        if 'season' in self.df_model.columns:
+        if 'season' in self.train_data.columns:
             temporal_results = DataLeakageChecker.check_temporal_leakage(
-                self.df_model, 'season', self.target_col
+                self.train_data, 'season', self.target_col
             )
             logger.info("🔍 시간적 데이터 누수 검사 완료")
         
         # 피처 누수 검사
-        feature_leakage = DataLeakageChecker.check_feature_leakage(self.df_model, self.target_col)
+        feature_leakage = DataLeakageChecker.check_feature_leakage(self.train_data, self.target_col)
         if feature_leakage['suspicious_features']:
             logger.warning(f"의심스러운 피처: {feature_leakage['suspicious_features']}")
         else:
             logger.info("✅ 피처 누수 없음")
         
-        # 1. 피처 엔지니어링 (전체 데이터에 적용)
+        # 1. 피처 엔지니어링 (각 데이터에 개별 적용)
         feature_engineer = FootballFeatureEngineer()
-        self.df_model = feature_engineer.create_engineered_features(self.df_model)
-        logger.info(f"✅ 피처 엔지니어링 완료: {self.df_model.shape}")
+        self.train_data = feature_engineer.create_engineered_features(self.train_data)
+        self.valid_data = feature_engineer.create_engineered_features(self.valid_data)
+        self.test_data = feature_engineer.create_engineered_features(self.test_data)
+        self.pred_data = feature_engineer.create_engineered_features(self.pred_data)
+        logger.info(f"✅ 피처 엔지니어링 완료: train {self.train_data.shape}, valid {self.valid_data.shape}, test {self.test_data.shape}, pred {self.pred_data.shape}")
         
-        # 2. 데이터 분할 (22/23을 validation으로 사용)
-        X_train, X_val, y_train, y_val, X_2324 = self._split_data()
+        # 2. 데이터 분할
+        X_train, y_train, X_val, y_val, X_test, y_test = self._split_data()
+        
+        # 24/25 예측용 데이터 준비
+        X_2425 = self._prepare_prediction_data()
         
         # 3. 전처리기 생성 및 학습 (train 데이터만 사용 - 데이터 누수 방지)
-        feature_types = feature_engineer.get_feature_types(self.df_model)
+        feature_types = feature_engineer.get_feature_types(self.train_data)
         self.preprocessor = feature_engineer.create_preprocessor(feature_types)
         self.feature_types = feature_types
         
@@ -167,17 +176,18 @@ class FootballModelTrainer:
         # 전처리 적용
         X_train = self.preprocessor.transform(X_train)
         X_val = self.preprocessor.transform(X_val)
-        logger.info(f"✅ 전처리 적용 완료: train {X_train.shape}, validation {X_val.shape}")
+        X_test = self.preprocessor.transform(X_test)
+        X_2425 = self.preprocessor.transform(X_2425)
+        logger.info(f"✅ 전처리 적용 완료: train {X_train.shape}, valid {X_val.shape}, test {X_test.shape}, pred {X_2425.shape}")
         
-        # 4. 모델 정의
-        models = self._define_models()
+        # 4. 최고 성능 모델만 사용 (LightGBM)
+        self.best_model = self._get_best_model()
         
-        # 5. 모델 훈련 및 평가 (validation 데이터로 평가)
-        model_scores, model_details = self._train_and_evaluate_models(models, X_train, y_train, X_val, y_val)
+        # 5. 모델 훈련 및 평가
+        model_scores, model_details = self._train_and_evaluate_single_model(X_train, y_train, X_val, y_val)
         
         # 6. 최적 모델 선택
-        best_model_name = max(model_scores, key=model_scores.get)
-        self.best_model = models[best_model_name]
+        best_model_name = "LightGBM"  # 최고 성능 모델만 사용
         
         # 6.5. 오버피팅 검사
         from src.features.feature_engineering import OverfittingChecker
@@ -218,7 +228,7 @@ class FootballModelTrainer:
             'y_train': y_train,      # 훈련 타겟 추가
             'X_val': X_val,   # validation 데이터
             'y_val': y_val,   # validation 타겟
-            'X_2324': X_2324,
+            'X_2425': X_2425,
             # 검사 결과 추가
             'data_quality_results': quality_results,
             'feature_leakage_results': feature_leakage,
@@ -252,43 +262,82 @@ class FootballModelTrainer:
                 col not in exclude_cols and
                 pd.api.types.is_numeric_dtype(self.df_model[col])]
     
-    def _split_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame]:
-        """데이터 분할 (22/23을 validation으로 사용)"""
+    def _split_data(self) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
+        """데이터 분할 (train/valid/test 분리)"""
         # 피처와 타겟 분리 (ID 변수 제외)
         exclude_cols = {'player_id', 'club_id', 'season', self.target_col}
-        feature_cols = [col for col in self.df_model.columns if col not in exclude_cols]
-        X = self.df_model[feature_cols]
-        y = self.df_model[self.target_col]
+        feature_cols = [col for col in self.train_data.columns if col not in exclude_cols]
         
-        # 23/24 데이터 분리 (예측용 데이터)
-        X_2324 = None
-        if 'season' in self.df_model.columns:
-            mask_2324 = self.df_model['season'] == '23/24'
-            X_2324 = self.df_model[mask_2324][feature_cols].copy()
-            X = X[~mask_2324].copy()
-            y = y[~mask_2324].copy()
+        # Train 데이터
+        X_train = self.train_data[feature_cols]
+        y_train = self.train_data[self.target_col]
         
-        # 22/23을 validation으로 사용
-        if 'season' in self.df_model.columns and '22/23' in self.df_model['season'].values:
-            validation_mask = self.df_model['season'] == '22/23'
-            # 22/23을 제외한 나머지를 train으로, 22/23을 validation으로
-            X_train, X_val = X[~validation_mask], X[validation_mask]
-            y_train, y_val = y[~validation_mask], y[validation_mask]
-            
-            logger.info(f"📊 데이터 분할 완료:")
-            logger.info(f"  - Train: {X_train.shape[0]:,} rows (11-21 시즌)")
-            logger.info(f"  - Validation: {X_val.shape[0]:,} rows (22/23 시즌)")
-            logger.info(f"  - Prediction: {X_2324.shape[0] if X_2324 is not None else 0:,} rows (23/24 시즌)")
-        else:
-            # season 컬럼이 없는 경우 일반적인 분할
-            X_train, X_val, y_train, y_val = train_test_split(
-                X, y, test_size=0.2, random_state=42, stratify=y
-            )
-            logger.info(f"📊 데이터 분할 완료 (랜덤 분할):")
-            logger.info(f"  - Train: {X_train.shape[0]:,} rows")
-            logger.info(f"  - Validation: {X_val.shape[0]:,} rows")
+        # Valid 데이터
+        X_val = self.valid_data[feature_cols]
+        y_val = self.valid_data[self.target_col]
         
-        return X_train, X_val, y_train, y_val, X_2324
+        # Test 데이터
+        X_test = self.test_data[feature_cols]
+        y_test = self.test_data[self.target_col]
+        
+        return X_train, y_train, X_val, y_val, X_test, y_test
+    
+    def _prepare_prediction_data(self):
+        """24/25 예측용 데이터 준비"""
+        # 피처와 타겟 분리 (ID 변수 제외)
+        exclude_cols = {'player_id', 'club_id', 'season', self.target_col}
+        feature_cols = [col for col in self.pred_data.columns if col not in exclude_cols]
+        X_pred = self.pred_data[feature_cols]
+        return X_pred
+    
+    def _get_best_model(self):
+        """최고 성능 모델 반환 (LightGBM)"""
+        if not _has_lgbm:
+            raise ImportError("LightGBM이 설치되지 않았습니다.")
+        
+        return LGBMClassifier(
+            random_state=self.config.model_random_state,
+            class_weight='balanced',
+            verbose=-1
+        )
+    
+    def _train_and_evaluate_single_model(self, X_train, y_train, X_val, y_val):
+        """단일 모델 훈련 및 평가"""
+        logger.info(f"🤖 {self.best_model.__class__.__name__} 훈련 시작")
+        
+        # 모델 훈련
+        self.best_model.fit(X_train, y_train)
+        
+        # 예측
+        y_pred = self.best_model.predict(X_val)
+        y_pred_proba = self.best_model.predict_proba(X_val)[:, 1]
+        
+        # 성능 평가
+        accuracy = accuracy_score(y_val, y_pred)
+        precision = precision_score(y_val, y_pred, zero_division=0)
+        recall = recall_score(y_val, y_pred, zero_division=0)
+        f1 = f1_score(y_val, y_pred, zero_division=0)
+        auc = roc_auc_score(y_val, y_pred_proba)
+        
+        # 복합 점수 계산
+        composite_score = (precision * 0.4 + f1 * 0.3 + accuracy * 0.2 + recall * 0.1)
+        
+        model_scores = {"LightGBM": composite_score}
+        model_details = {
+            "LightGBM": {
+                'accuracy': accuracy,
+                'precision': precision,
+                'recall': recall,
+                'f1': f1,
+                'auc': auc,
+                'composite_score': composite_score
+            }
+        }
+        
+        logger.info(f"✅ {self.best_model.__class__.__name__} 훈련 완료")
+        logger.info(f"   복합 점수: {composite_score:.4f}")
+        
+        return model_scores, model_details
     
     def _create_preprocessor(self, numeric_features: List[str]) -> ColumnTransformer:
         """전처리기 생성"""
@@ -571,7 +620,7 @@ class FootballModelTrainer:
         logger.info(f"💾 모델 저장 완료: {output_dir}")
     
     def predict(self, df: pd.DataFrame) -> pd.DataFrame:
-        """23/24 시즌 예측"""
+        """24/25 시즌 예측 (pred_df 사용)"""
         # 피처 엔지니어링 적용
         from src.features.feature_engineering import FootballFeatureEngineer
         feature_engineer = FootballFeatureEngineer()
