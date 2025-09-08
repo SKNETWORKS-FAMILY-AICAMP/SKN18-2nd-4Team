@@ -68,7 +68,7 @@
 
 #### 메인 화면
 
-![Web Introduce 01](assets/images/web_introduce01.png)
+![Web Introduce 01](./assets/images/web_introduce01.png)
 _선수 검색 및 이적 예측 메인 화면_
 
 </td>
@@ -76,7 +76,7 @@ _선수 검색 및 이적 예측 메인 화면_
 
 #### 상세 분석 화면
 
-![Web Introduce 02](assets/images/web_introduce02.png)
+![Web Introduce 02](./assets/images/web_introduce02.png)
 _선수별 상세 분석 및 예측 결과 화면_
 
 </td>
@@ -609,7 +609,7 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 #### 모델 성능 비교
 
-![Model Comparison](outputs/model_comparison.png)
+![Model Comparison](./outputs/model_comparison.png)
 _8개 모델의 성능 지표 비교_
 
 </td>
@@ -617,7 +617,7 @@ _8개 모델의 성능 지표 비교_
 
 #### 혼동 행렬
 
-![Confusion Matrix](outputs/confusion_matrix.png)
+![Confusion Matrix](./outputs/confusion_matrix.png)
 _최고 모델의 예측 정확도 분석_
 
 </td>
@@ -627,7 +627,7 @@ _최고 모델의 예측 정확도 분석_
 
 #### ROC 곡선
 
-![ROC Curve](outputs/roc_curve.png)
+![ROC Curve](./outputs/roc_curve.png)
 _모델의 분류 성능 곡선_
 
 </td>
@@ -635,7 +635,7 @@ _모델의 분류 성능 곡선_
 
 #### 피처 중요도
 
-![Feature Importance](outputs/feature_importance.png)
+![Feature Importance](./outputs/feature_importance.png)
 _상위 30개 피처의 중요도 순위_
 
 </td>
@@ -652,7 +652,7 @@ _상위 30개 피처의 중요도 순위_
 
 #### SHAP 요약 플롯
 
-![SHAP Summary](outputs/shap_summary.png)
+![SHAP Summary](./outputs/shap_summary.png)
 _상위 20개 피처의 SHAP 값 분포_
 
 </td>
@@ -660,7 +660,7 @@ _상위 20개 피처의 SHAP 값 분포_
 
 #### SHAP 바 플롯
 
-![SHAP Bar](outputs/shap_bar.png)
+![SHAP Bar](./outputs/shap_bar.png)
 _피처별 평균 SHAP 중요도 순위_
 
 </td>
@@ -677,7 +677,7 @@ _피처별 평균 SHAP 중요도 순위_
 
 #### 학습 곡선 분석
 
-![Learning Curves](outputs/learning_curves.png)
+![Learning Curves](./outputs/learning_curves.png)
 _모델의 학습 곡선과 오버피팅 분석_
 
 </td>
@@ -711,7 +711,7 @@ _모델의 학습 곡선과 오버피팅 분석_
 
 #### 예측 분포 분석
 
-![Prediction Distribution](outputs/prediction_distribution.png)
+![Prediction Distribution](./outputs/prediction_distribution.png)
 _24/25 시즌 이적 확률 분포 및 포지션별 분석_
 
 </td>

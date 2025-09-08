@@ -61,17 +61,15 @@ class DataLoaderNew:
         df_model = df.copy()
         target_col = self.config.target_column
 
-        # 타겟 컬럼 확인 및 변환
-        if target_col not in df_model.columns:
-            raise ValueError(f"Target column '{target_col}' not found in the dataset.")
-        df_model[target_col] = pd.to_numeric(df_model[target_col], errors='coerce').fillna(0).astype(int)
-        print(f"✅ Target column '{target_col}' set. Positive ratio: {df_model[target_col].mean()*100:.1f}%")
+        # 타겟 컬럼 확인 및 변환 (pred_df는 target이 없을 수 있음)
+        if target_col in df_model.columns:
+            df_model[target_col] = pd.to_numeric(df_model[target_col], errors='coerce').fillna(0).astype(int)
+            print(f"✅ Target column '{target_col}' set. Positive ratio: {df_model[target_col].mean()*100:.1f}%")
+        else:
+            print(f"ℹ️ Target column '{target_col}' not found (prediction data)")
         
-        # 컬럼명 통일 (market_value_in_eur -> player_market_value_in_eur)
-        if 'market_value_in_eur' in df_model.columns:
-            df_model['player_market_value_in_eur'] = df_model['market_value_in_eur']
-            df_model = df_model.drop(columns=['market_value_in_eur'])
-            print("✅ Column name unified: market_value_in_eur -> player_market_value_in_eur")
+        # 두 컬럼 모두 유지 (player_highest_market_value_in_eur, market_value_in_eur)
+        # 컬럼명 변환 없이 원본 컬럼명 유지
         
         return df_model
 
@@ -86,6 +84,7 @@ class DataLoaderNew:
         train_df = self.prepare_model_data(train_df)
         valid_df = self.prepare_model_data(valid_df)
         test_df = self.prepare_model_data(test_df)
-        # pred_df는 target이 없으므로 prepare_model_data 적용 안함
+        # pred_df는 target이 없지만 컬럼명 통일을 위해 prepare_model_data 적용
+        pred_df = self.prepare_model_data(pred_df)
         
         return train_df, valid_df, test_df, pred_df

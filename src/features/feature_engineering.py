@@ -145,15 +145,26 @@ class FootballFeatureEngineer:
             birth_years = pd.to_numeric(birth_years, errors='coerce')
             df_fe['age_at_season'] = (df_fe['season_start_year'] - birth_years).astype('float')
         
-        # 3. 로그 시장가치
-        if 'market_value_in_eur' in df_fe.columns:
-            df_fe['log_market_value'] = np.log1p(pd.to_numeric(df_fe['market_value_in_eur'], errors='coerce'))
+        # 3. 로그 시장가치 (두 컬럼 모두 활용)
+        if 'player_highest_market_value_in_eur' in df_fe.columns:
+            df_fe['log_highest_market_value'] = np.log1p(pd.to_numeric(df_fe['player_highest_market_value_in_eur'], errors='coerce'))
         
-        # 4. 외국인 여부
+        if 'market_value_in_eur' in df_fe.columns:
+            df_fe['log_current_market_value'] = np.log1p(pd.to_numeric(df_fe['market_value_in_eur'], errors='coerce'))
+        
+        # 4. 가치 하락 비율 (새로운 피처)
+        if 'player_highest_market_value_in_eur' in df_fe.columns and 'market_value_in_eur' in df_fe.columns:
+            highest_value = pd.to_numeric(df_fe['player_highest_market_value_in_eur'], errors='coerce')
+            current_value = pd.to_numeric(df_fe['market_value_in_eur'], errors='coerce')
+            # 0으로 나누기 방지
+            df_fe['value_decline_ratio'] = np.where(highest_value > 0, current_value / highest_value, 0)
+            df_fe['value_decline_ratio'] = df_fe['value_decline_ratio'].fillna(0)
+        
+        # 5. 외국인 여부
         if 'country_of_birth' in df_fe.columns:
             df_fe['is_foreigner'] = (df_fe['country_of_birth'] != 'England').astype(int)
         
-        # 5. 클럽 평균 대비 출전시간
+        # 6. 클럽 평균 대비 출전시간
         if 'season_avg_minutes' in df_fe.columns and 'club_name' in df_fe.columns:
             df_fe['minutes_vs_club_avg'] = df_fe.apply(
                 lambda row: row['season_avg_minutes'] / (self.club_avg_minutes.get(row['club_name'], 1) + 1e-6)

@@ -45,17 +45,16 @@ def ensemble_modeling():
         
         config = Config("config_final.yaml")
         data_loader = DataLoaderNew(config)
-        train_df, test_df = data_loader.load_all_data()
+        train_df, valid_df, test_df, pred_df = data_loader.load_all_data()
         
         print(f"📊 데이터 로드 완료:")
         print(f"  - Train: {train_df.shape[0]:,} rows")
+        print(f"  - Valid: {valid_df.shape[0]:,} rows")
         print(f"  - Test: {test_df.shape[0]:,} rows")
+        print(f"  - Pred: {pred_df.shape[0]:,} rows")
         
         # 2. 기본 모델링과 동일한 방식으로 처리
         from src.models.football_modeling import FootballModelTrainer
-        
-        # 전체 데이터 합치기 (모델링용)
-        all_data = pd.concat([train_df, test_df], ignore_index=True)
         
         # 기본 모델링 결과 재사용 (중복 학습 방지)
         outputs_dir = Path(config.output_dir)
@@ -66,7 +65,7 @@ def ensemble_modeling():
             model_results = joblib.load(model_results_path)
         else:
             logger.info("🚀 기본 모델링 결과가 없어서 새로 학습합니다")
-            model_trainer = FootballModelTrainer(all_data, config)
+            model_trainer = FootballModelTrainer(train_df, valid_df, test_df, pred_df, config)
             model_results = model_trainer.run_pipeline()
         
         # 전처리된 데이터 가져오기
