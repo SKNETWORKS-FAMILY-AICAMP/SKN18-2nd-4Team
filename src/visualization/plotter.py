@@ -256,19 +256,35 @@ class ModelVisualizer:
             logger.warning("학습 곡선 데이터가 없습니다.")
             return
         
-        from src.features.feature_engineering import OverfittingChecker
-        
-        # 학습 곡선 데이터 추출
+        # 학습 곡선 데이터 추출 (여러 모델)
         lc_results = self.model_results['learning_curve_results']
-        train_scores = lc_results['train_scores']
-        val_scores = lc_results['val_scores']
-        final_gap = lc_results['final_gap']
-        max_gap = lc_results['max_gap']
-        is_overfitting = lc_results['is_overfitting']
         
-        # 훈련 크기 계산 (기본값 사용)
-        train_sizes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-        n_samples = [int(len(train_scores) * size * 10) for size in train_sizes]  # 근사치
+        if not lc_results:
+            logger.warning("학습 곡선 데이터가 비어있습니다.")
+            return
+        
+        # 모델별로 시각화
+        n_models = len(lc_results)
+        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+        axes = axes.flatten()
+        
+        colors = ['blue', 'red', 'green', 'orange', 'purple']
+        
+        for i, (model_name, lc_data) in enumerate(lc_results.items()):
+            if i >= 4:  # 최대 4개 모델만 표시
+                break
+                
+            ax = axes[i]
+            
+            train_scores = lc_data['train_scores']
+            val_scores = lc_data['val_scores']
+            final_gap = lc_data['final_gap']
+            max_gap = lc_data['max_gap']
+            is_overfitting = lc_data['is_overfitting']
+            
+            # 훈련 크기 계산
+            train_sizes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+            n_samples = [int(len(train_scores) * size * 10) for size in train_sizes]
         
         # 시각화
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))

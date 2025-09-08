@@ -190,7 +190,28 @@ class FootballModelTrainer:
                     index=[f"feature_{i}" for i in range(len(self.best_model.feature_importances_))]
                 ).sort_values(ascending=True)
         
-        # 9. 결과 저장
+        # 9. 오버피팅 분석 (상위 3개 모델)
+        logger.info("🔍 오버피팅 분석 시작")
+        from src.features.feature_engineering import OverfittingChecker
+        
+        # 상위 3개 모델에 대해 오버피팅 분석
+        top_models = sorted(model_scores.items(), key=lambda x: x[1], reverse=True)[:3]
+        learning_curve_results = {}
+        
+        for model_name, score in top_models:
+            if model_name in model_details:
+                model = model_details[model_name]['model']
+                try:
+                    # 오버피팅 분석 수행
+                    lc_result = OverfittingChecker.check_learning_curves(
+                        model, X_train_processed, y_train, X_val_processed, y_val
+                    )
+                    learning_curve_results[model_name] = lc_result
+                    logger.info(f"✅ {model_name} 오버피팅 분석 완료")
+                except Exception as e:
+                    logger.warning(f"⚠️ {model_name} 오버피팅 분석 실패: {e}")
+        
+        # 10. 결과 저장
         self.model_results = {
             'X_train': X_train,
             'y_train': y_train,
@@ -206,10 +227,11 @@ class FootballModelTrainer:
             'best_model': self.best_model,
             'preprocessor': self.preprocessor,
             'final_results': final_results,
-            'feature_importance': feature_importance
+            'feature_importance': feature_importance,
+            'learning_curve_results': learning_curve_results
         }
         
-        # 10. 시각화 (SHAP, 피처 중요도, 학습 곡선)
+        # 11. 시각화 (SHAP, 피처 중요도, 학습 곡선)
         try:
             from src.visualization.plotter import ModelVisualizer
             visualizer = ModelVisualizer(self.model_results, self.output_dir)
