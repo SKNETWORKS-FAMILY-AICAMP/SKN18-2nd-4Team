@@ -45,7 +45,7 @@ def ensemble_modeling():
         
         config = Config("config_final.yaml")
         data_loader = DataLoaderNew(config)
-        train_df, test_df = data_loader.load_all_data()
+        train_df, valid_df, test_df, pred_df = data_loader.load_all_data()
         
         print(f"📊 데이터 로드 완료:")
         print(f"  - Train: {train_df.shape[0]:,} rows")
@@ -85,21 +85,31 @@ def ensemble_modeling():
         from sklearn.metrics import f1_score, roc_auc_score
         f1_scorer = make_scorer(f1_score)
         
-        # 5. 기본 모델들 정의
-        base_models = [
-            ('rf', RandomForestClassifier(n_estimators=100, max_depth=10, 
-                                       min_samples_split=10, min_samples_leaf=4,
-                                       class_weight='balanced', random_state=42)),
-            ('gb', GradientBoostingClassifier(n_estimators=200, learning_rate=0.05,
-                                            max_depth=5, subsample=0.8, random_state=42)),
-            ('lr', LogisticRegression(C=0.1, class_weight='balanced', 
-                                    random_state=42, max_iter=1000))
-        ]
+        # 5. 기본 모델들 정의 (성능 상위 3개 모델)
+        base_models = []
         
-        if _has_lgbm:
-            base_models.append(('lgb', LGBMClassifier(n_estimators=200, learning_rate=0.05,
-                                                    num_leaves=31, max_depth=5,
-                                                    class_weight='balanced', random_state=42)))
+        # XGBoost - 1위 모델
+        try:
+            import xgboost as xgb
+            base_models.append(('xgb', xgb.XGBClassifier(
+                n_estimators=100, learning_rate=0.1, max_depth=6,
+                random_state=42, eval_metric='logloss'
+            )))
+        except ImportError:
+            logger.warning("XGBoost가 설치되지 않았습니다. XGBoost를 건너뜁니다.")
+        
+        # Logistic Regression - 2위 모델
+        base_models.append(('lr', LogisticRegression(
+            C=1.0, class_weight='balanced', 
+            random_state=42, max_iter=1000
+        )))
+        
+        # SVM - 3위 모델
+        from sklearn.svm import SVC
+        base_models.append(('svm', SVC(
+            C=1.0, kernel='rbf', gamma='scale',
+            class_weight='balanced', random_state=42, probability=True
+        )))
         
         # 6. 앙상블 모델 정의
         ensemble_models = {}
@@ -119,7 +129,7 @@ def ensemble_modeling():
         # Stacking Classifier
         ensemble_models['Stacking'] = StackingClassifier(
             estimators=base_models,
-            final_estimator=LogisticRegression(C=0.1, class_weight='balanced', 
+            final_estimator=LogisticRegression(C=1.0, class_weight='balanced', 
                                              random_state=42, max_iter=1000),
             cv=3
         )
