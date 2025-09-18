@@ -881,8 +881,8 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 <table>
 <tr>
-<th style="width: 15%; text-align: center;">팀원 이름</th>
-<th style="width: 25%; text-align: center;">역할</th>
+<th style="width: 17%; text-align: center;">팀원 이름</th>
+<th style="width: 23%; text-align: center;">역할</th>
 <th style="width: 60%; text-align: left;">프로젝트 소감</th>
 </tr>
 <tr>
