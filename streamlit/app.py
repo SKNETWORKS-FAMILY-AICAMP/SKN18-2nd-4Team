@@ -22,11 +22,49 @@ CSS = """
     --radius:14px;
     --green:#6b5cff;      /* Transfer Predictor 색상 */
     --blue:#6b5cff;       /* Player Search 색상 */
+    --content-width:982px; /* 전체 페이지 컨테이너 폭 */
 }
 
 html, body, [class*="css"]  { 
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; 
-    background: white;
+    background: rgba(0, 0, 0, 0.7);
+    color: #e5e7eb !important;
+}
+
+/* 배경 설정 - 반투명 다크그레이 배경 */
+.stApp {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 메인 컨테이너 배경 설정 */
+.main {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 모든 텍스트를 밝은 회색으로 */
+h1, h2, h3, h4, h5, h6, p, div, span, label, .stText, .stMarkdown {
+  color: #e5e7eb !important;
+}
+
+/* 전체 컨테이너 중앙 정렬 강화 */
+.stApp > div {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+}
+
+.stApp .main {
+    width: 100% !important;
+    max-width: var(--content-width) !important;
+    margin: 0 auto !important;
+}
+
+/* centered 레이아웃에 맞는 설정 */
+.main .block-container {
+    max-width: var(--content-width) !important;
+    width: var(--content-width) !important;
+    margin: 0 auto !important;
+    padding: 1rem 24px !important;
 }
 
 .stMarkdown a, a, a:visited { color:#333; text-decoration:none; }
@@ -51,9 +89,9 @@ div[data-testid="stHorizontalBlock"] .stButton>button {
     text-align: left;
     margin-bottom: 30px;
 }
-.hero-eyebrow { color: var(--brand); font-weight: 800; font-size: 22px; margin-bottom: 10px; }
+.hero-eyebrow { color: #9337D1 !important; font-weight: 800; font-size: 22px; margin-bottom: 10px; }
 .hero-title { font-weight: 900; font-size: 45px; line-height: 1.15; margin: 0 0 12px 0; letter-spacing: -0.01em; color: #333; }
-.hero-title .accent { color: var(--accent); }
+.hero-title .accent { color: #9337D1 !important; }
 .hero-sub { color: rgba(0,0,0,.75); font-size: 18px; margin: 0 0 18px 0; font-weight: 500; }
 
 /* Section Header */
@@ -141,7 +179,7 @@ def page_home():
         with header_cols[1]:
             if st.button("Push", key="push_players", use_container_width=True, type="primary"):
                 go("players")
-        st.image("pages/imgs/main-img1.jpg", use_container_width=True)
+        st.image("data/streamlit/data/imgs/mainpage/main-img1.jpg", use_container_width=True)
 
     st.divider()
 
@@ -153,12 +191,12 @@ def page_home():
         with header_cols[1]:
             if st.button("Push", key="push_predict", use_container_width=True, type="primary"):
                 go("predict")
-        st.image("pages/imgs/main-img2.jpg", use_container_width=True)
+        st.image("data/streamlit/data/imgs/mainpage/main-img2.jpg", use_container_width=True)
 
     # Footer
     st.markdown("""
         <div class="footer">
-            <p class="footer-text">©2024 Project_XferStats by SKN18 2nd Project 4th team</p>
+            <p class="footer-text">©2025 Project by SKN18 2nd Project 4th team</p>
         </div>
     """, unsafe_allow_html=True)
 
