@@ -881,33 +881,33 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 
 <table>
 <tr>
-<th style="width: 17%; text-align: center;">팀원 이름</th>
-<th style="width: 23%; text-align: center;">역할</th>
-<th style="width: 60%; text-align: left;">프로젝트 소감</th>
+<th style="width: 15%; text-align: center;">팀원 이름</th>
+<th style="width: 15%; text-align: center;">역할</th>
+<th style="width: 70%; text-align: left;">프로젝트 소감</th>
 </tr>
 <tr>
 <td style="text-align: center;">임승옥</td>
-<td style="text-align: center;">팀장👑 (Streamlit 구현)</td>
-<td>이번 프로젝트를 통해 Figma 설계와 이적 예측 모델을 실제 서비스로 연결하는 과정을 경험하며,<br>데이터 분석·UI/UX 설계·개발을 아우르는 통합적 역량을 쌓을 수 있었습니다.<br>팀원들과 필요한 기능을 논의해 사용자 관점에서 핵심 요소를 구현했지만, Streamlit으로 제작한 화면이 Figma 디자인에 비해 다소 아쉬움이 남았습니다.<br>추가로 이적 확률이 높은 선수의 구단 적합성 평가 기능을 통해 서비스 완성도를 높이면 좋을 거 같다는 생각이 들었습니다.</td>
+<td style="text-align: center;">팀장👑<br> (Streamlit 구현)</td>
+<td>이번 프로젝트를 통해 Figma 설계와 이적 예측 모델을 실제 서비스로 연결하는 과정을 경험하면서,<br> 데이터 분석·UI/UX 설계·개발을 아우르는 종합적인 역량을 쌓을 수 있었습니다.<br> 팀원들과 필요한 기능을 논의하며 사용자 관점에서 핵심 요소를 구현한 점은 큰 의미가 있었지만, <br>Streamlit으로 제작한 화면이 Figma 디자인에 비해 다소 미흡했던 점은 아쉬움으로 남습니다. <br>앞으로는 이적 확률이 높은 선수에 대해 구단 적합성까지 평가할 수 있는 기능을 보완한다면, 서비스의 완성도와 활용도를 더욱 높일 수 있을 것이라 생각합니다.
 </tr>
 <tr>
 <td style="text-align: center;">김수미</td>
-<td style="text-align: center;">팀원 (모델 학습)</td>
+<td style="text-align: center;">팀원<br>(모델 학습)</td>
 <td>데이터들을 파악해서 새로운 피처를 만드는 것과 조합에 따라 새로운 결과값을 얻게되는 것이 흥미로웠습니다.<br>모델 학습 방법에 따라 다양한 해석을 할 수 있다는 점에서도 데이터 활용의 매력을 느낄 수 있었던 프로젝트였습니다.</td>
 </tr>
 <tr>
 <td style="text-align: center;">손주영</td>
-<td style="text-align: center;">팀원 (데이터 처리)</td>
+<td style="text-align: center;">팀원<br>(데이터 처리)</td>
 <td>이적 요인이 너무 다양하고, 데이터 target이 있는 데이터가 아니었다보니 데이터를 어떻게 처리하면 좋을지에 대해 고민이 많았었는데,<br>팀원 분들과 함께 논의하면서 최적의 결과를 얻어냈던 것 같습니다.<br>축구에 대해 잘 알지 못했는데, 이래서 도메인 지식이 중요구나를 다시 한번 깨닫게 되었습니다.<br>4팀 화이팅!</td>
 </tr>
 <tr>
 <td style="text-align: center;">양진아</td>
-<td style="text-align: center;">팀원 (모듈화)</td>
+<td style="text-align: center;">팀원<br>(모듈화)</td>
 <td>프로젝트의 전체 코드를 취합하고 모듈화를 진행하는 과정에서, 프로젝트에 대한 충분한 이해가 정리 과정의 핵심임을 깨달았습니다.<br>프로젝트 구조와 흐름을 정확히 파악해야만 효율적으로 모듈화를 수행할 수 있으며, 이를 통해 누락된 부분도 신속하게 확인할 수 있음을 알게 되었습니다.</td>
 </tr>
 <tr>
 <td style="text-align: center;">정동석</td>
-<td style="text-align: center;">팀원 (모델 학습)</td>
+<td style="text-align: center;">팀원<br>(모델 학습)</td>
 <td>실제 사용자에게 서비스를 제공하기 위해 개발을 할 때 서비스에 대한 충분한 도메인 지식의 중요성을 느꼈습니다.<br>제가 제안한 주제임에도 피처 분석과 생성에 많은 시간이 소요되어 서비스 개발에 충분히 많은 시간을 할애하지 못한 점이 아쉬움으로 남았습니다.</td>
 </tr>
 </table>
