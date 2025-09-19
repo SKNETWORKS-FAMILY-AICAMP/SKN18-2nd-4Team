@@ -38,10 +38,89 @@ CSS = """
 /* 기본 */
 html, body, [class*="css"]{
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  background:var(--bg); color:var(--ink);
+  background:rgba(0, 0, 0, 0.7); color:#e5e7eb !important;
+}
+
+/* 배경 설정 - 반투명 다크그레이 배경 */
+.stApp {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 메인 컨테이너 배경 설정 */
+.main {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 모든 텍스트를 밝은 회색으로 */
+h1, h2, h3, h4, h5, h6, p, div, span, label, .stText, .stMarkdown {
+  color: #e5e7eb !important;
+}
+
+/* 선수정보 카드 내부 텍스트 색상 설정 */
+.card, .card * {
+  color: #111827 !important;  /* 기본 검정색 */
+}
+
+/* 키(라벨)는 회색 */
+.card .k, .card .metric-label {
+  color: #6B7280 !important;  /* 회색 */
+}
+
+/* 값은 검정색 */
+.card .v, .card .metric-val {
+  color: #111827 !important;  /* 검정색 */
+}
+
+/* 선수 이름은 검정색 */
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
+  color: #111827 !important;  /* 검정색 */
+}
+
+/* 최강 우선순위로 선수 이름 강제 검정색 설정 */
+html body div[data-testid="stApp"] .card h1,
+html body div[data-testid="stApp"] .card h2,
+html body div[data-testid="stApp"] .card h3,
+html body div[data-testid="stApp"] .card h4,
+html body div[data-testid="stApp"] .card h5,
+html body div[data-testid="stApp"] .card h6 {
+  color: #111827 !important;  /* 검정색 */
+}
+
+/* 최종 강제 설정 - 모든 선수 이름 관련 요소 */
+html body div[data-testid="stApp"] h1,
+html body div[data-testid="stApp"] h2,
+html body div[data-testid="stApp"] h3,
+html body div[data-testid="stApp"] h4,
+html body div[data-testid="stApp"] h5,
+html body div[data-testid="stApp"] h6 {
+  color: #111827 !important;  /* 검정색 */
+}
+
+/* 팀멤버 그리드 전체 컨테이너 배경 제거 */
+.player-grid-wrap {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.player-grid {
+  background: transparent !important;
 }
 .main > div { padding-top:0 !important; }
 .stApp > header { display:none; }
+
+/* 전체 컨테이너 중앙 정렬 강화 */
+.stApp > div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+}
+
+.stApp .main {
+  width: 100% !important;
+  max-width: var(--content-width) !important;
+  margin: 0 auto !important;
+}
 
 /* Top Navigation */
 .page-title { font-size: 22px; font-weight: 700; color: #333; margin: 0; padding-top: 8px;}
@@ -58,15 +137,17 @@ div[data-testid="stHorizontalBlock"] .stButton>button {
 
 
 /* ▶ 4열 폭에 맞춰 중앙 정렬 */
-[data-testid="stAppViewContainer"] .main .block-container{
-  max-width:var(--content-width);
-  width:var(--content-width);
-  padding-left:24px; padding-right:24px;
-  margin:0 auto;
+.main .block-container{
+  max-width:var(--content-width) !important;
+  width:var(--content-width) !important;
+  padding-left:0px !important; 
+  padding-right:24px !important;
+  margin:0 auto !important;
 }
 
 .page-wrap { max-width:var(--content-width); width:var(--content-width); margin:24px auto 60px; }
-.h1{font-weight:800; font-size:45px; line-height:1.2; letter-spacing:-0.02em; margin:8px 0 8px; text-align:left;}
+.h1{font-weight:800; font-size:45px; line-height:1.2; letter-spacing:-0.02em; margin:8px 0 8px; text-align:left; color:#e5e7eb !important;}
+.h1 span{color:#7B19BD !important;}
 .subtitle{font-size:18px; color:var(--muted); text-align:left;}
 .h2{font-weight:700; font-size:26px; letter-spacing:-0.01em; margin:24px 0 12px; text-align:left;}
 .card, .chartbox { text-align:left; }
@@ -150,7 +231,7 @@ div[data-testid="stHorizontalBlock"] .stButton>button {
 }
 @media (max-width:740px){ .player-header{ grid-template-columns:1fr; } }
 .player-photo-img{
-  width:100%; aspect-ratio:3/4; object-fit:cover;
+  width:100%; height:auto; object-fit:contain;
   border-radius:10px; border:1px solid #ECECEF; background:#FAFAFB;
 }
 
@@ -288,7 +369,7 @@ def img_to_data_uri(path: str):
   return f"data:{mime};base64,{b64}"
 
 def logo_src_for_club(club_display_name: str):
-  search_dirs = ["pages/imgs/clubs", "pages/imgs", "assets/clubs", "assets", "static/clubs", "static"]
+  search_dirs = ["data/streamlit/data/imgs/clubs", "pages/imgs", "assets/clubs", "assets", "static/clubs", "static"]
   target_norm = _norm_token(club_display_name)
   exts = (".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg")
   for d in search_dirs:
@@ -410,7 +491,7 @@ st.markdown(wrap_start, unsafe_allow_html=True)
 
 st.markdown("""
 <div>
-  <div class="h1">Explore <span style="color:#7B19BD;">24/25</span> Premier League<br/>Football Player in One Place</div>
+  <div class="h1">Explore <span style="color:#7B19BD !important; font-weight:800 !important;">24/25 Premier League</span> <br/>Football Player in One Place</div>
   <div class="subtitle">Easily search across teams, key positions.</div>
 </div>
 """, unsafe_allow_html=True)
@@ -476,7 +557,15 @@ def get_local_img(player_name):
     if player_name is None:
         return None  # 선수 이름이 없으면 바로 None 반환
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     img_folder = cwd() / "data" / "streamlit" / "data" / "imgs" / "player"
+=======
+    img_folder = "data/streamlit/data/imgs/player"
+>>>>>>> Stashed changes
+=======
+    img_folder = "data/streamlit/data/imgs/player"
+>>>>>>> Stashed changes
     name_variants = [
         f"{player_name}.png", f"{player_name}.jpg",
         f"{player_name.replace(' ', '_')}.png",
@@ -655,8 +744,9 @@ with st.container():
             st.plotly_chart(fig_mv, use_container_width=True, config={"displayModeBar": False})
 
 # Footer
+    # Footer
 st.markdown("""
-    <div class="footer">
-        <p class="footer-text">©2025 Project by SKN18 2nd Project 4th team</p>
-    </div>
-""", unsafe_allow_html=True)
+        <div class="footer" style="text-align: right;">
+            <p>©2025 Project by SKN18 2nd Project 4th team</p>
+        </div>
+    """, unsafe_allow_html=True)

@@ -42,7 +42,9 @@
 
 ### 데이터 출처
 
-- **Kaggle** Football Data from Transfermarkt 데이터 (https://www.kaggle.com/datasets/davidcariboo/player-scores?select=competitions.csv)
+- **Kaggle** Football Data from Transfermarkt 데이터
+
+  (https://www.kaggle.com/datasets/davidcariboo/player-scores?select=competitions.csv)
 
 ### 데이터 범위
 
@@ -152,7 +154,7 @@
 
 ## 📊 데이터 구조
 
-`data/raw/` (원본 데이터)
+`data/DB_football/` (원본 데이터)
 
 ```
 ├── players.csv              # 선수 기본 정보 (이름, 생년월일, 포지션, 키 등)
@@ -174,10 +176,15 @@
 └── README.md                # 데이터 설명서
 ```
 
-### `data/final/` (전처리된 데이터)
+### `data/streamlit/` (streamlit 구현 데이터)
 
 ```
-├── final_df.csv             # streamlit 구현 데이터 (14,873 rows × 27 columns)
+├── imgs/               # streamlit Img 데이터
+│   │   ├── mainpage/   # mainpage 이미지
+│   │   ├── club/       # club 로고 이미지
+│   │   └── player/     # player 사진 이미지
+├── DB1.csv             # streamlit 구현 csv (12/13-24/25) (15,734 rows × 27 columns)
+└── DB2.csv             # streamlit 구현 csv (24/25시즌의 선수정보 + 이적 예측 데이터) (570 rows × 5 columns)
 ```
 
 ## 🔧 피처 엔지니어링 및 전처리 파이프라인
@@ -517,17 +524,12 @@
 - **시즌 경험**: 시즌 출전, 팀 성적(우승 수, 순위 등)도 모델 예측에 기여
 - **국가 특성**: 특정 출신 국가 변수(country_of_birth_Romania 등)가 강하게 작용하지만 데이터 편향 가능성 존재
 - **팀 환경 + 개인 성과 + 시장 가치**의 조합을 중심으로 이적 확률 판단
-
-<<<<<<< HEAD
+- 
 <img src="outputs/shap_summary.png" alt="SHAP 요약" width="500">
-=======
-![SHAP Summary](outputs/shap_summary.png)
->>>>>>> 6bd8784 (chore:README수정)
 
 ---
 
 #### ▶️ SHAP 바 플롯
-<<<<<<< HEAD
 
 - **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
 - **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
@@ -539,19 +541,6 @@
 
 <img src="outputs/shap_bar.png" alt="SHAP 바 플롯" width="500">
 
-=======
-
-- **최상위 Feature**: `club_name_Fulham Football Club` → 구단 소속 여부가 예측에 절대적 영향
-- **국가 변수**: `country_of_birth_Romania` 등 일부 국가 특성이 큰 기여 (데이터 편향 가능성 주의)
-- **팀 특성**: `club_average_age`, 소속 클럽(Arsenal, Newcastle, Tottenham, Man City 등) 변수가 다수 포함
-- **개인 성과**: `goals`, `player_market_value_in_eur`, `player_highest_market_value_in_eur`도 중요한 역할
-- **시즌 경험**: 출전 경기 수, 팀 순위, 우승 횟수 등이 추가적 기여
-- **징계 변수**: `red_cards`도 반영되지만 상대적 영향력은 낮음
-- **팀 환경(구단, 평균 연령, 국가 특성)**을 강하게 고려하며, 그 다음으로 **개인 성과와 시장 가치**가 기여하는 구조
-
-![SHAP Bar](outputs/shap_bar.png)
-
->>>>>>> 6bd8784 (chore:README수정)
 ---
 
 ### 오버피팅 분석
@@ -596,11 +585,9 @@
     - 모델 단순화 (복잡도 줄이기 → 트리 깊이 축소, feature 수 줄이기 등)
     - 하이퍼파라미터 튜닝 (learning rate, max_depth 등 조정)
 
-<<<<<<< HEAD
+
 <img src="outputs/learning_curves.png" alt="학습 곡선" width="500">
-=======
-![Learning Curves](outputs/learning_curves.png)
->>>>>>> 6bd8784 (chore:README수정)
+
 
 #### 오버피팅 현황
 
@@ -615,7 +602,7 @@
 
 ### 핵심 모듈
 
-#### `src/features/feature_engineering.py`
+#### `ml_pipeline/src/features/feature_engineering.py`
 
 ```
 └── FootballFeatureEngineer        # 피처 엔지니어링 클래스
@@ -643,7 +630,7 @@
 - **수치형 (28개)**: 중앙값 결측치 처리 → 표준화
 - **명목형 (5개)**: 최빈값 결측치 처리 → 원핫 인코딩
 
-#### `src/models/football_modeling.py`
+#### `ml_pipeline/src/models/football_modeling.py`
 
 ```
 └── FootballModelTrainer        # 통합 모델링 파이프라인
@@ -656,7 +643,7 @@
     └── 📋 24/25 시즌 예측 생성
 ```
 
-#### `src/visualization/plotter.py`
+#### `ml_pipeline/visualization/plotter.py`
 
 ```
 └── ModelVisualizer             # 시각화 통합 클래스
@@ -668,7 +655,7 @@
     └── 예측 분포 히스토그램
 ```
 
-#### `scripts/` 디렉토리 (개별 실행 스크립트들)
+#### `ml_pipeline/scripts/` 디렉토리 (개별 실행 스크립트들)
 
 ```
 ├── run_final_modeling.py       # 기본 모델링 실행
@@ -682,38 +669,53 @@
 
 ```
 SKN18-2nd-4Team/
-├── main.py                     # 🎯 중앙 실행 파일
+│  
 ├── data/
+│   ├── streamlit/              # streamlit 구현 데이터
+│   │   ├── imgs/               # streamlit Img 데이터
+│   │   │     ├── mainpage/     # mainpage 이미지
+│   │   │     ├── club/         # club 로고 이미지
+│   │   │     └── player/       # player 사진 이미지
+│   │   │     
+│   │   ├── DB1.csv             # streamlit 구현 csv (12/13-24/25)
+│   │   └── DB2.csv             # streamlit 구현 csv (24/25시즌의 선수정보 + 이적 예측 데이터)
+│   │            
 │   ├── curated/                # 정제된 데이터
 │   │   ├── train_df.csv        # 훈련 데이터 (12/13-22/23)
 │   │   └── test_df.csv         # 테스트 데이터 (24/25)
-│   └── raw/                    # 원본 데이터 (9개 CSV 파일)
-├── src/                        # 핵심 모듈
-│   ├── features/
-│   │   └── feature_engineering.py  # 피처 엔지니어링 + 전처리
-│   ├── models/
-│   │   └── football_modeling.py    # 모델 훈련 + 평가
-│   ├── data/
-│   │   └── data_loader_new.py       # 데이터 로딩
-│   ├── utils/
-│   │   └── config.py               # 설정 관리
-│   └── visualization/
-│       └── plotter.py              # 시각화 (ModelVisualizer)
-├── scripts/                        # 실행 스크립트
-│   ├── run_final_modeling.py       # 기본 모델링
-│   ├── hyperparameter_tuning.py    # 하이퍼파라미터 튜닝
-│   ├── regularization_improvement.py # 정규화 강화
-│   ├── ensemble_modeling.py        # 앙상블 모델링
-│   └── save_model_performance.py   # 성능 저장
-└── outputs/                        # 결과 파일 (자동 생성)
-    ├── *.png                       # 시각화 결과
-    └── *.csv                       # 예측 결과 + 성능 지표
+│   └── DB_football/                    # 원본 데이터 (9개 CSV 파일)
+│
+├──ml_pipeline/
+│   ├── main.py                 # 🎯 중앙 실행 파일
+│   ├── src/                    # 핵심 모듈
+│   │   ├── features/
+│   │   │   └── feature_engineering.py  # 피처 엔지니어링 + 전처리
+│   │   ├── models/
+│   │   │   └── football_modeling.py    # 모델 훈련 + 평가
+│   │   ├── data/
+│   │   │   └── data_loader_new.py      # 데이터 로딩
+│   │   ├── utils/
+│   │   │   └── config.py               # 설정 관리
+│   │   └── visualization/
+│   │       └── plotter.py              # 시각화 (ModelVisualizer)
+│   │
+│   ├── scripts/                          # 실행 스크립트
+│   │   ├── run_final_modeling.py         # 기본 모델링
+│   │   ├── hyperparameter_tuning.py      # 하이퍼파라미터 튜닝
+│   │   ├── regularization_improvement.py # 정규화 강화
+│   │   ├── ensemble_modeling.py        # 앙상블 모델링
+│   │   └── save_model_performance.py   # 성능 저장
+│
+│── outputs/                    # 결과 파일 (자동 생성)
+│       ├── *.png               # 시각화 결과
+│       └── *.csv               # 예측 결과 + 성능 지표
+│
 └── streamlit/                  # 웹서비스화
-    ├── app.py              # Mainpage
-    └── pages/
-        ├── player_search.py        # 선수정보 조회 페이지
-        └── transfer_predictor.py   # 모델예측 결과 조회 페이지
----
+        ├── app.py              # Mainpage
+        └── pages/
+            ├── player_search.py        # 선수정보 조회 페이지
+            └── transfer_predictor.py   # 모델예측 결과 조회 페이지
+
 ```
 
 ---
@@ -836,94 +838,80 @@ python main.py --mode train --force-retrain   # 강제 재학습 (개선된 모�
 - **최종 모델**: Bagging (RF) 앙상블 (0.4901 점수)
 - **예측 파일**: `outputs/24_25_transfer_predictions.csv` (570명, 255명 이적 예측)
 
-### Streamlit 화면구현
+
+---
+##  🌐 Streamlit 화면구현
+#### **메인 화면**
+- 선수 검색 페이지 및 이적률 예측 서비스 페이 이동
+
 <table>
 <tr>
-<td width="50%">
-
-**메인 화면**
-- 선수 검색 페이지 및 이적률 예측 서비스 페이 이동
-</td>
-<td width="50%">
-
-![웹 애플리케이션 Main Page](assets/images/web01.png)
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-**선수 상세 정보: Player Search Page**
-- 24/25 시즌 팀별 선수 조회
-- 선수이름 버튼시 선수 24/25시즌 성적 및 개별 정보 조회
-- 프리미어 리그 활동시, 활동 시즌별 성적 및 선수 시장 가치 정보 제공
-</td>
-<td width="50%">
-
-![웹 애플리케이션 Player Search Page](assets/images/web02-1.png)
-![웹 애플리케이션 Player Search Page](assets/images/web02-2.png)
-</td>
+<td><img src="assets/images/web01.png" alt="웹 애플리케이션 Main Page" width="400"></td>
 </tr>
 </table>
 
-**이적률 예측 정보: Transfer Predictor Page**
+#### **선수 상세 정보: Player Search Page**
+- 24/25 시즌 팀별 선수 조회
+- 선수이름 버튼시 선수 24/25시즌 성적 및 개별 정보 조회
+- 프리미어 리그 활동시, 활동 시즌별 성적 및 선수 시장 가치 정보 제공
+
+<table>
+<tr>
+<td><img src="assets/images/web02-1.png" alt="웹 애플리케이션 Player Search Page 1" width="400"></td>
+<td><img src="assets/images/web02-2.png" alt="웹 애플리케이션 Player Search Page 2" width="400"></td>
+</tr>
+</table>
+
+#### **이적률 예측 정보: Transfer Predictor Page**
 - 24/25 시즌 선수의 25/26 시즌 이적 예측률 제공
 - 1) 선수이름으로 조회
 - 2) 포지션, 나이, 시장 가치,주 사용 발로 필터링하여 해당하는 선수의 예측률 제공
 - 해당 선수의 예측률 및 프리미어 리그 활동시 같은 포지션 대비 시즌별 평균 승리수,
  시장가치와 비교한 정보 제공
 
-</td>
-<td width="50%">
-
-![웹 애플리케이션 Player Search Page](assets/images/web03.png)
-
-</td>
+<table>
+<tr>
+<td><img src="assets/images/web03-1.png" alt="웹 애플리케이션 Transfer Predictor Page" width="400"></td>
+<td><img src="assets/images/web03-2.png" alt="웹 애플리케이션 Transfer Predictor Page" width="400"></td>
 </tr>
 </table>
 
-
-
 ---
-
-<<<<<<< HEAD
 ## 👥 팀원별 프로젝트 소감
 
 <table>
 <tr>
 <th style="width: 15%; text-align: center;">팀원 이름</th>
-<th style="width: 25%; text-align: center;">역할</th>
-<th style="width: 60%; text-align: left;">프로젝트 소감</th>
+<th style="width: 15%; text-align: center;">역할</th>
+<th style="width: 70%; text-align: left;">프로젝트 소감</th>
 </tr>
 <tr>
 <td style="text-align: center;">임승옥</td>
-<td style="text-align: center;">팀장👑 (Streamlit 구현)</td>
-<td>이번 프로젝트를 통해 Figma 설계와 이적 예측 모델을 실제 서비스로 연결하는 과정을 경험하며,<br>데이터 분석·UI/UX 설계·개발을 아우르는 통합적 역량을 쌓을 수 있었습니다.<br>팀원들과 필요한 기능을 논의해 사용자 관점에서 핵심 요소를 구현했지만, Streamlit으로 제작한 화면이 Figma 디자인에 비해 다소 아쉬움이 남았습니다.<br>추가로 이적 확률이 높은 선수의 구단 적합성 평가 기능을 통해 서비스 완성도를 높이면 좋을 거 같다는 생각이 들었습니다.</td>
+<td style="text-align: center;">팀장👑<br> (Streamlit 구현)</td>
+<td>이번 프로젝트를 통해 Figma 설계와 이적 예측 모델을 실제 서비스로 연결하는 과정을 경험하면서,<br> 데이터 분석·UI/UX 설계·개발을 아우르는 종합적인 역량을 쌓을 수 있었습니다.<br> 팀원들과 필요한 기능을 논의하며 사용자 관점에서 핵심 요소를 구현한 점은 큰 의미가 있었지만, <br>Streamlit으로 제작한 화면이 Figma 디자인에 비해 다소 미흡했던 점은 아쉬움으로 남습니다. <br>앞으로는 이적 확률이 높은 선수에 대해 구단 적합성까지 평가할 수 있는 기능을 보완한다면, 서비스의 완성도와 활용도를 더욱 높일 수 있을 것이라 생각합니다.
 </tr>
 <tr>
 <td style="text-align: center;">김수미</td>
-<td style="text-align: center;">팀원 (모델 학습)</td>
+<td style="text-align: center;">팀원<br>(모델 학습)</td>
 <td>데이터들을 파악해서 새로운 피처를 만드는 것과 조합에 따라 새로운 결과값을 얻게되는 것이 흥미로웠습니다.<br>모델 학습 방법에 따라 다양한 해석을 할 수 있다는 점에서도 데이터 활용의 매력을 느낄 수 있었던 프로젝트였습니다.</td>
 </tr>
 <tr>
 <td style="text-align: center;">손주영</td>
-<td style="text-align: center;">팀원 (데이터 처리)</td>
+<td style="text-align: center;">팀원<br>(데이터 처리)</td>
 <td>이적 요인이 너무 다양하고, 데이터 target이 있는 데이터가 아니었다보니 데이터를 어떻게 처리하면 좋을지에 대해 고민이 많았었는데,<br>팀원 분들과 함께 논의하면서 최적의 결과를 얻어냈던 것 같습니다.<br>축구에 대해 잘 알지 못했는데, 이래서 도메인 지식이 중요구나를 다시 한번 깨닫게 되었습니다.<br>4팀 화이팅!</td>
 </tr>
 <tr>
 <td style="text-align: center;">양진아</td>
-<td style="text-align: center;">팀원 (모듈화)</td>
+<td style="text-align: center;">팀원<br>(모듈화)</td>
 <td>프로젝트의 전체 코드를 취합하고 모듈화를 진행하는 과정에서, 프로젝트에 대한 충분한 이해가 정리 과정의 핵심임을 깨달았습니다.<br>프로젝트 구조와 흐름을 정확히 파악해야만 효율적으로 모듈화를 수행할 수 있으며, 이를 통해 누락된 부분도 신속하게 확인할 수 있음을 알게 되었습니다.</td>
 </tr>
 <tr>
 <td style="text-align: center;">정동석</td>
-<td style="text-align: center;">팀원 (모델 학습)</td>
+<td style="text-align: center;">팀원<br>(모델 학습)</td>
 <td>실제 사용자에게 서비스를 제공하기 위해 개발을 할 때 서비스에 대한 충분한 도메인 지식의 중요성을 느꼈습니다.<br>제가 제안한 주제임에도 피처 분석과 생성에 많은 시간이 소요되어 서비스 개발에 충분히 많은 시간을 할애하지 못한 점이 아쉬움으로 남았습니다.</td>
 </tr>
 </table>
 
 ---
+**최종 업데이트**: 2025년 9월 18일
 
-=======
->>>>>>> 6bd8784 (chore:README수정)
-**최종 업데이트**: 2025년 9월 8일
